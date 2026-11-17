@@ -29,63 +29,47 @@ function createColor(rand: () => number) {
   return `hsl(${h}, ${s}%, ${l}%)`;
 }
 
-interface BlockieProps {
-  address: string;
-  size?: number;
-  className?: string;
-}
+function Blockie({ address, size = 20 }: { address: string; size?: number }) {
+  const seed = (address || '').toLowerCase();
+  const rand = createRand(seed);
 
-function Blockie({ address, size = 20, className }: BlockieProps) {
-  const { grid, colors } = useMemo(() => {
-    const seed = address.toLowerCase();
-    const rand = createRand(seed);
-    
-    const bgColor = createColor(rand);
-    const primaryColor = createColor(rand);
-    const spotColor = createColor(rand);
-    
-    const grid: number[] = [];
-    const width = 8;
-    const height = 8;
-    
-    for (let y = 0; y < height; y++) {
-      const row: number[] = [];
-      for (let x = 0; x < 4; x++) {
-        const val = Math.floor(rand() * 2.3);
-        row.push(val);
-      }
-      const mirrored = [...row, ...row.slice().reverse()];
-      grid.push(...mirrored);
+  const colors = [
+    createColor(rand),
+    createColor(rand),
+    createColor(rand),
+  ];
+
+  const grid: number[][] = [];
+  for (let y = 0; y < 8; y++) {
+    const row: number[] = [];
+    for (let x = 0; x < 4; x++) {
+      row.push(Math.floor(rand() * 3));
     }
-    
-    return {
-      grid,
-      colors: [bgColor, primaryColor, spotColor],
-    };
-  }, [address]);
+    const fullRow = [...row, ...row.slice().reverse()];
+    grid.push(fullRow);
+  }
+
+  const cellSize = size / 8;
 
   return (
     <svg 
       width={size} 
       height={size} 
-      viewBox="0 0 8 8" 
-      className={`shrink-0 ${className || 'rounded-md'}`}
-      style={{ imageRendering: 'pixelated' }}
+      viewBox={`0 0 ${size} ${size}`} 
+      className="rounded-full overflow-hidden shrink-0 border border-white/20"
     >
-      {grid.map((val, idx) => {
-        const x = idx % 8;
-        const y = Math.floor(idx / 8);
-        return (
+      {grid.flatMap((row, y) =>
+        row.map((val, x) => (
           <rect
-            key={idx}
-            x={x}
-            y={y}
-            width={1}
-            height={1}
+            key={`${x}-${y}`}
+            x={x * cellSize}
+            y={y * cellSize}
+            width={cellSize}
+            height={cellSize}
             fill={colors[val]}
           />
-        );
-      })}
+        ))
+      )}
     </svg>
   );
 }
@@ -124,26 +108,23 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 w-full z-50 bg-[#0a0a0a]/90 border-b border-white/[0.06] backdrop-blur-2xl">
-        <div className="max-w-7xl mx-auto px-6 md:px-8 h-20 flex items-center justify-between">
-          {/* Left: Logo + Nav */}
-          <div className="flex items-center gap-6">
+      <header className="fixed top-0 w-full z-50 bg-[#060608]/80 border-b border-white/[0.08] backdrop-blur-2xl transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+          {/* Left: Logo + Navigation Links */}
+          <div className="flex items-center gap-8">
             <Logo />
             
-            {/* Separator */}
-            <div className="hidden md:block w-px h-5 bg-white/[0.08]" />
-            
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden md:flex items-center gap-1.5 p-1 bg-white/[0.03] border border-white/[0.08] rounded-full">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href;
                 return (
                   <Link 
                     key={link.href}
                     to={link.href} 
-                    className={`px-3 py-1.5 text-[16px] font-medium rounded-md transition-all duration-200 ${
+                    className={`px-5 py-2 text-base rounded-full transition-all duration-200 ${
                       isActive 
-                        ? 'text-primary' 
-                        : 'text-white/40 hover:text-white/80'
+                        ? 'bg-white/10 text-white font-bold shadow-sm' 
+                        : 'text-white/60 hover:text-white hover:bg-white/[0.06] font-medium'
                     }`}
                   >
                     {link.label}
@@ -154,30 +135,31 @@ export default function Navbar() {
           </div>
 
           {/* Right: Network + Wallet */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {/* Network Display / Selector */}
             <div className="relative hidden sm:block">
               <button 
                 onClick={() => visibleChains.length > 1 && setNetworkDropdown(!networkDropdown)}
-                className={`flex items-center gap-2 px-3.5 h-10 rounded-lg bg-[#161721] border border-[#232532] ${
-                  visibleChains.length > 1 
-                    ? 'hover:bg-[#1a1c27] hover:border-[#2f3246] cursor-pointer' 
-                    : 'cursor-default'
-                } text-[#9fa3b2] transition-all`}
-                title={visibleChains.length > 1 ? "Switch Network" : "Network"}
+                className={`flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-white/[0.04] border border-white/[0.08] hover:border-white/20 transition-all ${
+                  visibleChains.length > 1 ? 'cursor-pointer hover:bg-white/[0.07]' : 'cursor-default'
+                }`}
+                title={visibleChains.length > 1 ? "Switch Network" : "Active Network"}
               >
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
-                <span className="text-[14px] font-mono tracking-tight">{activeChain.name}</span>
+                <div className="relative flex items-center justify-center">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  <span className="absolute w-2 h-2 rounded-full bg-emerald-400 animate-ping opacity-75" />
+                </div>
+                <span className="text-xs font-mono font-medium tracking-tight text-white/90">{activeChain.name}</span>
                 {visibleChains.length > 1 && (
-                  <ChevronDown size={14} className={`text-[#9fa3b2] transition-transform duration-200 ${networkDropdown ? 'rotate-180' : ''}`} />
+                  <ChevronDown size={14} className={`text-white/40 transition-transform duration-200 ${networkDropdown ? 'rotate-180' : ''}`} />
                 )}
               </button>
 
               {visibleChains.length > 1 && networkDropdown && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setNetworkDropdown(false)} />
-                  <div className="absolute right-0 top-full mt-2 w-56 bg-[#111111] border border-white/[0.08] rounded-lg shadow-2xl shadow-black/50 z-50 overflow-hidden py-1.5">
-                    <div className="px-3.5 py-2 border-b border-white/[0.06] text-[11px] uppercase tracking-widest text-white/30">
+                  <div className="absolute right-0 top-full mt-2 w-60 bg-[#0e0e11] border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden py-2 backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150">
+                    <div className="px-4 py-2 border-b border-white/[0.06] text-xs font-semibold uppercase tracking-wider text-white/40">
                       Select Network
                     </div>
                     {visibleChains.map((c) => {
@@ -189,17 +171,17 @@ export default function Navbar() {
                             switchNetwork(c.id);
                             setNetworkDropdown(false);
                           }}
-                          className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-sm transition-all cursor-pointer ${
+                          className={`w-full flex items-center justify-between px-4 py-2.5 text-left text-sm transition-all cursor-pointer ${
                             isSelected 
-                              ? 'bg-white/[0.08] text-white font-medium' 
-                              : 'text-white/60 hover:text-white hover:bg-white/[0.04]'
+                              ? 'bg-primary/10 text-primary font-semibold' 
+                              : 'text-white/70 hover:text-white hover:bg-white/[0.05]'
                           }`}
                         >
                           <div className="flex items-center gap-2.5">
-                            <div className={`w-2 h-2 rounded-full ${isSelected ? 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]' : 'bg-white/20'}`} />
-                            <span className="font-mono text-[13px]">{c.name}</span>
+                            <div className={`w-2 h-2 rounded-full ${isSelected ? 'bg-emerald-400' : 'bg-white/20'}`} />
+                            <span className="font-mono text-xs">{c.name}</span>
                           </div>
-                          {isSelected && <Check size={14} className="text-emerald-400" />}
+                          {isSelected && <Check size={14} className="text-primary" />}
                         </button>
                       );
                     })}
@@ -213,193 +195,160 @@ export default function Navbar() {
               {!isConnected ? (
                 <button 
                   onClick={() => open()}
-                  className="bg-[#161721] border border-[#232532] hover:bg-[#1a1c27] hover:border-[#2f3246] text-[#9fa3b2] px-6 py-2.5 text-sm font-bold tracking-wide transition-all active:scale-95 cursor-pointer h-10 flex items-center justify-center"
+                  className="bg-primary text-black px-5 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all hover:brightness-110 active:scale-95 cursor-pointer shadow-md flex items-center justify-center gap-2"
                 >
                   Connect Wallet
                 </button>
               ) : (
-                <div className="flex items-center gap-2">
-                  <div className="relative">
-                    <button
-                      onClick={() => setWalletDropdown(!walletDropdown)}
-                      className="flex items-center gap-2.5 px-3.5 py-2 bg-[#161721] border border-[#232532] hover:bg-[#1a1c27] hover:border-[#2f3246] transition-all cursor-pointer h-10"
-                    >
-                      <Blockie address={address || ''} size={20} />
-                      <span className="text-[14px] text-[#9fa3b2] font-mono tracking-tight">{shortAddress}</span>
-                      <ChevronDown size={14} className={`text-[#9fa3b2] transition-transform duration-200 ${walletDropdown ? 'rotate-180' : ''}`} />
-                    </button>
+                <div className="relative">
+                  <button
+                    onClick={() => setWalletDropdown(!walletDropdown)}
+                    className="flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-white/[0.04] border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] transition-all cursor-pointer"
+                  >
+                    <Blockie address={address || ''} size={20} />
+                    <span className="text-xs font-mono text-white/90 font-medium tracking-tight">{shortAddress}</span>
+                    <ChevronDown size={14} className={`text-white/40 transition-transform duration-200 ${walletDropdown ? 'rotate-180' : ''}`} />
+                  </button>
 
-                    {/* Wallet Dropdown */}
-                    {walletDropdown && (
-                      <>
-                        <div className="fixed inset-0 z-40" onClick={() => setWalletDropdown(false)} />
-                        
-                        <div className="absolute right-0 top-full mt-2 w-64 bg-[#111111] border border-white/[0.08] rounded-lg shadow-2xl shadow-black/50 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                          {/* Wallet Info */}
-                          <div className="p-4 border-b border-white/[0.06]">
-                            <div className="flex items-center justify-between mb-3">
-                              <span className="text-[11px] uppercase tracking-widest text-white/30">Connected</span>
-                              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  {/* Wallet Dropdown */}
+                  {walletDropdown && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setWalletDropdown(false)} />
+                      
+                      <div className="absolute right-0 top-full mt-2 w-72 bg-[#0e0e11] border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150 backdrop-blur-2xl">
+                        {/* Wallet Header */}
+                        <div className="p-4 border-b border-white/[0.06]">
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-xs uppercase tracking-wider font-semibold text-white/40">Connected</span>
+                            <div className="flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                              <span className="text-xs font-mono text-emerald-400">Online</span>
                             </div>
-                            <div className="flex items-center gap-3">
-                              <Blockie address={address || ''} size={32} />
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[14px] font-mono text-white/80 tracking-tight">{shortAddress}</span>
-                                  <button 
-                                    onClick={handleCopy} 
-                                    className="text-white/20 hover:text-primary transition-colors cursor-pointer"
-                                    title="Copy Address"
-                                  >
-                                    {copied ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
-                                  </button>
-                                </div>
-                                <span className="text-[12px] text-white/30 tracking-wide">{activeChain.name}</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <Blockie address={address || ''} size={36} />
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-mono text-white font-medium tracking-tight">{shortAddress}</span>
+                                <button 
+                                  onClick={handleCopy} 
+                                  className="text-white/40 hover:text-white transition-colors cursor-pointer p-1 rounded-md hover:bg-white/[0.08]"
+                                  title="Copy Address"
+                                >
+                                  {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                                </button>
                               </div>
+                              <span className="text-xs text-white/40 font-mono">{activeChain.name}</span>
                             </div>
-                          </div>
-
-                          {/* Balance */}
-                          <div className="px-4 py-3 border-b border-white/[0.06]">
-                            <span className="text-[11px] uppercase tracking-widest text-white/30">Balance</span>
-                            <p className="text-[16px] text-[#9fa3b2] font-mono mt-1">
-                              {formattedBalance} <span className="text-white/30">{tokens[0]?.symbol || activeChain.nativeCurrency.symbol}</span>
-                            </p>
-                          </div>
-
-                          {/* Disconnect */}
-                          <div className="p-2">
-                            <button 
-                              onClick={() => { disconnect(); setWalletDropdown(false); }}
-                              className="w-full flex items-center gap-2 px-3 py-2 text-white/45 hover:text-red-400 hover:bg-red-500/[0.06] transition-all cursor-pointer text-xs font-semibold"
-                            >
-                              <LogOut size={13} />
-                              <span className="text-xs font-semibold tracking-wide">Disconnect</span>
-                            </button>
                           </div>
                         </div>
-                      </>
-                    )}
-                  </div>
+
+                        {/* Balance */}
+                        <div className="px-4 py-3.5 border-b border-white/[0.06] bg-white/[0.02]">
+                          <span className="text-xs uppercase tracking-wider font-semibold text-white/40">Native Balance</span>
+                          <p className="text-base text-white font-mono font-bold mt-1">
+                            {formattedBalance} <span className="text-xs text-white/50 font-normal">{tokens[0]?.symbol || activeChain.nativeCurrency.symbol}</span>
+                          </p>
+                        </div>
+
+                        {/* Disconnect */}
+                        <div className="p-2">
+                          <button 
+                            onClick={() => { disconnect(); setWalletDropdown(false); }}
+                            className="w-full flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-white/60 hover:text-rose-400 hover:bg-rose-500/10 transition-all cursor-pointer text-xs font-semibold"
+                          >
+                            <LogOut size={14} />
+                            <span>Disconnect Wallet</span>
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Hamburger Toggle */}
+            {/* Mobile Hamburger Toggle */}
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden w-9 h-9 flex items-center justify-center bg-white/[0.04] border border-white/[0.08] text-white/60 hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer"
+              className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.08] text-white/70 hover:text-white transition-all cursor-pointer"
             >
-              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
       </header>
 
       {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 z-40 md:hidden bg-[#0a0a0a]/98 backdrop-blur-2xl transition-all duration-400 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-        <div className="flex flex-col h-full pt-16 px-6 md:px-8 pb-12 overflow-y-auto">
+      <div className={`fixed inset-0 z-40 md:hidden bg-[#060608]/95 backdrop-blur-2xl transition-all duration-300 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+        <div className="flex flex-col h-full pt-24 px-6 pb-12 overflow-y-auto">
           {/* Mobile Nav Links */}
-          <nav className="flex flex-col gap-1 mt-4">
+          <nav className="flex flex-col gap-2">
             {navLinks.map((link) => (
               <Link 
                 key={link.href}
                 to={link.href} 
                 onClick={() => setIsMenuOpen(false)}
-                className={`flex items-center justify-between px-4 py-4 transition-all duration-200 ${
+                className={`flex items-center justify-between px-4 py-3.5 rounded-xl transition-all ${
                   pathname === link.href 
-                    ? 'bg-white/[0.05] text-white' 
-                    : 'text-white/40 hover:text-white hover:bg-white/[0.03]'
+                    ? 'bg-white/10 text-white font-semibold' 
+                    : 'text-white/60 hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
-                <span className="text-[17px] font-medium">{link.label}</span>
-                <ArrowRight size={16} className={`transition-all duration-200 ${pathname === link.href ? 'text-primary opacity-100' : 'opacity-0'}`} />
+                <span className="text-base font-medium">{link.label}</span>
+                <ArrowRight size={16} className={`transition-all ${pathname === link.href ? 'text-primary' : 'text-white/20'}`} />
               </Link>
             ))}
           </nav>
 
-          {/* Mobile Network Selector */}
-          {visibleChains.length > 1 ? (
-            <div className="mt-6 p-4 bg-white/[0.03] border border-white/[0.06] rounded-lg">
-              <p className="text-[11px] uppercase tracking-widest text-white/30 mb-2">Switch Network</p>
-              <div className="grid grid-cols-2 gap-2">
-                {visibleChains.map((c) => {
-                  const isSelected = c.id === chainId;
-                  return (
-                    <button
-                      key={c.id}
-                      onClick={() => switchNetwork(c.id)}
-                      className={`px-3 py-2 text-xs font-mono rounded flex items-center justify-center gap-1.5 border transition-all ${
-                        isSelected 
-                          ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300' 
-                          : 'bg-white/[0.02] border-white/[0.08] text-white/50 hover:text-white'
-                      }`}
-                    >
-                      <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-emerald-400' : 'bg-white/20'}`} />
-                      <span>{c.name.replace(' Mainnet', '').replace(' Testnet', '')}</span>
-                    </button>
-                  );
-                })}
-              </div>
+          {/* Mobile Network Info */}
+          <div className="mt-6 p-4 bg-white/[0.03] border border-white/[0.06] rounded-2xl flex items-center justify-between">
+            <span className="text-xs uppercase tracking-wider font-semibold text-white/40">Network</span>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="text-xs font-mono font-medium text-white">{activeChain.name}</span>
             </div>
-          ) : (
-            <div className="mt-6 p-4 bg-white/[0.03] border border-white/[0.06] rounded-lg flex items-center justify-between">
-              <p className="text-[11px] uppercase tracking-widest text-white/30">Network</p>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
-                <span className="text-xs font-mono text-white/80">{activeChain.name}</span>
-              </div>
-            </div>
-          )}
+          </div>
 
-          {/* Mobile Authentication Area */}
-          <div className="mt-auto pt-6 border-t border-white/[0.06]">
+          {/* Mobile Wallet Section */}
+          <div className="mt-auto pt-6 border-t border-white/[0.08]">
             {!isConnected ? (
-              <div className="space-y-4">
-                <button 
-                  onClick={() => { open(); setIsMenuOpen(false); }}
-                  className="w-full bg-primary text-black py-4 text-sm font-bold tracking-wide transition-all hover:brightness-110 active:scale-[0.98] cursor-pointer"
-                >
-                  Connect Wallet
-                </button>
-              </div>
+              <button 
+                onClick={() => { open(); setIsMenuOpen(false); }}
+                className="w-full bg-primary text-black py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all hover:brightness-110 active:scale-95 cursor-pointer shadow-lg"
+              >
+                Connect Wallet
+              </button>
             ) : (
               <div className="space-y-4">
-                <div className="bg-white/[0.04] border border-white/[0.08] p-5 space-y-4">
+                <div className="bg-white/[0.03] border border-white/[0.08] rounded-2xl p-4 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] uppercase tracking-widest text-white/30">Connected Wallet</span>
-                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-xs uppercase tracking-wider font-semibold text-white/40">Wallet</span>
+                    <span className="text-xs font-mono text-emerald-400">Connected</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Blockie address={address || ''} size={40} />
-                    <div className="flex-1 flex items-center justify-between">
-                      <div>
-                        <p className="font-mono text-[15px] text-white/80 tracking-tight">{shortAddress}</p>
-                        <p className="text-[12px] text-white/30 tracking-wide">{activeChain.name}</p>
-                      </div>
-                      <button 
-                        onClick={handleCopy} 
-                        className="w-8 h-8 flex items-center justify-center text-white/20 hover:text-primary hover:bg-white/[0.05] transition-all cursor-pointer"
-                        title="Copy Address"
-                      >
-                        {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                      </button>
-                    </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-sm text-white font-medium">{shortAddress}</span>
+                    <button 
+                      onClick={handleCopy} 
+                      className="p-1.5 rounded-md hover:bg-white/10 text-white/40 hover:text-white transition-colors"
+                    >
+                      {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                    </button>
                   </div>
-                  <div className="pt-3 border-t border-white/[0.06]">
-                    <span className="text-[11px] uppercase tracking-widest text-white/30">Balance</span>
-                    <p className="text-[16px] text-white/80 font-mono mt-0.5">
-                      {formattedBalance} <span className="text-white/30">{tokens[0]?.symbol || activeChain.nativeCurrency.symbol}</span>
-                    </p>
+                  <div className="pt-2 border-t border-white/[0.06] flex justify-between items-baseline">
+                    <span className="text-xs text-white/40">Balance</span>
+                    <span className="text-sm font-mono text-white font-semibold">
+                      {formattedBalance} {tokens[0]?.symbol || activeChain.nativeCurrency.symbol}
+                    </span>
                   </div>
                 </div>
-                
+
                 <button 
                   onClick={() => { disconnect(); setIsMenuOpen(false); }}
-                  className="w-full bg-white/[0.03] border border-white/[0.06] text-white/60 py-4 text-sm font-semibold tracking-wide flex items-center justify-center gap-2 hover:text-red-400 hover:border-red-500/20 transition-all cursor-pointer"
+                  className="w-full bg-rose-500/10 border border-rose-500/20 text-rose-300 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 hover:bg-rose-500/20 transition-all cursor-pointer"
                 >
-                  <LogOut size={14} />
-                  Disconnect
+                  <LogOut size={15} />
+                  Disconnect Wallet
                 </button>
               </div>
             )}

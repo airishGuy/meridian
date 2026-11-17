@@ -484,34 +484,24 @@ export default function ActivityPage() {
   return (
     <div className="pb-40 relative z-10 w-full">
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 mb-12">
+      {/* Compact Stat Boxes */}
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-8">
         {statCards.map((card) => (
           <div
             key={card.label}
-            className={`relative rounded-2xl p-4 flex flex-col gap-3 overflow-hidden transition-all duration-300 group hover:scale-[1.02] ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all ${
               card.accent
-                ? 'bg-primary/10 border border-primary/30 shadow-[0_0_24px_rgba(234,179,8,0.08)]'
-                : 'bg-white/[0.03] border border-white/[0.07] hover:border-white/15'
+                ? 'bg-primary/10 border border-primary/30 shadow-sm'
+                : 'bg-white/[0.03] border border-white/[0.08] hover:border-white/20'
             }`}
           >
-            {/* subtle top-right glow */}
-            {card.accent && (
-              <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-primary/20 blur-2xl pointer-events-none" />
-            )}
-
-            {/* Label */}
-            <p className="text-[10px] tracking-[0.18em] text-white/30 leading-tight">
-              {card.label}
-            </p>
-
-            {/* Value */}
+            <span className="text-xs text-white/50 font-medium">{card.label}:</span>
             {loading ? (
-              <div className="h-7 w-20 bg-white/5 rounded-lg animate-pulse" />
+              <div className="h-4 w-12 bg-white/10 rounded animate-pulse" />
             ) : (
-              <p className={`text-xl font-semibold tracking-tight leading-none ${card.accent ? 'text-primary' : 'text-white'}`}>
+              <span className={`text-sm font-bold font-mono ${card.accent ? 'text-primary' : 'text-white'}`}>
                 {card.value}
-              </p>
+              </span>
             )}
           </div>
         ))}
@@ -523,22 +513,18 @@ export default function ActivityPage() {
       {/* Tabs & Actions */}
       <div className="flex justify-between items-center border-b border-white/10 mb-10">
         <div className="flex gap-10">
-          <button className="pb-5 text-primary border-b-2 border-primary  uppercase tracking-widest text-xs flex items-center gap-3">
+          <button className="pb-5 text-primary border-b-2 border-primary uppercase tracking-widest text-xs flex items-center gap-3">
             Activity 
-            <span className="bg-primary text-black text-[12px] px-2 py-0.5 rounded-full ">{totalTxCount || filteredSwaps.length}</span>
+            <span className="bg-primary text-black text-xs font-bold px-2 py-0.5 rounded-full">{totalTxCount || filteredSwaps.length}</span>
           </button>
         </div>
-        {/* <button className="bg-primary text-black px-5 py-2 rounded-full  text-[12px] tracking-[0.1em] flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-lg gold-glow mb-4 cursor-pointer">
-          <span className="material-symbols-outlined text-sm ">download</span>
-          EXPORT CSV
-        </button> */}
       </div>
 
       {/* Filters Row */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 bg-white/[0.02] p-6 rounded-2xl border border-white/5">
         <div className="flex flex-wrap items-center gap-6">
           <div className="flex flex-col gap-2">
-            <label className="text-[12px] text-white/40">Filter by type</label>
+            <label className="text-xs font-semibold uppercase tracking-wider text-white/40">Filter by type</label>
             <div className="relative">
               <button 
                 onClick={() => setFilterOpen(!filterOpen)}
@@ -560,7 +546,7 @@ export default function ActivityPage() {
                         setFilterType(type);
                         setFilterOpen(false);
                       }}
-                      className={`w-full text-left px-5 py-3 text-sm  transition-colors border-l-2 ${filterType === type ? 'text-primary bg-primary/10 border-primary' : 'text-white/70 hover:bg-white/5 hover:text-white border-transparent cursor-pointer'}`}
+                      className={`w-full text-left px-5 py-3 text-sm transition-colors border-l-2 ${filterType === type ? 'text-primary bg-primary/10 border-primary' : 'text-white/70 hover:bg-white/5 hover:text-white border-transparent cursor-pointer'}`}
                     >
                       {type}
                     </button>
@@ -571,13 +557,13 @@ export default function ActivityPage() {
           </div>
         </div>
         <div className="flex flex-col gap-2 w-full md:w-auto">
-          <label className="text-[12px] text-white/40">Time Range</label>
+          <label className="text-xs font-semibold uppercase tracking-wider text-white/40">Time Range</label>
           <div className="flex bg-black/40 rounded-full p-1.5 border border-white/10">
             {['1h', '24h', '7d', '30d', 'All Time'].map(range => (
               <button 
                 key={range}
                 onClick={() => setTimeRange(range)}
-                className={`flex-1 md:px-6 py-2 text-[12px] font-bold tracking-wider rounded-full transition-all whitespace-nowrap active:scale-95 ${timeRange === range ? 'bg-primary text-black shadow-lg' : 'text-white/40 hover:text-white cursor-pointer'}`}
+                className={`flex-1 md:px-6 py-2 text-xs font-bold tracking-wider rounded-full transition-all whitespace-nowrap active:scale-95 ${timeRange === range ? 'bg-primary text-black shadow-lg' : 'text-white/40 hover:text-white cursor-pointer'}`}
               >
                 {range}
               </button>
@@ -593,7 +579,7 @@ export default function ActivityPage() {
             <h3 className="text-base font-bold text-white tracking-tight">Transactions Feed</h3>
             <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">Live</span>
+              <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Live</span>
             </div>
           </div>
           <span className="text-xs text-white/40 font-mono">
@@ -601,7 +587,7 @@ export default function ActivityPage() {
           </span>
         </div>
 
-        <div className="hidden md:grid grid-cols-[100px_1.4fr_120px_140px_140px_110px] gap-4 px-6 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/40 border-b border-white/[0.06] bg-[#0a0a0a]">
+        <div className="hidden md:grid grid-cols-[100px_1.4fr_120px_140px_140px_110px] gap-4 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white/40 border-b border-white/[0.06] bg-[#0a0a0a]">
           <div>Time</div>
           <div>Type & Action</div>
           <div className="text-right">Total USD</div>
@@ -637,7 +623,7 @@ export default function ActivityPage() {
                 >
                   {/* Time */}
                   <div className="flex md:block justify-between items-center text-xs text-white/50 font-mono">
-                     <span className="md:hidden text-[11px] uppercase tracking-wider text-white/30 font-sans">Time</span>
+                     <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Time</span>
                      <span className="flex items-center gap-1.5">
                        <Clock size={12} className="text-white/30 hidden md:inline" />
                        {formattedTime}
@@ -646,30 +632,30 @@ export default function ActivityPage() {
 
                   {/* Type & Action */}
                   <div className="flex md:block justify-between items-center">
-                    <span className="md:hidden text-[11px] uppercase tracking-wider text-white/30 font-sans">Type</span>
+                    <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Type</span>
                     <div className="flex items-center gap-2">
                       {isSwap ? (
                         isBuy ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-bold rounded-sm bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 uppercase">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded-sm bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 uppercase">
                             <ArrowUpRight size={13} className="stroke-[2.5]" />
                             buy
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-bold rounded-sm bg-rose-500/10 text-rose-400 border border-rose-500/25 uppercase">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded-sm bg-rose-500/10 text-rose-400 border border-rose-500/25 uppercase">
                             <ArrowDownRight size={13} className="stroke-[2.5]" />
                             sell
                           </span>
                         )
                       ) : isAddLiq ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-bold rounded-sm bg-purple-500/10 text-purple-300 border border-purple-500/25 uppercase">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded-sm bg-purple-500/10 text-purple-300 border border-purple-500/25 uppercase">
                           + add lp
                         </span>
                       ) : isRemoveLiq ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-bold rounded-sm bg-amber-500/10 text-amber-300 border border-amber-500/25 uppercase">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded-sm bg-amber-500/10 text-amber-300 border border-amber-500/25 uppercase">
                           - remove lp
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-bold rounded-sm bg-cyan-500/10 text-cyan-300 border border-cyan-500/25 uppercase">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded-sm bg-cyan-500/10 text-cyan-300 border border-cyan-500/25 uppercase">
                           fees
                         </span>
                       )}
@@ -681,7 +667,7 @@ export default function ActivityPage() {
 
                   {/* Total USD */}
                   <div className="flex md:block justify-between items-center md:text-right">
-                    <span className="md:hidden text-[11px] uppercase tracking-wider text-white/30 font-sans">Total USD</span>
+                    <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Total USD</span>
                     <span className={`text-sm font-bold font-mono ${isSwap && isBuy ? 'text-emerald-400' : 'text-white/90'}`}>
                       {row.usd === '-' ? '-' : formatCurrency(row.usd)}
                     </span>
@@ -689,7 +675,7 @@ export default function ActivityPage() {
 
                   {/* Token0 Amount */}
                   <div className="flex md:block justify-between items-center md:text-right">
-                    <span className="md:hidden text-[11px] uppercase tracking-wider text-white/30 font-sans">Token0</span>
+                    <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Token0</span>
                     <span className={`text-xs font-mono font-medium ${row.isToken0Negative ? 'text-rose-400/80' : 'text-emerald-400'}`}>
                       {row.token0Amount}
                     </span>
@@ -697,7 +683,7 @@ export default function ActivityPage() {
 
                   {/* Token1 Amount */}
                   <div className="flex md:block justify-between items-center md:text-right">
-                    <span className="md:hidden text-[11px] uppercase tracking-wider text-white/30 font-sans">Token1</span>
+                    <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Token1</span>
                     <span className={`text-xs font-mono font-medium ${row.isToken1Negative ? 'text-rose-400/80' : 'text-emerald-400'}`}>
                       {row.token1Amount || '-'}
                     </span>
@@ -705,7 +691,7 @@ export default function ActivityPage() {
 
                   {/* Txn Hash */}
                   <div className="flex md:block justify-between items-center md:text-right">
-                    <span className="md:hidden text-[11px] uppercase tracking-wider text-white/30 font-sans">Txn</span>
+                    <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Txn</span>
                     <a 
                       href={`${BLOCK_EXPLORER_URL}/tx/${row.hash}`}
                       target="_blank"
@@ -752,140 +738,3 @@ export default function ActivityPage() {
     </div>
   );
 }
-
-
-
-
-
-      {/* Unique Users Toggle Section */}
-      // <div className="mb-12">
-      //   <div 
-      //     onClick={handleFetchUniqueUsers}
-      //     className="flex items-center justify-between p-6 bg-white/[0.02] border border-white/[0.07] hover:border-white/15 rounded-3xl cursor-pointer transition-all duration-300 group shadow-lg"
-      //   >
-      //     <div className="flex items-center gap-4">
-      //       <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-      //         <Users size={22} />
-      //       </div>
-      //       <div>
-      //         <h3 className="text-white font-semibold text-base tracking-tight group-hover:text-primary transition-colors">
-      //           Unique User Analytics
-      //         </h3>
-      //         <p className="text-white/45 text-xs">
-      //           {fetchingUsers 
-      //             ? "Scanning on-chain transactions..." 
-      //             : userStats 
-      //               ? `${userStats.uniqueCount} unique wallets have interacted with the protocol` 
-      //               : "Click to load unique wallet statistics"}
-      //         </p>
-      //       </div>
-      //     </div>
-
-      //     <div className="flex items-center gap-3">
-      //       {fetchingUsers && <Loader2 size={18} className="animate-spin text-primary" />}
-      //       <span className="text-[10px] uppercase tracking-widest font-semibold text-white/35 group-hover:text-white transition-colors bg-white/[0.03] px-3.5 py-1.5 rounded-full border border-white/5">
-      //         {showUniqueUsers ? "Collapse" : "Explore"}
-      //       </span>
-      //       {showUniqueUsers ? <ChevronUp size={16} className="text-white/40" /> : <ChevronDown size={16} className="text-white/40" />}
-      //     </div>
-      //   </div>
-
-      //   {/* Unique Users Stats Dashboard */}
-      //   {showUniqueUsers && (
-      //     <div className="mt-4 p-6 bg-white/[0.01] border border-white/5 rounded-3xl backdrop-blur-md transition-all duration-300 animate-fadeIn space-y-6">
-      //       {fetchingUsers ? (
-      //         <div className="flex flex-col items-center justify-center py-16 gap-4">
-      //           <Loader2 size={36} className="animate-spin text-primary" />
-      //           <p className="text-xs uppercase tracking-widest text-white/40 animate-pulse">Querying Subgraphs...</p>
-      //         </div>
-      //       ) : userStats ? (
-      //         <>
-      //           {/* Stats Breakdown */}
-      //           <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-      //             {/* Grand Total */}
-      //             <div className="relative overflow-hidden rounded-2xl p-5 bg-primary/[0.04] border border-primary/20 flex flex-col gap-2">
-      //               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-full blur-xl pointer-events-none" />
-      //               <span className="text-[9px] uppercase tracking-widest text-primary font-bold">Total Unique Users</span>
-      //               <span className="text-3xl font-extrabold text-white tracking-tight">{userStats.uniqueCount}</span>
-      //             </div>
-      //             {/* Swappers */}
-      //             <div className="rounded-2xl p-5 bg-white/[0.02] border border-white/[0.06] flex flex-col gap-2">
-      //               <span className="text-[9px] uppercase tracking-widest text-white/40">Unique Swappers</span>
-      //               <span className="text-2xl font-bold text-white tracking-tight">{userStats.swappersCount}</span>
-      //             </div>
-      //             {/* Liquidity Providers */}
-      //             <div className="rounded-2xl p-5 bg-white/[0.02] border border-white/[0.06] flex flex-col gap-2">
-      //               <span className="text-[9px] uppercase tracking-widest text-white/40">Liquidity Providers</span>
-      //               <span className="text-2xl font-bold text-white tracking-tight">{userStats.lpCount}</span>
-      //             </div>
-      //             {/* Position Owners */}
-      //             <div className="rounded-2xl p-5 bg-white/[0.02] border border-white/[0.06] flex flex-col gap-2">
-      //               <span className="text-[9px] uppercase tracking-widest text-white/40">Position Owners</span>
-      //               <span className="text-2xl font-bold text-white tracking-tight">{userStats.positionOwnersCount}</span>
-      //             </div>
-      //             {/* Points Holders */}
-      //             <div className="rounded-2xl p-5 bg-white/[0.02] border border-white/[0.06] flex flex-col gap-2">
-      //               <span className="text-[9px] uppercase tracking-widest text-white/40">Points Holders</span>
-      //               <span className="text-2xl font-bold text-white tracking-tight">{userStats.pointsCount}</span>
-      //             </div>
-      //           </div>
-
-      //           {/* Address List Toggle Button */}
-      //           <div className="pt-2">
-      //             <button 
-      //               onClick={() => setShowAddressList(!showAddressList)}
-      //               className="flex items-center gap-2 text-xs font-semibold text-primary hover:underline cursor-pointer bg-transparent border-none"
-      //             >
-      //               {showAddressList ? "Hide full address list" : "Show full address list"}
-      //               {showAddressList ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-      //             </button>
-
-      //             {showAddressList && (
-      //               <div className="mt-4 space-y-4">
-      //                 {/* Search Bar */}
-      //                 <div className="relative max-w-md">
-      //                   <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/35" />
-      //                   <input
-      //                     type="text"
-      //                     placeholder="Search addresses..."
-      //                     value={addressSearch}
-      //                     onChange={(e) => setAddressSearch(e.target.value)}
-      //                     className="w-full bg-black/40 border border-white/10 rounded-full py-2.5 pl-10 pr-4 text-xs text-white placeholder-white/35 focus:outline-none focus:border-primary/50 transition-colors"
-      //                   />
-      //                 </div>
-
-      //                 {/* Address Grid */}
-      //                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-      //                   {userStats.addresses
-      //                     .filter(addr => addr.includes(addressSearch.toLowerCase()))
-      //                     .map((address) => (
-      //                       <div 
-      //                         key={address} 
-      //                         className="flex items-center justify-between p-3 bg-black/20 border border-white/[0.04] hover:border-white/10 rounded-xl transition-all text-xs font-mono text-white/60 hover:text-white"
-      //                       >
-      //                         <span>{address.slice(0, 10)}…{address.slice(-8)}</span>
-      //                         <a 
-      //                           href={`https://elysium.kinetiq.xyz/testnet-explorer/address/${address}`} 
-      //                           target="_blank" 
-      //                           rel="noopener noreferrer" 
-      //                           className="text-primary hover:underline flex items-center gap-0.5"
-      //                         >
-      //                           View <ExternalLink size={10} />
-      //                         </a>
-      //                       </div>
-      //                     ))
-      //                   }
-      //                   {userStats.addresses.filter(addr => addr.includes(addressSearch.toLowerCase())).length === 0 && (
-      //                     <div className="col-span-full text-center py-6 text-xs text-white/30">
-      //                       No addresses match your search.
-      //                     </div>
-      //                   )}
-      //                 </div>
-      //               </div>
-      //             )}
-      //           </div>
-      //         </>
-      //       ) : null}
-      //     </div>
-      //   )}
-      // </div>

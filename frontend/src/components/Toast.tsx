@@ -66,7 +66,7 @@ const Toast: React.FC<ToastProps> = ({ type, title, message, onClose, txHash }) 
                 href={`${BLOCK_EXPLORER_URL}/tx/${txHash}`}
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="mt-2 flex items-center gap-1 text-[12px]  uppercase tracking-widest text-white hover:brightness-125 transition-all w-fit"
+                className="mt-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-white hover:brightness-125 transition-all w-fit"
               >
                 View on Explorer
                 <ExternalLink size={12} />

@@ -330,49 +330,55 @@ export default function SwapPage() {
 
 
   return (
-    <div className="flex-grow flex items-center justify-center pb-40 relative w-full">
-      {/* Background Glows */}
-      <div className="fixed top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/5 rounded-full blur-[160px] pointer-events-none" />
-      <div className="fixed bottom-1/4 -right-20 w-72 h-72 bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
+    <div className="flex-grow flex items-center justify-center py-6 sm:py-12 relative w-full">
+      {/* Background Ambient Glows */}
+      <div className="fixed top-1/4 left-1/2 -translate-x-1/2 w-[550px] h-[350px] bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="w-full max-w-[480px] mx-auto">
-
-        {/* No pool found warning */}
+      <div className="w-full max-w-[480px] mx-auto relative z-10">
+        {/* Warning if no pool found */}
         {!poolsLoading && matchingPools.length === 0 && (
-          <div className="mb-3 px-4 py-3 rounded-2xl border border-red-500/20 bg-red-500/[0.04] flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
-            <span className="text-[11px] uppercase tracking-widest text-red-400/80">No pool found for this pair</span>
+          <div className="mb-4 px-4 py-3 rounded-2xl border border-amber-500/20 bg-amber-500/[0.06] flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
+            <span className="text-xs uppercase tracking-wider font-semibold text-amber-300">
+              No active liquidity pool found for this pair
+            </span>
           </div>
         )}
 
         {/* Main Swap Card */}
-        <div className="rounded-3xl border border-white/[0.07] bg-[#0c0c0c] shadow-2xl overflow-hidden">
-
+        <div className="rounded-3xl border border-white/[0.08] bg-[#0c0c0e]/95 backdrop-blur-2xl shadow-2xl overflow-hidden p-3 sm:p-4">
           {/* Card Header */}
-          <div className="flex items-center justify-between px-5 pt-5 pb-3">
-            <span className="text-[13px] font-semibold text-white/70 tracking-wide">Swap</span>
+          <div className="flex items-center justify-between px-3 pt-2 pb-3">
+            <div className="flex items-center gap-2">
+              <span className="text-base font-bold text-white tracking-tight">Swap</span>
+              <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.06] text-white/50">
+                Uniswap v4
+              </span>
+            </div>
             {poolsLoading && (
-              <div className="flex items-center gap-1.5">
-                <div className="h-3 w-3 border border-primary/40 border-t-primary rounded-full animate-spin" />
-                <span className="text-[10px] text-white/20 uppercase tracking-widest">Finding pools</span>
+              <div className="flex items-center gap-2">
+                <Loader2 size={13} className="animate-spin text-primary" />
+                <span className="text-xs text-white/40 font-medium">Finding best route...</span>
               </div>
             )}
             {rateText && !poolsLoading && (
-              <span className="text-[11px] text-white/30 font-mono">{rateText}</span>
+              <span className="text-xs text-white/50 font-mono">{rateText}</span>
             )}
           </div>
 
-          <div className="px-3 pb-3 space-y-1">
-
+          <div className="space-y-1 relative">
             {/* From Token Box */}
-            <div className="bg-white/[0.04] hover:bg-white/[0.05] transition-all duration-200 rounded-2xl px-4 pt-4 pb-5 border border-white/[0.04] hover:border-white/[0.07]">
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-[11px] text-white/25 uppercase tracking-widest font-medium">You pay</span>
+            <div className="bg-[#121216] hover:bg-[#15151a] focus-within:bg-[#15151a] focus-within:border-white/15 transition-all duration-200 rounded-2xl p-4 border border-white/[0.06]">
+              <div className="flex justify-between items-center mb-2.5">
+                <span className="text-xs uppercase tracking-wider font-semibold text-white/40">You Pay</span>
                 <button
+                  type="button"
                   onClick={() => { if (fromBalance) onInputChange(fromBalance.replace(/,/g, '')); setIsExactInput(true); }}
-                  className="text-[11px] text-white/35 hover:text-primary transition-colors cursor-pointer"
+                  className="text-xs text-white/50 hover:text-primary transition-colors cursor-pointer flex items-center gap-1.5"
                 >
-                  balance: <span className="font-mono">{fromBalance}</span> <span className="token-symbol">{effectiveFromToken.symbol}</span>
+                  <span>Balance:</span>
+                  <span className="font-mono text-white/90 font-medium">{fromBalance}</span>
+                  <span className="token-symbol text-white/60">{effectiveFromToken.symbol}</span>
                 </button>
               </div>
               <div className="flex items-center justify-between gap-3">
@@ -382,13 +388,13 @@ export default function SwapPage() {
                       type="text"
                       value={inputAmount}
                       onChange={(e) => { setIsExactInput(true); onInputChange(e.target.value); }}
-                      className={`bg-transparent border-none p-0 text-[32px] leading-none focus:ring-0 focus:outline-none w-full placeholder:text-white/10 font-medium ${
-                        isExactInput ? 'text-white' : 'text-white/35'
+                      className={`bg-transparent border-none p-0 text-3xl sm:text-4xl leading-tight focus:ring-0 focus:outline-none w-full placeholder:text-white/15 font-bold tracking-tight ${
+                        isExactInput ? 'text-white' : 'text-white/40'
                       }`}
                       placeholder="0"
                     />
                     {quoteLoading && !isExactInput && (
-                      <Loader2 size={16} className="animate-spin text-white/30 shrink-0" />
+                      <Loader2 size={18} className="animate-spin text-primary shrink-0" />
                     )}
                   </div>
                 </div>
@@ -403,21 +409,25 @@ export default function SwapPage() {
             </div>
 
             {/* Flip Button */}
-            <div className="flex justify-center relative z-10 py-2">
+            <div className="flex justify-center -my-2.5 relative z-20">
               <button
+                type="button"
                 onClick={handleFlipTokens}
-                className="w-9 h-9 bg-[#0c0c0c] border border-white/[0.08] flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/30 hover:bg-primary/5 shadow-lg transition-all duration-200 active:scale-95 cursor-pointer"
+                className="w-10 h-10 rounded-full bg-[#18181f] border border-white/10 flex items-center justify-center text-white/60 hover:text-primary hover:border-primary/40 hover:bg-primary/10 shadow-xl transition-all duration-200 active:scale-90 cursor-pointer"
+                title="Swap Direction"
               >
-                <ArrowDown size={15} strokeWidth={2.5} />
+                <ArrowDown size={16} strokeWidth={2.5} />
               </button>
             </div>
 
             {/* To Token Box */}
-            <div className="bg-white/[0.025] hover:bg-white/[0.04] transition-all duration-200 rounded-2xl px-4 pt-4 pb-5 border border-white/[0.04] hover:border-white/[0.07]">
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-[11px] text-white/25 uppercase tracking-widest font-medium">You receive</span>
-                <span className="text-[11px] text-white/25 font-mono">
-                  balance: {toBalance} <span className="token-symbol">{effectiveToToken.symbol}</span>
+            <div className="bg-[#121216] hover:bg-[#15151a] focus-within:bg-[#15151a] focus-within:border-white/15 transition-all duration-200 rounded-2xl p-4 border border-white/[0.06]">
+              <div className="flex justify-between items-center mb-2.5">
+                <span className="text-xs uppercase tracking-wider font-semibold text-white/40">You Receive</span>
+                <span className="text-xs text-white/50 flex items-center gap-1.5">
+                  <span>Balance:</span>
+                  <span className="font-mono text-white/90 font-medium">{toBalance}</span>
+                  <span className="token-symbol text-white/60">{effectiveToToken.symbol}</span>
                 </span>
               </div>
               <div className="flex items-center justify-between gap-3">
@@ -427,13 +437,13 @@ export default function SwapPage() {
                       type="text"
                       value={outputAmount}
                       onChange={(e) => { setIsExactInput(false); onOutputChange(e.target.value); }}
-                      className={`bg-transparent border-none p-0 text-[32px] leading-none focus:ring-0 focus:outline-none w-full placeholder:text-white/10 font-medium ${
-                        !isExactInput ? 'text-white' : 'text-white/35'
+                      className={`bg-transparent border-none p-0 text-3xl sm:text-4xl leading-tight focus:ring-0 focus:outline-none w-full placeholder:text-white/15 font-bold tracking-tight ${
+                        !isExactInput ? 'text-white' : 'text-white/40'
                       }`}
                       placeholder="0"
                     />
                     {quoteLoading && isExactInput && (
-                      <Loader2 size={16} className="animate-spin text-white/30 shrink-0" />
+                      <Loader2 size={18} className="animate-spin text-primary shrink-0" />
                     )}
                   </div>
                 </div>
@@ -448,73 +458,77 @@ export default function SwapPage() {
             </div>
           </div>
 
-          {/* Quote Error */}
+          {/* Quote Error Message */}
           {quoteError && (
-            <div className="mx-3 mb-3 px-4 py-2.5 bg-red-500/[0.04] border border-red-500/10 text-red-400/80 text-[11px] uppercase tracking-widest text-center rounded-xl">
+            <div className="mt-3 px-4 py-2.5 bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-medium text-center rounded-2xl">
               {quoteError}
             </div>
           )}
 
-          {/* Swap Button */}
-          <div className="px-3 pb-3">
+          {/* Swap CTA Button */}
+          <div className="mt-3">
             {!isConnected ? (
               <button
+                type="button"
                 onClick={() => open()}
-                className="w-full py-4 bg-primary text-black text-[15px] tracking-wide font-bold transition-all hover:brightness-110 active:scale-[0.98] cursor-pointer shadow-lg"
+                className="w-full py-4 rounded-2xl bg-primary text-black text-base tracking-wide font-bold transition-all hover:brightness-110 active:scale-[0.98] cursor-pointer shadow-lg"
               >
                 Connect Wallet
               </button>
             ) : (
               <button
+                type="button"
                 onClick={handleSwapClick}
                 disabled={quoteLoading || !!quoteError || !inputAmount || Number(inputAmount) <= 0 || !outputAmount || Number(outputAmount) <= 0}
-                className="w-full py-4 bg-primary text-black text-[15px] tracking-wide font-bold transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shadow-lg"
+                className="w-full py-4 rounded-2xl bg-primary text-black text-base tracking-wide font-bold transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shadow-lg"
               >
-                {quoteLoading ? 'Getting Quote…' : 'Swap'}
+                {quoteLoading ? 'Fetching Best Quote…' : 'Swap'}
               </button>
             )}
           </div>
 
-          {/* Details Section */}
+          {/* Order Details & Slippage Settings */}
           {(rateText || isConnected) && (
-            <div className="border-t border-white/[0.05]">
-
-              {/* Slippage row */}
-              <div className="flex items-center justify-between px-5 py-3.5">
-                <span className="text-[11px] text-white/30 uppercase tracking-widest">Slippage</span>
+            <div className="mt-3 pt-3 border-t border-white/[0.06] space-y-2 px-1">
+              {/* Slippage Row */}
+              <div className="flex items-center justify-between text-xs py-1">
+                <span className="uppercase tracking-wider font-semibold text-white/40">Max Slippage</span>
                 <div className="flex items-center gap-1.5">
-                  <div className="flex items-center gap-0.5 bg-white/[0.03] border border-white/[0.05] p-0.5">
+                  <div className="flex items-center p-0.5 bg-white/[0.04] border border-white/[0.06] rounded-xl">
                     {['0.1', '0.5', '1.0'].map((preset) => (
                       <button
                         key={preset}
+                        type="button"
                         onClick={() => { setSlippage(preset); setIsAutoSlippage(preset === '0.5'); }}
-                        className={`px-2.5 py-1 text-[12px] font-semibold transition-all cursor-pointer ${
+                        className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                           slippage === preset && isAutoSlippage === (preset === '0.5')
-                            ? 'bg-primary text-black shadow'
-                            : 'text-white/30 hover:text-white/60'
+                            ? 'bg-primary text-black shadow-sm font-bold'
+                            : 'text-white/40 hover:text-white'
                         }`}
                       >
                         {preset}%
                       </button>
                     ))}
                   </div>
-                  <div className={`flex items-center bg-white/[0.03] border px-2.5 py-1 transition-all ${!isAutoSlippage && !['0.1','0.5','1.0'].includes(slippage) ? 'border-primary/40' : 'border-white/[0.05]'}`}>
+                  <div className={`flex items-center bg-white/[0.04] border rounded-xl px-2.5 py-1 transition-all ${
+                    !isAutoSlippage && !['0.1','0.5','1.0'].includes(slippage) ? 'border-primary/50 text-white' : 'border-white/[0.06] text-white/60'
+                  }`}>
                     <input
                       type="text"
                       value={slippage}
                       onChange={(e) => { setSlippage(e.target.value); setIsAutoSlippage(false); }}
-                      className="bg-transparent border-none p-0 text-[11px] text-white/70 focus:ring-0 focus:outline-none w-6 text-right"
+                      className="bg-transparent border-none p-0 text-xs text-white focus:ring-0 focus:outline-none w-7 text-right font-mono"
                     />
-                    <span className="text-[11px] ml-0.5 text-white/25">%</span>
+                    <span className="text-xs text-white/30 ml-0.5">%</span>
                   </div>
                 </div>
               </div>
 
-              {/* Reverse rate */}
+              {/* Rate Detail */}
               {reverseRateText && (
-                <div className="flex items-center justify-between px-5 py-3 border-t border-white/[0.04]">
-                  <span className="text-[11px] text-white/20 uppercase tracking-widest">Rate</span>
-                  <span className="text-[11px] text-white/40 font-mono">{reverseRateText}</span>
+                <div className="flex items-center justify-between text-xs py-1 border-t border-white/[0.04]">
+                  <span className="uppercase tracking-wider font-semibold text-white/40">Exchange Rate</span>
+                  <span className="text-xs text-white/70 font-mono font-medium">{reverseRateText}</span>
                 </div>
               )}
             </div>

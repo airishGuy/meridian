@@ -91,93 +91,96 @@ export default function SwapConfirmationModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity"
+        className="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity"
         onClick={onClose}
-      ></div>
+      />
 
       {/* Modal Content */}
-      <div className="relative w-full max-w-[560px] rounded-2xl border border-white/10 bg-[#0d0d0d]/90 p-6 shadow-2xl backdrop-blur-2xl animate-in fade-in zoom-in duration-200">
+      <div className="relative w-full max-w-[500px] rounded-3xl border border-white/15 bg-[#0d0d10] p-6 sm:p-7 shadow-2xl backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-200">
         
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xs uppercase tracking-[0.2em] text-white/60 cursor-pointer">Confirm Swap</h3>
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h3 className="text-base font-bold text-white tracking-tight">Review Swap</h3>
+            <p className="text-xs text-white/40 mt-0.5">Please confirm transaction details below</p>
+          </div>
           <button 
             onClick={onClose}
-            className="text-white/40 hover:text-white transition-colors cursor-pointer"
+            className="text-white/40 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Swap Route Visualizer */}
-        <div className="space-y-3 mb-6">
+        <div className="space-y-2 mb-5">
           {/* Pay Block */}
-          <div className="bg-white/[0.02] border border-white/5 p-4 rounded-xl flex items-center justify-between">
+          <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl flex items-center justify-between">
             <div className="flex flex-col gap-1 min-w-0">
-              <span className="text-[12px] tracking-widest text-white/30">Send</span>
-              <span className="text-xl font-medium text-white truncate">{amountIn}</span>
+              <span className="text-xs uppercase tracking-wider text-white/40 font-medium">You Pay</span>
+              <span className="text-xl font-bold font-mono text-white truncate">{amountIn}</span>
             </div>
-            <div className="flex items-center gap-2 shrink-0 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
-              <div className="w-5 h-5 shrink-0 rounded-full overflow-hidden">
+            <div className="flex items-center gap-2 shrink-0 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
+              <div className="w-6 h-6 shrink-0 rounded-full overflow-hidden">
                 <TokenImage tokenAddress={fromToken.address} symbol={fromToken.symbol} className="w-full h-full" alt={fromToken.symbol} />
               </div>
-              <span className="text-xs text-white">{fromToken.symbol}</span>
+              <span className="text-xs font-semibold text-white">{fromToken.symbol}</span>
             </div>
           </div>
 
           {/* Arrow */}
-          <div className="flex justify-center -my-5 relative z-10">
-            <div className="w-8 h-8 bg-black border border-white/10 rounded-full flex items-center justify-center text-primary shadow-lg">
+          <div className="flex justify-center -my-3.5 relative z-10">
+            <div className="w-8 h-8 bg-[#16161a] border border-white/15 rounded-full flex items-center justify-center text-primary shadow-lg">
               <ArrowDown size={14} strokeWidth={2.5} />
             </div>
           </div>
 
           {/* Receive Block */}
-          <div className="bg-white/[0.02] border border-white/5 p-4 rounded-xl flex items-center justify-between">
+          <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl flex items-center justify-between">
             <div className="flex flex-col gap-1 min-w-0">
-              <span className="text-[12px] tracking-widest text-white/30">Receive</span>
-              <span className="text-xl font-medium text-white truncate">{amountOut}</span>
+              <span className="text-xs uppercase tracking-wider text-white/40 font-medium">You Receive</span>
+              <span className="text-xl font-bold font-mono text-white truncate">{amountOut}</span>
             </div>
-            <div className="flex items-center gap-2 shrink-0 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
-              <div className="w-5 h-5 shrink-0 rounded-full overflow-hidden">
+            <div className="flex items-center gap-2 shrink-0 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
+              <div className="w-6 h-6 shrink-0 rounded-full overflow-hidden">
                 <TokenImage tokenAddress={toToken.address} symbol={toToken.symbol} className="w-full h-full" alt={toToken.symbol} />
               </div>
-              <span className="text-xs text-white">{toToken.symbol}</span>
+              <span className="text-xs font-semibold text-white">{toToken.symbol}</span>
             </div>
           </div>
         </div>
 
         {/* Details Table */}
-        <div className="bg-white/[0.01] border border-white/5 rounded-xl p-4 space-y-3 mb-6 text-[12px] tracking-widest text-white/40">
+        <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-4 space-y-2 mb-5 text-xs text-white/50">
           {rateText && (
-            <div className="flex justify-between">
-              <span>Rate</span>
-              <span className="text-white font-mono tracking-normal">{rateText}</span>
+            <div className="flex justify-between items-center">
+              <span>Exchange Rate</span>
+              <span className="text-white font-mono">{rateText}</span>
             </div>
           )}
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <span>Slippage Tolerance</span>
-            <span className="text-white">{slippagePct}%</span>
+            <span className="text-white font-mono">{slippagePct}%</span>
           </div>
-          <div className="flex justify-between">
-            <span>Estimated Gas Fee</span>
-            <span className="text-white">{gasFeeUsd}</span>
+          <div className="flex justify-between items-center">
+            <span>Estimated Network Fee</span>
+            <span className="text-white font-mono">{gasFeeUsd}</span>
           </div>
         </div>
 
         {/* Step-by-Step Approval & Swap Flow */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           {!isNative && needsApproval && (
             <div className="space-y-3">
               {/* Step 1: Approve */}
-              <div className="flex items-center justify-between p-3 rounded-lg border border-primary/20 bg-primary/[0.02]">
+              <div className="flex items-center justify-between p-3.5 rounded-2xl border border-primary/25 bg-primary/[0.04]">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-primary/30 text-[12px] text-primary">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/20 text-xs font-bold text-primary">
                     1
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[11px] tracking-widest text-white/80">Approve {fromToken.symbol}</span>
-                    <span className="text-[11px] text-white/40">Allow Universal Router to swap your tokens</span>
+                    <span className="text-xs font-semibold text-white">Approve {fromToken.symbol}</span>
+                    <span className="text-xs text-white/40">Allow Universal Router to swap your tokens</span>
                   </div>
                 </div>
                 {checkingAllowance ? (
@@ -186,23 +189,11 @@ export default function SwapConfirmationModal({
                   <button
                     onClick={handleApprove}
                     disabled={isApproving}
-                    className="px-5 py-2.5 bg-primary text-black text-xs font-bold tracking-wide transition-all hover:brightness-110 disabled:opacity-50 cursor-pointer"
+                    className="px-4 py-2 bg-primary hover:bg-primary/90 text-black text-xs font-bold rounded-xl gold-glow transition-all disabled:opacity-50 cursor-pointer"
                   >
-                    {isApproving ? <Loader2 size={12} className="animate-spin" /> : 'Approve'}
+                    {isApproving ? <Loader2 size={14} className="animate-spin" /> : 'Approve'}
                   </button>
                 )}
-              </div>
-
-              {/* Step 2: Swap (Disabled until approved) */}
-              <div className="flex items-center justify-between p-3 border opacity-40">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center border text-xs">
-                    
-                  </div>
-                  <div className="flex flex-col text-xs">
-                    <span className="text-xs">Swap <span className="token-symbol">{fromToken.symbol}</span> to <span className="token-symbol">{toToken.symbol}</span></span>
-                  </div>
-                </div>
               </div>
             </div>
           )}
@@ -211,7 +202,7 @@ export default function SwapConfirmationModal({
           {(!isNative && needsApproval) ? (
             <button
               disabled
-              className="w-full py-4 px-6 bg-white/5 border border-white/10 text-sm font-bold tracking-wide text-white/30 cursor-not-allowed cursor-pointer"
+              className="w-full py-3.5 px-6 bg-white/5 border border-white/10 rounded-xl text-xs font-bold uppercase tracking-wider text-white/30 cursor-not-allowed"
             >
               Please Approve First
             </button>
@@ -219,15 +210,15 @@ export default function SwapConfirmationModal({
             <button
               onClick={onConfirm}
               disabled={isSwapping}
-              className="w-full py-4 px-6 bg-primary text-black text-sm font-bold tracking-wide gold-glow transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3.5 px-6 bg-primary hover:bg-primary/90 text-black text-xs font-bold uppercase tracking-wider gold-glow rounded-xl transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
             >
               {isSwapping ? (
                 <>
-                  <Loader2 size={14} className="animate-spin" />
+                  <Loader2 size={16} className="animate-spin" />
                   Swapping...
                 </>
               ) : (
-                <span>Swap <span className="token-symbol">{fromToken.symbol}</span> to <span className="token-symbol">{toToken.symbol}</span></span>
+                <span>Confirm Swap {fromToken.symbol} → {toToken.symbol}</span>
               )}
             </button>
           )}

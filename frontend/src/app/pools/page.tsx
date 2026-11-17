@@ -31,22 +31,22 @@ const PoolRowSkeleton = () => (
     </div>
     {/* Fee Tier */}
     <div className="flex md:block justify-between items-center mt-6 md:mt-0">
-      <span className="md:hidden text-[12px] text-white/10 uppercase">Fee Tier</span>
+      <span className="md:hidden text-xs text-white/20 uppercase tracking-wider">Fee Tier</span>
       <div className="h-7 w-14 bg-white/5 rounded float-right" />
     </div>
     {/* Liquidity */}
     <div className="flex md:block justify-between items-center mt-2 md:mt-0">
-      <span className="md:hidden text-[12px] text-white/10 uppercase">Liquidity</span>
+      <span className="md:hidden text-xs text-white/20 uppercase tracking-wider">Liquidity</span>
       <div className="h-5 w-20 bg-white/5 rounded md:ml-auto" />
     </div>
     {/* 1D Vol */}
     <div className="flex md:block justify-between items-center mt-2 md:mt-0">
-      <span className="md:hidden text-[12px] text-white/10 uppercase">1D Vol</span>
+      <span className="md:hidden text-xs text-white/20 uppercase tracking-wider">1D Vol</span>
       <div className="h-5 w-20 bg-white/5 rounded md:ml-auto" />
     </div>
     {/* 1D Fees */}
     <div className="flex md:block justify-between items-center mt-2 md:mt-0">
-      <span className="md:hidden text-[14px] text-white/10 uppercase">1D Fees</span>
+      <span className="md:hidden text-xs text-white/20 uppercase tracking-wider">1D Fees</span>
       <div className="h-5 w-20 bg-white/5 rounded md:ml-auto" />
     </div>
     {/* Action */}
@@ -167,96 +167,99 @@ export default function PoolsPage() {
 
 
   return (
-    <div className="pb-40 relative z-10 w-full">
+    <div className="pb-40 relative z-10 w-full max-w-7xl mx-auto">
 
-      {/* Header */}
-      {/* <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12">
-        <div className="space-y-4">
-          <h1 className="text-3xl md:text-3xl  tracking-tighter text-white">
-            Liquidity Pools
-          </h1>
+      {/* Header & Primary CTA */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">Liquidity Pools</h1>
+          <p className="text-base text-white/50 mt-1">
+            Provide liquidity, earn trading fees on LitVM LiteForge, and explore active markets.
+          </p>
         </div>
-      </header> */}
+        <div className="flex items-center gap-3 shrink-0">
+          <Link
+            to="/pools/create"
+            className="inline-flex items-center gap-2 bg-primary hover:brightness-110 text-black px-6 py-3 rounded-2xl text-base font-bold transition-all duration-200 gold-glow active:scale-[0.98] shadow-lg"
+          >
+            <Plus size={18} strokeWidth={2.5} />
+            Create Pool
+          </Link>
+        </div>
+      </div>
 
-      {/* Analytics Summary */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 mb-12">
+      {/* Compact Stat Strip (Smaller sleek stat boxes) */}
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6">
         {[
           { label: 'Total TVL', value: formatLargeCurrency(globalData?.poolManagers?.[0]?.totalValueLockedUSD) },
-          { label: '1D Volume', value: formatLargeCurrency(globalVol1d) },
-          { label: 'All Time Volume', value: formatLargeCurrency(globalData?.poolManagers?.[0]?.totalVolumeUSD) },
-          { label: '1D Fees', value: formatLargeCurrency(globalFees1d) },
-          { label: 'All Time Fees', value: formatLargeCurrency(globalData?.poolManagers?.[0]?.totalFeesUSD) },
-          { label: 'Total Pools', value: formatNumber(globalData?.poolManagers?.[0]?.poolCount) },
+          { label: '24h Volume', value: formatLargeCurrency(globalVol1d) },
+          { label: 'All-Time Volume', value: formatLargeCurrency(globalData?.poolManagers?.[0]?.totalVolumeUSD) },
+          { label: '24h Fees', value: formatLargeCurrency(globalFees1d) },
+          { label: 'Pools', value: formatNumber(globalData?.poolManagers?.[0]?.poolCount) },
           { label: 'Total Txns', value: formatNumber(globalData?.poolManagers?.[0]?.txCount) },
         ].map((card) => (
           <div
             key={card.label}
-            className="relative rounded-2xl p-4 flex flex-col gap-3 overflow-hidden bg-white/[0.03] border border-white/[0.07] hover:border-white/15 transition-all duration-300 hover:scale-[1.02]"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/20 transition-all duration-200 shadow-sm backdrop-blur-sm"
           >
-            <p className="text-[10px] tracking-[0.18em] text-white/30 leading-tight">
-              {card.label}
-            </p>
+            <span className="text-xs text-white/50 font-medium">{card.label}:</span>
             {loading ? (
-              <div className="h-7 w-20 bg-white/5 rounded-lg animate-pulse" />
+              <div className="h-4 w-12 bg-white/10 rounded animate-pulse" />
             ) : (
-              <p className="text-xl font-semibold tracking-tight leading-none text-white">
+              <span className="text-sm font-bold font-mono text-white">
                 {card.value}
-              </p>
+              </span>
             )}
           </div>
         ))}
       </div>
 
-      {/* Search Filter & Actions */}
-      <div className="mb-8 flex flex-col md:flex-row justify-between items-center gap-6">
+      {/* Search & Filter Bar */}
+      <div className="mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
         <div className="relative group w-full max-w-md">
           <input
             type="text"
-            placeholder="Search by token address..."
+            placeholder="Search by token symbol or address..."
             value={addressSearch}
             onChange={(e) => setAddressSearch(e.target.value)}
-            className="w-full bg-white/[0.03] border border-white/10 rounded-full px-12 py-4 text-sm font-medium text-white focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] transition-all"
+            className="w-full bg-[#0a0a0c]/90 border border-white/10 rounded-2xl px-12 py-3.5 text-base text-white placeholder:text-white/40 focus:outline-none focus:border-primary/60 focus:bg-[#0a0a0c] transition-all shadow-inner"
           />
-          <Search size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-primary transition-colors" />
+          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-primary transition-colors" />
         </div>
-        <div className="flex gap-4">
-          <Link to="/pools/create" className="bg-primary text-black px-8 py-3.5 text-[10px] tracking-[0.2em] font-bold transition-all gold-glow hover:brightness-110 active:scale-[0.98] flex items-center gap-3">
-            <Plus size={16} strokeWidth={3} />
-            create pool
-          </Link>
+        <div className="text-sm text-white/50 font-mono self-end sm:self-center font-medium">
+          {filteredPools.length} {filteredPools.length === 1 ? 'Pool' : 'Pools'} Active
         </div>
       </div>
 
-
-      {/* Pools Table */}
-      <div className="rounded-2xl border border-white/[0.07] overflow-hidden bg-white/[0.01]">
+      {/* Pools Table (Standard DEX Layout, matches Activity design aesthetic) */}
+      <div className="bg-black/60 rounded-3xl border border-white/[0.08] overflow-hidden shadow-2xl backdrop-blur-md">
 
         {/* Table Header */}
-        <div className="hidden md:grid grid-cols-[32px_2fr_1fr_1fr_1fr_140px] gap-4 px-6 py-4 border-b border-white/[0.06] bg-white/[0.02]">
-          <div className="text-[10px] text-white/20 uppercase tracking-widest">#</div>
-          <div className="text-[10px] text-white/20 uppercase tracking-widest">Pool</div>
-          <div className="text-[10px] text-white/20 uppercase tracking-widest text-right">TVL</div>
-          <div className="text-[10px] text-white/20 uppercase tracking-widest text-right">1D Vol</div>
-          <div className="text-[10px] text-white/20 uppercase tracking-widest text-right">1D Fees</div>
-          <div />
+        <div className="hidden md:grid grid-cols-[56px_2.2fr_1.2fr_1.2fr_1fr_150px] gap-4 px-6 py-4 text-sm font-semibold uppercase tracking-wider text-white/40 border-b border-white/[0.06] bg-[#0a0a0c]">
+          <div>#</div>
+          <div>Pool Pair</div>
+          <div className="text-right">TVL</div>
+          <div className="text-right">24h Volume</div>
+          <div className="text-right">24h Fees</div>
+          <div className="text-right">Action</div>
         </div>
 
         {/* Pool Rows */}
         {loading && pools.length === 0 ? (
           Array(4).fill(0).map((_, i) => (
-            <div key={i} className="grid grid-cols-[32px_2fr_1fr_1fr_1fr_140px] gap-4 px-6 py-5 border-b border-white/[0.04] animate-pulse last:border-0">
+            <div key={i} className="grid grid-cols-[56px_2.2fr_1.2fr_1.2fr_1fr_150px] gap-4 px-6 py-5 border-b border-white/[0.04] animate-pulse last:border-0 items-center">
               <div className="h-4 w-4 bg-white/5 rounded" />
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <div className="flex -space-x-3">
-                  <div className="w-9 h-9 rounded-full bg-white/10 border-2 border-black" />
-                  <div className="w-9 h-9 rounded-full bg-white/5 border-2 border-black" />
+                  <div className="w-10 h-10 rounded-full bg-white/10 border-2 border-black" />
+                  <div className="w-10 h-10 rounded-full bg-white/5 border-2 border-black" />
                 </div>
-                <div className="h-4 w-24 bg-white/10 rounded" />
+                <div className="h-5 w-32 bg-white/10 rounded" />
               </div>
-              <div className="h-4 w-16 bg-white/5 rounded ml-auto" />
-              <div className="h-4 w-16 bg-white/5 rounded ml-auto" />
-              <div className="h-4 w-16 bg-white/5 rounded ml-auto" />
-              <div className="h-8 w-28 bg-white/5 rounded-full ml-auto" />
+              <div className="h-5 w-20 bg-white/5 rounded ml-auto" />
+              <div className="h-5 w-20 bg-white/5 rounded ml-auto" />
+              <div className="h-5 w-16 bg-white/5 rounded ml-auto" />
+              <div className="h-9 w-28 bg-white/5 rounded-xl ml-auto" />
             </div>
           ))
         ) : (
@@ -287,15 +290,15 @@ export default function PoolsPage() {
               <div
                 key={pool.id}
                 onClick={() => navigate(`/pools/${computedId}`)}
-                className="group relative hidden md:grid grid-cols-[32px_2fr_1fr_1fr_1fr_140px] gap-4 px-6 py-4 items-center border-b border-white/[0.04] hover:bg-white/[0.03] transition-all duration-200 last:border-0 cursor-pointer"
+                className="group relative hidden md:grid grid-cols-[56px_2.2fr_1.2fr_1.2fr_1fr_150px] gap-4 px-6 py-4.5 items-center border-b border-white/[0.04] hover:bg-white/[0.04] transition-colors last:border-0 cursor-pointer"
               >
                 {/* Rank */}
-                <span className="text-[12px] text-white/20 font-mono">{index + 1}</span>
+                <span className="text-sm text-white/40 font-mono font-medium">{index + 1}</span>
 
                 {/* Pool identity */}
-                <div className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center gap-3.5 min-w-0">
                   <div className="flex -space-x-3 shrink-0">
-                    <div className="w-9 h-9 rounded-full border-2 border-black bg-black overflow-hidden">
+                    <div className="w-9 h-9 rounded-full border-2 border-black bg-black overflow-hidden shadow-md">
                       <TokenImage
                         tokenAddress={pool.token0.id}
                         symbol={pool.token0.symbol}
@@ -303,7 +306,7 @@ export default function PoolsPage() {
                         alt={pool.token0.symbol || 'token0'}
                       />
                     </div>
-                    <div className="w-9 h-9 rounded-full border-2 border-black bg-black overflow-hidden">
+                    <div className="w-9 h-9 rounded-full border-2 border-black bg-black overflow-hidden shadow-md">
                       <TokenImage
                         tokenAddress={pool.token1.id}
                         symbol={pool.token1.symbol}
@@ -312,11 +315,11 @@ export default function PoolsPage() {
                       />
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="text-sm font-medium text-white tracking-tight truncate">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="text-base font-bold text-white tracking-tight truncate group-hover:text-primary transition-colors">
                       {pool.token0.symbol} / {pool.token1.symbol}
                     </span>
-                    <span className="shrink-0 text-[10px] bg-white/[0.06] border border-white/10 text-white/40 px-2 py-0.5 rounded-full uppercase tracking-widest">
+                    <span className="shrink-0 text-xs bg-primary/10 border border-primary/25 text-primary px-2.5 py-0.5 rounded-full font-mono font-semibold">
                       {feePercent}
                     </span>
                   </div>
@@ -324,26 +327,26 @@ export default function PoolsPage() {
 
                 {/* TVL */}
                 <div className="text-right">
-                  <span className="text-sm text-white font-mono tracking-tight">{tvlFormatted}</span>
+                  <span className="text-base text-white font-mono font-semibold">{tvlFormatted}</span>
                 </div>
 
                 {/* 1D Vol */}
                 <div className="text-right">
-                  <span className="text-sm text-white/70 font-mono tracking-tight">{vol1d}</span>
+                  <span className="text-base text-white/80 font-mono font-medium">{vol1d}</span>
                 </div>
 
                 {/* 1D Fees */}
                 <div className="text-right">
-                  <span className="text-sm text-white/50 font-mono tracking-tight">{fee1d}</span>
+                  <span className="text-base text-white/60 font-mono font-medium">{fee1d}</span>
                 </div>
 
                 {/* Action */}
                 <div className="flex justify-end">
                   <button
                     onClick={(e) => { e.stopPropagation(); navigate(addLiquidityPath); }}
-                    className="bg-primary text-black px-4 py-2 text-xs font-bold tracking-wide transition-all duration-200 gold-glow hover:brightness-110 active:scale-[0.98] cursor-pointer whitespace-nowrap"
+                    className="bg-primary hover:brightness-110 text-black px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer whitespace-nowrap active:scale-[0.98] shadow-sm"
                   >
-                    + Liquidity
+                    + Deposit
                   </button>
                 </div>
               </div>
@@ -375,12 +378,12 @@ export default function PoolsPage() {
             <div
               key={`m-${pool.id}`}
               onClick={() => navigate(`/pools/${computedId}`)}
-              className="md:hidden flex flex-col gap-4 px-5 py-5 border-b border-white/[0.04] hover:bg-white/[0.03] transition-all last:border-0 cursor-pointer"
+              className="md:hidden flex flex-col gap-4 px-5 py-5 border-b border-white/[0.06] hover:bg-white/[0.04] transition-all last:border-0 cursor-pointer"
             >
               {/* Top row: logos + name + fee */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex -space-x-3 shrink-0">
+                  <div className="flex -space-x-2.5 shrink-0">
                     <div className="w-9 h-9 rounded-full border-2 border-black bg-black overflow-hidden">
                       <TokenImage
                         tokenAddress={pool.token0.id}
@@ -399,35 +402,35 @@ export default function PoolsPage() {
                     </div>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm font-medium text-white">{pool.token0.symbol} / {pool.token1.symbol}</span>
-                    <span className="text-[10px] bg-white/[0.06] border border-white/10 text-white/40 px-2 py-0.5 rounded-full">{feePercent}</span>
+                    <span className="text-base font-bold text-white">{pool.token0.symbol} / {pool.token1.symbol}</span>
+                    <span className="text-xs bg-primary/10 border border-primary/25 text-primary px-2 py-0.5 rounded-full font-mono font-semibold">{feePercent}</span>
                   </div>
                 </div>
-                <span className="text-[11px] text-white/20 font-mono">#{index + 1}</span>
+                <span className="text-xs text-white/40 font-mono">#{index + 1}</span>
               </div>
               {/* Stats row */}
               <div className="grid grid-cols-3 gap-2">
-                {[['TVL', tvlFormatted], ['1D Vol', vol1d], ['1D Fees', fee1d]].map(([label, val]) => (
-                  <div key={label} className="bg-white/[0.03] rounded-xl p-3">
-                    <p className="text-[9px] uppercase tracking-widest text-white/25 mb-1">{label}</p>
-                    <p className="text-sm font-mono text-white/80">{val}</p>
+                {[['TVL', tvlFormatted], ['24h Vol', vol1d], ['24h Fees', fee1d]].map(([label, val]) => (
+                  <div key={label} className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-2.5">
+                    <p className="text-xs uppercase tracking-wider text-white/50 mb-1">{label}</p>
+                    <p className="text-sm font-mono text-white font-bold">{val}</p>
                   </div>
                 ))}
               </div>
               {/* Action */}
               <button
                 onClick={(e) => { e.stopPropagation(); navigate(addLiquidityPath); }}
-                className="w-full bg-primary text-black py-3 text-sm font-bold tracking-wide gold-glow hover:brightness-110 active:scale-[0.98] cursor-pointer"
+                className="w-full bg-primary hover:brightness-110 text-black py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all active:scale-[0.98] cursor-pointer"
               >
-                + Add Liquidity
+                + Deposit Liquidity
               </button>
             </div>
           );
         })}
 
         {!loading && filteredPools.length === 0 && (
-          <div className="py-20 text-center text-white/20 uppercase text-xs tracking-widest">
-            No pools found
+          <div className="py-24 text-center text-white/40 text-base">
+            No liquidity pools found matching your search.
           </div>
         )}
       </div>

@@ -510,7 +510,7 @@ export default function PositionDetailsPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <RefreshCw className="w-10 h-10 text-primary animate-spin" />
-        <p className="text-[12px]   text-white/40">Loading on-chain position state...</p>
+        <p className="text-xs text-white/40 uppercase tracking-wider">Loading on-chain position state...</p>
       </div>
     );
   }
@@ -518,20 +518,20 @@ export default function PositionDetailsPage() {
   if (error || !details) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center max-w-md mx-auto px-6">
-        <div className="p-4 bg-red-500/10 rounded-full text-red-500">
+        <div className="p-4 bg-rose-500/10 rounded-2xl text-rose-400">
           <AlertTriangle size={32} />
         </div>
         <div>
-          <h2 className="text-xl text-white  tracking-tighter mb-2">Position Load Failed</h2>
-          <p className="text-xs text-white/40   leading-relaxed">
+          <h2 className="text-xl font-bold text-white tracking-tight mb-2">Position Load Failed</h2>
+          <p className="text-xs text-white/50 leading-relaxed">
             {error ?? "We couldn't find this position on-chain. Please verify the ID and try again."}
           </p>
         </div>
-        <div className="flex gap-4">
-          <Link to="/profile" className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 text-[12px]   rounded-full transition-all">
+        <div className="flex gap-3">
+          <Link to="/profile" className="px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all">
             Back to Profile
           </Link>
-          <button onClick={refetch} className="px-6 py-3 bg-primary text-black text-[12px]   rounded-full transition-all hover:brightness-110 active:scale-95">
+          <button onClick={refetch} className="px-5 py-2.5 bg-primary hover:bg-primary/90 text-black text-xs font-bold uppercase tracking-wider rounded-xl transition-all gold-glow active:scale-95 cursor-pointer">
             Retry Fetch
           </button>
         </div>
@@ -554,40 +554,40 @@ export default function PositionDetailsPage() {
         </div>
       )}
 
-      <Link to="/profile" className="flex items-center gap-2 text-white/40 hover:text-white transition-colors mb-8 group w-fit">
+      <Link to="/profile" className="flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-6 group w-fit">
         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-        <span className="text-[12px]  ">Back to Profile</span>
+        <span className="text-xs font-semibold uppercase tracking-wider">Back to Profile</span>
       </Link>
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
-        <div className="flex items-center gap-6">
-          <div className="flex -space-x-4 scale-125">
-            <div className="w-12 h-12 rounded-full border-[3px] border-black bg-black overflow-hidden relative z-[5]">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8">
+        <div className="flex items-center gap-4">
+          <div className="flex -space-x-3 shrink-0">
+            <div className="w-12 h-12 rounded-full border-2 border-black bg-black overflow-hidden relative z-[5] shadow-md">
               <img alt="token0" className="w-full h-full object-contain" src={getTokenLogo(details.token0)} />
             </div>
-            <div className="w-12 h-12 rounded-full border-[3px] border-black bg-black overflow-hidden relative z-[4]">
+            <div className="w-12 h-12 rounded-full border-2 border-black bg-black overflow-hidden relative z-[4] shadow-md">
               <img alt="token1" className="w-full h-full object-contain" src={getTokenLogo(details.token1)} />
             </div>
           </div>
           <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl text-white tracking-tighter ">{details.token0.symbol} / {details.token1.symbol}</h1>
-              <span className="text-xs bg-white/10 text-white/60 px-3 py-1 rounded-full">{details.feePct} Fee</span>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{details.token0.symbol} / {details.token1.symbol}</h1>
+              <span className="text-xs bg-primary/10 border border-primary/25 text-primary px-3 py-0.5 rounded-full font-mono font-bold">{details.feePct}</span>
             </div>
-            <div className="flex items-center gap-3 mt-2">
-              <span className={`text-[12px]   px-2 py-0.5 rounded bg-white/5 ${details.status === 'In Range' ? 'text-emerald-400' : 'text-amber-400'}`}>
+            <div className="flex items-center gap-2.5 mt-1.5">
+              <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full border ${details.status === 'In Range' ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-amber-400 bg-amber-500/10 border-amber-500/20'}`}>
                 {details.status}
               </span>
-              <span className="text-[12px] text-white/20 font-mono ">Position #{details.tokenId}</span>
+              <span className="text-xs text-white/50 font-mono">Position #{details.tokenId}</span>
             </div>
           </div>
         </div>
-        <div className="flex gap-3 relative">
+        <div className="flex gap-3 relative w-full sm:w-auto">
           {!isConnected ? (
             <button
               onClick={() => open()}
-              className="px-8 py-3.5 rounded-full text-[13px]  tracking-[0.2em] font-bold transition-all active:scale-[0.98] cursor-pointer bg-primary text-black gold-glow hover:brightness-110"
+              className="w-full sm:w-auto px-6 py-3 rounded-2xl text-sm font-bold uppercase tracking-wider transition-all active:scale-[0.98] cursor-pointer bg-primary hover:brightness-110 text-black gold-glow shadow-lg"
             >
               Connect Wallet
             </button>
@@ -598,7 +598,7 @@ export default function PositionDetailsPage() {
                   setActiveModal('collect');
                 }}
                 disabled={isPending}
-                className="px-8 py-3.5 rounded-full text-[10px]  tracking-[0.2em] font-bold transition-all active:scale-[0.98] border cursor-pointer bg-white/5 border-white/10 text-white/60 hover:bg-white/10"
+                className="flex-1 sm:flex-initial px-5 py-3 rounded-2xl text-sm font-bold uppercase tracking-wider transition-all active:scale-[0.98] border cursor-pointer bg-white/5 border-white/10 text-white/80 hover:text-white hover:bg-white/10"
               >
                 Collect Fees
               </button>
@@ -607,7 +607,7 @@ export default function PositionDetailsPage() {
                 onClick={() => {
                   setManageOpen(!manageOpen);
                 }}
-                className={`px-8 py-3.5 rounded-full text-[10px]  tracking-[0.2em] font-bold transition-all active:scale-[0.98] flex items-center gap-2 cursor-pointer ${manageOpen ? 'bg-white/20 text-white border border-white/30' : 'bg-primary text-black gold-glow'}`}
+                className={`flex-1 sm:flex-initial px-5 py-3 rounded-2xl text-sm font-bold uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer shadow-lg ${manageOpen ? 'bg-white/20 text-white border border-white/30' : 'bg-primary hover:brightness-110 text-black gold-glow'}`}
               >
                 Manage
                 <ChevronDown size={14} className={`transition-transform duration-300 ${manageOpen ? 'rotate-180' : ''}`} />
@@ -619,17 +619,17 @@ export default function PositionDetailsPage() {
 
       {/* Expanded Manage Actions */}
       {manageOpen && (
-        <div className="flex flex-wrap gap-4 mb-12 p-1 bg-white/[0.03] border border-white/5 rounded-2xl animate-in fade-in slide-in-from-top-4 duration-300">
+        <div className="flex flex-wrap gap-3 mb-8 p-1.5 bg-[#0a0a0c]/80 border border-white/[0.08] rounded-2xl animate-in fade-in slide-in-from-top-2 duration-200 shadow-xl">
           <button
             onClick={() => {
               setSelectedAction('increase');
               setActiveModal('increase');
               setManageOpen(false);
             }}
-            className="flex-1 min-w-[140px] flex items-center justify-center gap-3 px-6 py-4 rounded-full border transition-all bg-white/5 border-white/10 hover:bg-primary/10 hover:border-primary/30 group cursor-pointer"
+            className="flex-1 min-w-[140px] flex items-center justify-center gap-2.5 px-5 py-3 rounded-xl border transition-all bg-white/[0.02] border-white/10 hover:bg-primary/10 hover:border-primary/30 group cursor-pointer"
           >
-            <ArrowUpCircle size={16} className="text-white/20 group-hover:text-primary transition-colors" />
-            <span className="text-[10px]   text-white/60 group-hover:text-white transition-colors">Increase Position</span>
+            <ArrowUpCircle size={16} className="text-white/30 group-hover:text-primary transition-colors" />
+            <span className="text-xs font-semibold text-white/70 group-hover:text-white transition-colors">Increase Position</span>
           </button>
 
           <button
@@ -638,10 +638,10 @@ export default function PositionDetailsPage() {
               setActiveModal('decrease');
               setManageOpen(false);
             }}
-            className="flex-1 min-w-[140px] flex items-center justify-center gap-3 px-6 py-4 rounded-full border transition-all bg-white/5 border-white/10 hover:bg-primary/10 hover:border-primary/30 group cursor-pointer"
+            className="flex-1 min-w-[140px] flex items-center justify-center gap-2.5 px-5 py-3 rounded-xl border transition-all bg-white/[0.02] border-white/10 hover:bg-primary/10 hover:border-primary/30 group cursor-pointer"
           >
-            <ArrowDownCircle size={16} className="text-white/20 group-hover:text-primary transition-colors" />
-            <span className="text-[10px]   text-white/60 group-hover:text-white transition-colors">Decrease Position</span>
+            <ArrowDownCircle size={16} className="text-white/30 group-hover:text-primary transition-colors" />
+            <span className="text-xs font-semibold text-white/70 group-hover:text-white transition-colors">Decrease Position</span>
           </button>
 
           <button
@@ -650,44 +650,45 @@ export default function PositionDetailsPage() {
               setActiveModal('burn');
               setManageOpen(false);
             }}
-            className="flex-1 min-w-[140px] flex items-center justify-center gap-3 px-6 py-4 rounded-full border transition-all bg-red-500/[0.03] border-red-500/10 hover:bg-red-500/10 hover:border-red-500/30 group cursor-pointer"
+            className="flex-1 min-w-[140px] flex items-center justify-center gap-2.5 px-5 py-3 rounded-xl border transition-all bg-rose-500/[0.03] border-rose-500/15 hover:bg-rose-500/10 hover:border-rose-500/30 group cursor-pointer"
           >
-            <Flame size={16} className="text-red-400/40 group-hover:text-red-400 transition-colors" />
-            <span className="text-[10px]   text-red-400/60 group-hover:text-white transition-colors">Burn Position</span>
+            <Flame size={16} className="text-rose-400/50 group-hover:text-rose-400 transition-colors" />
+            <span className="text-xs font-semibold text-rose-400/80 group-hover:text-rose-300 transition-colors">Burn Position</span>
           </button>
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+      {/* Compact Stat Cards (Smaller Sleek Boxes) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         {/* Liquidity Card */}
-        <div className="glass-morphism bg-white/[0.01] border border-white/5 p-8 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-primary/5 blur-[80px] rounded-full pointer-events-none transition-colors group-hover:bg-primary/10"></div>
-          <p className="text-[12px]   text-white/30 mb-6">Total Liquidity Value</p>
-          <p className="text-3xl tracking-tighter text-white mb-8">
+        <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-5 sm:p-6 rounded-2xl relative overflow-hidden group shadow-xl backdrop-blur-md">
+          <div className="absolute top-0 right-0 w-[120px] h-[120px] bg-primary/5 blur-[60px] rounded-full pointer-events-none transition-colors group-hover:bg-primary/10"></div>
+          <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-2">Total Liquidity Value</p>
+          <p className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-white mb-4">
             ${usd.totalUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
 
-          <div className="space-y-4 relative z-10">
-            <div className="flex justify-between items-center py-4 border-t border-white/5">
-              <div className="flex items-center gap-3">
-                <img src={getTokenLogo(details.token0)} alt="token0" className="w-6 h-6 rounded-full" />
-                <span className="text-sm text-white">{details.token0.symbol}</span>
+          <div className="space-y-2 relative z-10 text-sm">
+            <div className="flex justify-between items-center py-2 border-t border-white/[0.06]">
+              <div className="flex items-center gap-2">
+                <img src={getTokenLogo(details.token0)} alt="token0" className="w-5 h-5 rounded-full" />
+                <span className="font-semibold text-white">{details.token0.symbol}</span>
               </div>
               <div className="text-right">
-                <p className="text-sm text-white">{details.amount0Human.toFixed(6)} {details.token0.symbol}</p>
-                <p className="text-[12px] text-white/30 font-mono">
+                <p className="font-semibold text-white font-mono">{details.amount0Human.toFixed(4)} {details.token0.symbol}</p>
+                <p className="text-xs text-white/40 font-mono">
                   ${usd.amount0USD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
             </div>
-            <div className="flex justify-between items-center py-4 border-t border-white/5">
-              <div className="flex items-center gap-3">
-                <img src={getTokenLogo(details.token1)} alt="token1" className="w-6 h-6 rounded-full" />
-                <span className="text-sm text-white">{details.token1.symbol}</span>
+            <div className="flex justify-between items-center py-2 border-t border-white/[0.06]">
+              <div className="flex items-center gap-2">
+                <img src={getTokenLogo(details.token1)} alt="token1" className="w-5 h-5 rounded-full" />
+                <span className="font-semibold text-white">{details.token1.symbol}</span>
               </div>
               <div className="text-right">
-                <p className="text-sm text-white">{details.amount1Human.toFixed(6)} {details.token1.symbol}</p>
-                <p className="text-[12px] text-white/30 font-mono">
+                <p className="font-semibold text-white font-mono">{details.amount1Human.toFixed(4)} {details.token1.symbol}</p>
+                <p className="text-xs text-white/40 font-mono">
                   ${usd.amount1USD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
@@ -696,100 +697,100 @@ export default function PositionDetailsPage() {
         </div>
 
         {/* Unclaimed Fees Card */}
-        <div className="glass-morphism bg-white/[0.01] border border-white/5 p-8 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-emerald-500/5 blur-[80px] rounded-full pointer-events-none transition-colors group-hover:bg-emerald-500/10"></div>
-          <div className="flex justify-between items-start mb-6">
-            <p className="text-[12px]   text-white/30">Unclaimed Fees</p>
-            <button onClick={refetch} className="text-white/20 hover:text-white transition-colors cursor-pointer">
+        <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-5 sm:p-6 rounded-2xl relative overflow-hidden group shadow-xl backdrop-blur-md">
+          <div className="absolute top-0 right-0 w-[120px] h-[120px] bg-emerald-500/5 blur-[60px] rounded-full pointer-events-none transition-colors group-hover:bg-emerald-500/10"></div>
+          <div className="flex justify-between items-start mb-2">
+            <p className="text-xs font-semibold uppercase tracking-wider text-white/40">Unclaimed Fees</p>
+            <button onClick={refetch} className="text-white/30 hover:text-white transition-colors cursor-pointer p-1 rounded-md hover:bg-white/5">
               <RefreshCw size={14} className={isPending ? 'animate-spin' : ''} />
             </button>
           </div>
-          <p className="text-3xl tracking-tighter text-emerald-400 mb-8">
-            ${usd.totalFeesUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 10 })}
+          <p className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-emerald-400 mb-4">
+            ${usd.totalFeesUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
           </p>
 
-          <div className="space-y-4 relative z-10">
-            <div className="flex justify-between items-center py-4 border-t border-white/5">
-              <span className="text-sm text-white/60">{details.token0.symbol}</span>
-              <span className="text-sm text-white">{details.fees0Human.toFixed(6)} {details.token0.symbol}</span>
+          <div className="space-y-2 relative z-10 text-sm">
+            <div className="flex justify-between items-center py-2 border-t border-white/[0.06]">
+              <span className="font-semibold text-white/70">{details.token0.symbol}</span>
+              <span className="font-semibold text-white font-mono">{details.fees0Human.toFixed(6)} {details.token0.symbol}</span>
             </div>
-            <div className="flex justify-between items-center py-4 border-t border-white/5 text-white/60">
-              <span className="text-sm">{details.token1.symbol}</span>
-              <span className="text-sm text-white">{details.fees1Human.toFixed(6)} {details.token1.symbol}</span>
+            <div className="flex justify-between items-center py-2 border-t border-white/[0.06]">
+              <span className="font-semibold text-white/70">{details.token1.symbol}</span>
+              <span className="font-semibold text-white font-mono">{details.fees1Human.toFixed(6)} {details.token1.symbol}</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Range Section */}
-      <div className="glass-morphism bg-white/[0.01] border border-white/5 p-8">
-        <p className="text-[12px]   text-white/30 mb-8 text-center">Price Range</p>
+      <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-6 sm:p-8 rounded-3xl shadow-xl backdrop-blur-md mb-8">
+        <p className="text-sm font-bold uppercase tracking-wider text-white/50 mb-6 text-center">Price Range Corridor</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-          <div className="text-center p-6 bg-white/[0.02] border border-white/5">
-            <p className="text-[11px]   text-white/20 mb-2">Min Price</p>
-            <p className="text-3xl text-white leading-none">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+          <div className="text-center p-5 bg-black/40 border border-white/[0.08] rounded-2xl">
+            <p className="text-xs uppercase tracking-wider text-white/40 mb-2 font-semibold">Min Price</p>
+            <p className="text-2xl font-bold font-mono text-white leading-tight">
               {details.priceLower === 0 ? '0' : details.priceLower.toLocaleString(undefined, { maximumFractionDigits: 6 })}
             </p>
-            <p className="text-[11px] text-white/40  mt-2">{details.token1.symbol} per {details.token0.symbol}</p>
+            <p className="text-xs text-white/40 font-mono mt-1.5">{details.token1.symbol} per {details.token0.symbol}</p>
           </div>
 
-          <div className="text-center p-8 bg-primary/5 border border-primary/20 rounded-2xl relative shadow-[0_0_30px_rgba(244,114,182,0.05)]">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-black text-[11px] px-3 py-1  tracking-[0.2em] rounded-full">Current Market</div>
-            <p className="text-[11px]   text-primary/40 mb-2">Current Price</p>
-            <p className="text-3xl text-primary">{details.currentPrice.toLocaleString(undefined, { maximumFractionDigits: 6 })}</p>
-            <p className="text-[11px] text-primary/40  mt-1">{details.token1.symbol} per {details.token0.symbol}</p>
+          <div className="text-center p-6 bg-primary/5 border border-primary/25 rounded-2xl relative shadow-[0_0_30px_rgba(244,63,94,0.1)]">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-black text-xs font-bold px-3 py-0.5 uppercase tracking-wider rounded-full shadow-sm">Current Market</div>
+            <p className="text-xs uppercase tracking-wider text-primary/70 mb-2 font-semibold">Current Price</p>
+            <p className="text-2xl font-bold font-mono text-primary leading-tight">{details.currentPrice.toLocaleString(undefined, { maximumFractionDigits: 6 })}</p>
+            <p className="text-xs text-primary/60 font-mono mt-1.5">{details.token1.symbol} per {details.token0.symbol}</p>
           </div>
 
-          <div className="text-center p-6 bg-white/[0.02] border border-white/5">
-            <p className="text-[11px]   text-white/20 mb-2">Max Price</p>
-            <p className="text-3xl text-white leading-none">
+          <div className="text-center p-5 bg-black/40 border border-white/[0.08] rounded-2xl">
+            <p className="text-xs uppercase tracking-wider text-white/40 mb-2 font-semibold">Max Price</p>
+            <p className="text-2xl font-bold font-mono text-white leading-tight">
               {details.priceUpper > 1e12 ? '∞' : details.priceUpper.toLocaleString(undefined, { maximumFractionDigits: 6 })}
             </p>
-            <p className="text-[11px] text-white/40  mt-2">{details.token1.symbol} per {details.token0.symbol}</p>
+            <p className="text-xs text-white/40 font-mono mt-1.5">{details.token1.symbol} per {details.token0.symbol}</p>
           </div>
         </div>
 
         {/* Visual Progress Bar */}
-        <div className="mt-12 relative h-2 bg-white/5 rounded-full overflow-hidden">
-          <div className="absolute h-full glass-morphism bg-primary/20 border-x border-primary" style={{ left: progress.rangeLeft, right: progress.rangeRight }}></div>
-          <div className="absolute top-0 h-full w-1 bg-primary gold-glow" style={{ left: progress.cursorLeft }}></div>
+        <div className="mt-8 relative h-2.5 bg-white/5 rounded-full overflow-hidden">
+          <div className="absolute h-full bg-primary/20 border-x border-primary" style={{ left: progress.rangeLeft, right: progress.rangeRight }}></div>
+          <div className="absolute top-0 h-full w-2 bg-primary gold-glow" style={{ left: progress.cursorLeft }}></div>
         </div>
-        <div className="flex justify-between mt-4 text-[17px]  tracking-[0.3em] text-white/50">
+        <div className="flex justify-between mt-3 text-xs font-mono text-white/40">
           <span>0</span>
           <span>&infin;</span>
         </div>
       </div>
 
       {/* Transaction History Section */}
-      <div className="mt-12">
+      <div className="mb-8">
         <button
           onClick={() => setHistoryOpen(!historyOpen)}
           className="flex items-center gap-3 group outline-none cursor-pointer"
         >
-          <div className={`p-2 rounded-lg transition-colors ${historyOpen ? 'bg-primary/20 text-primary' : 'bg-white/5 text-white/40 group-hover:bg-white/10 group-hover:text-white'}`}>
+          <div className={`p-2 rounded-xl transition-colors ${historyOpen ? 'bg-primary/20 text-primary' : 'bg-white/5 text-white/40 group-hover:bg-white/10 group-hover:text-white'}`}>
             <ChevronDown size={16} className={`transition-transform duration-300 ${historyOpen ? 'rotate-180' : ''}`} />
           </div>
-          <span className={`text-[13px]  tracking-[0.2em] transition-colors ${historyOpen ? 'text-white' : 'text-white/40 group-hover:text-white'}`}>
+          <span className={`text-sm font-bold uppercase tracking-wider transition-colors ${historyOpen ? 'text-white' : 'text-white/40 group-hover:text-white'}`}>
             View Position Transactions
           </span>
         </button>
 
         {historyOpen && (
-          <div className="mt-8 animate-in fade-in slide-in-from-top-4 duration-500">
-            <div className="glass-morphism bg-[#0A0A0A] border border-white/5 p-8 rounded-3xl overflow-x-auto">
+          <div className="mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="bg-black/50 rounded-2xl border border-white/[0.08] overflow-hidden shadow-2xl backdrop-blur-sm">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-white/5 text-[11px]   text-white/30">
-                    <th className="pb-4 font-medium">Type</th>
-                    <th className="pb-4 font-medium text-right">Amount ({details.token0.symbol})</th>
-                    <th className="pb-4 font-medium text-right">Amount ({details.token1.symbol})</th>
-                    <th className="pb-4 font-medium text-right">Time</th>
-                    <th className="pb-4 font-medium text-center">Status</th>
-                    <th className="pb-4 font-medium text-right">Tx Hash</th>
+                  <tr className="border-b border-white/[0.06] bg-[#0a0a0a] text-xs font-semibold uppercase tracking-wider text-white/40">
+                    <th className="py-3.5 px-6">Type</th>
+                    <th className="py-3.5 px-6 text-right">Amount ({details.token0.symbol})</th>
+                    <th className="py-3.5 px-6 text-right">Amount ({details.token1.symbol})</th>
+                    <th className="py-3.5 px-6 text-right">Time</th>
+                    <th className="py-3.5 px-6 text-center">Status</th>
+                    <th className="py-3.5 px-6 text-right">Tx Hash</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5 text-[13px] font-mono  text-white/70">
+                <tbody className="divide-y divide-white/[0.04] text-xs font-mono text-white/70">
                   {historyLoading ? (
                     <tr>
                       <td colSpan={6} className="py-8 text-center text-primary/70 font-sans text-xs">
@@ -799,26 +800,26 @@ export default function PositionDetailsPage() {
                     </tr>
                   ) : historyItems.length > 0 ? (
                     historyItems.map((item) => (
-                      <tr key={item.id} className="hover:bg-white/[0.01] transition-colors">
-                        <td className="py-4 text-white font-sans tracking-wide">{item.type}</td>
-                        <td className={`py-4 text-right font-mono ${item.token0Amount.startsWith('-') ? 'text-red-400' : 'text-emerald-400'}`}>
+                      <tr key={item.id} className="hover:bg-white/[0.035] transition-colors">
+                        <td className="py-3.5 px-6 text-white font-sans font-medium">{item.type}</td>
+                        <td className={`py-3.5 px-6 text-right font-mono font-medium ${item.token0Amount.startsWith('-') ? 'text-rose-400/80' : 'text-emerald-400'}`}>
                           {item.token0Amount}
                         </td>
-                        <td className={`py-4 text-right font-mono ${item.token1Amount.startsWith('-') ? 'text-red-400' : 'text-emerald-400'}`}>
+                        <td className={`py-3.5 px-6 text-right font-mono font-medium ${item.token1Amount.startsWith('-') ? 'text-rose-400/80' : 'text-emerald-400'}`}>
                           {item.token1Amount}
                         </td>
-                        <td className="py-4 text-right text-white/40 font-sans">{getRelativeTime(item.timestamp)}</td>
-                        <td className="py-4 text-center">
-                          <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[11px]">Success</span>
+                        <td className="py-3.5 px-6 text-right text-white/40 font-mono">{getRelativeTime(item.timestamp)}</td>
+                        <td className="py-3.5 px-6 text-center">
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">Success</span>
                         </td>
-                        <td className="py-4 text-right">
+                        <td className="py-3.5 px-6 text-right">
                           <a 
                             href={`${BLOCK_EXPLORER_URL}/tx/${item.hash}`}
                             target="_blank" 
                             rel="noopener noreferrer" 
                             className="inline-flex items-center gap-1 text-primary hover:underline font-mono"
                           >
-                            {`${item.hash.slice(0, 6)}...${item.hash.slice(-4)}`}
+                            {`${item.hash.slice(0, 4)}...${item.hash.slice(-4)}`}
                             <ExternalLink size={10} />
                           </a>
                         </td>
@@ -826,7 +827,7 @@ export default function PositionDetailsPage() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={6} className="py-8 text-center text-white/30 font-sans text-xs">
+                      <td colSpan={6} className="py-8 text-center text-white/30 font-sans text-xs uppercase tracking-wider">
                         No transactions found for this position.
                       </td>
                     </tr>
@@ -840,81 +841,81 @@ export default function PositionDetailsPage() {
 
       {/* Collect Fees Modal */}
       {activeModal === 'collect' && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center px-6">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={() => setActiveModal(null)}
-          ></div>
+          />
 
-          <div className="relative w-full max-w-xl glass-morphism bg-[#0A0A0A] border border-primary/30 p-10 shadow-[0_0_50px_rgba(244,114,182,0.1)] animate-in zoom-in-95 duration-300 flex flex-col items-center">
+          <div className="relative w-full max-w-lg bg-[#0d0d10] border border-white/15 p-6 sm:p-8 shadow-2xl rounded-3xl flex flex-col animate-in zoom-in-95 duration-200">
             <button
               onClick={() => setActiveModal(null)}
-              className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors"
+              className="absolute top-6 right-6 text-white/40 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
 
-            <div className="flex flex-col items-center text-center mt-8">
-              <h2 className="text-xl text-white  tracking-tighter mb-2">Collect Fees</h2>
-              <p className="text-[11px] text-white/40 font-medium max-w-[360px]  tracking-[0.2em] mb-4">
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-white tracking-tight">Collect Fees</h2>
+              <p className="text-xs text-white/40 mt-1">
                 Claim your earned trading fees from this position.
               </p>
             </div>
 
-            <div className="w-full flex-col justify-center space-y-4">
-              <div className="bg-white/[0.02] border border-white/5 p-6">
-                <p className="text-[11px]   text-white/30 mb-6 text-center">Unclaimed Earnings</p>
+            <div className="w-full space-y-4">
+              <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-4 text-center">Unclaimed Earnings</p>
 
-                <div className="space-y-6">
-                  <div className="flex justify-between items-center px-4">
-                    <div className="flex items-center gap-4">
-                      <img src={getTokenLogo(details.token0)} className="w-6 h-6 border border-white/10" />
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center px-2">
+                    <div className="flex items-center gap-3">
+                      <img src={getTokenLogo(details.token0)} className="w-6 h-6 rounded-full" />
                       <div>
-                        <p className="text-xs text-white ">{details.fees0Human.toFixed(6)} {details.token0.symbol}</p>
-                        <p className="text-[11px] font-mono text-white/20  ">{details.token0.name}</p>
+                        <p className="text-xs font-semibold text-white">{details.fees0Human.toFixed(6)} {details.token0.symbol}</p>
+                        <p className="text-xs text-white/40 font-mono">{details.token0.name}</p>
                       </div>
                     </div>
-                    <span className="text-[12px] font-mono text-white/40">
+                    <span className="text-xs font-mono text-white/60">
                       ${usd.fees0USD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-center px-4">
-                    <div className="flex items-center gap-4">
-                      <img src={getTokenLogo(details.token1)} className="w-6 h-6 border border-white/10" />
+                  <div className="flex justify-between items-center px-2">
+                    <div className="flex items-center gap-3">
+                      <img src={getTokenLogo(details.token1)} className="w-6 h-6 rounded-full" />
                       <div>
-                        <p className="text-xs text-white ">{details.fees1Human.toFixed(6)} {details.token1.symbol}</p>
-                        <p className="text-[11px] font-mono text-white/20  ">{details.token1.name}</p>
+                        <p className="text-xs font-semibold text-white">{details.fees1Human.toFixed(6)} {details.token1.symbol}</p>
+                        <p className="text-xs text-white/40 font-mono">{details.token1.name}</p>
                       </div>
                     </div>
-                    <span className="text-[12px] font-mono text-white/40">
+                    <span className="text-xs font-mono text-white/60">
                       ${usd.fees1USD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-white/5 flex flex-col items-center">
-                  <span className="text-[11px]  tracking-[0.2em] text-white/20 mb-1">Total Receivable</span>
-                  <span className="text-3xl text-primary tracking-tighter">
+                <div className="mt-6 pt-4 border-t border-white/[0.06] flex flex-col items-center">
+                  <span className="text-xs font-medium uppercase tracking-wider text-white/40 mb-1">Total Receivable</span>
+                  <span className="text-2xl sm:text-3xl font-bold text-primary tracking-tight font-mono">
                     ${usd.totalFeesUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 w-full mt-6">
+            <div className="grid grid-cols-2 gap-3 w-full mt-6">
               <button
                 onClick={() => setActiveModal(null)}
-                className="py-4 px-6 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold  tracking-wider text-white/60 hover:bg-white/10 transition-all cursor-pointer active:scale-[0.98]"
+                className="py-3 px-5 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold uppercase tracking-wider text-white/60 hover:bg-white/10 transition-all cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleCollectFees}
                 disabled={isPending}
-                className="py-4 px-6 rounded-full bg-primary text-black text-[10px] font-bold  tracking-[0.2em] shadow-[0_0_30px_rgba(244,114,182,0.2)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="py-3 px-5 rounded-xl bg-primary hover:bg-primary/90 text-black text-xs font-bold uppercase tracking-wider gold-glow active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2"
               >
-                {isPending && <RefreshCw size={12} className="animate-spin" />}
+                {isPending && <RefreshCw size={14} className="animate-spin" />}
                 Collect All Fees
               </button>
             </div>
@@ -924,43 +925,41 @@ export default function PositionDetailsPage() {
 
       {/* Increase Position Modal */}
       {activeModal === 'increase' && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center px-6">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={() => setActiveModal(null)}
-          ></div>
+          />
 
-          <div className="relative w-full max-w-xl glass-morphism bg-[#0A0A0A] border border-primary/30 p-10 shadow-[0_0_50px_rgba(244,114,182,0.1)] animate-in zoom-in-95 duration-300 flex flex-col items-center">
+          <div className="relative w-full max-w-lg bg-[#0d0d10] border border-white/15 p-6 sm:p-8 shadow-2xl rounded-3xl flex flex-col animate-in zoom-in-95 duration-200">
             <button
               onClick={() => setActiveModal(null)}
-              className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors"
+              className="absolute top-6 right-6 text-white/40 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
 
-            <div className="flex flex-col items-center text-center mt-6">
-              <h2 className="text-xl text-white  tracking-tighter mb-1">Increase Position</h2>
-              <p className="text-[11px] text-white/40 font-medium max-w-[360px]  tracking-[0.2em] mb-2">
-                Add more liquidity to your existing range.
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-white tracking-tight">Increase Position</h2>
+              <p className="text-xs text-white/40 mt-1">
+                Add more liquidity to your existing price range.
               </p>
             </div>
 
             <div className="w-full space-y-3">
               {/* Token Input 0 */}
-              <div className="bg-white/[0.02] border border-white/5 p-5">
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-[11px]   text-white/30">Deposit Amount</span>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[11px]   text-white/30">Bal: {token0?.balance ?? '0'} {details.token0.symbol}</span>
-                  </div>
+              <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs font-medium uppercase tracking-wider text-white/40">Deposit Amount</span>
+                  <span className="text-xs text-white/40 font-mono">Bal: {token0?.balance ?? '0'} {details.token0.symbol}</span>
                 </div>
-                <div className="flex justify-between items-center mb-3">
+                <div className="flex justify-between items-center mb-2.5">
                   <input
                     type="text"
                     placeholder="0.0"
                     value={amount0Input}
                     onChange={(e) => handleAmount0Change(e.target.value)}
-                    className="bg-transparent text-xl text-white outline-none w-1/2 "
+                    className="bg-transparent text-xl font-bold font-mono text-white outline-none w-1/2"
                   />
                   <TokenSelector
                     selectedToken={token0}
@@ -975,9 +974,9 @@ export default function PositionDetailsPage() {
                       key={p}
                       type="button"
                       onClick={() => handlePercent0Click(p)}
-                      className={`px-2.5 py-1 rounded text-[11px] font-mono tracking-wider transition-all cursor-pointer border ${
+                      className={`px-3 py-1 rounded-lg text-xs font-mono tracking-wider transition-all cursor-pointer border ${
                         increasePercent0 === p
-                          ? 'bg-primary text-black border-primary'
+                          ? 'bg-primary text-black border-primary font-bold'
                           : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10 hover:text-white'
                       }`}
                     >
@@ -988,20 +987,18 @@ export default function PositionDetailsPage() {
               </div>
 
               {/* Token Input 1 */}
-              <div className="bg-white/[0.02] border border-white/5 p-5">
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-[11px]   text-white/30">Deposit Amount</span>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[11px]   text-white/30">Bal: {token1?.balance ?? '0'} {details.token1.symbol}</span>
-                  </div>
+              <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs font-medium uppercase tracking-wider text-white/40">Deposit Amount</span>
+                  <span className="text-xs text-white/40 font-mono">Bal: {token1?.balance ?? '0'} {details.token1.symbol}</span>
                 </div>
-                <div className="flex justify-between items-center mb-3">
+                <div className="flex justify-between items-center mb-2.5">
                   <input
                     type="text"
                     placeholder="0.0"
                     value={amount1Input}
                     onChange={(e) => handleAmount1Change(e.target.value)}
-                    className="bg-transparent text-xl text-white outline-none w-1/2 "
+                    className="bg-transparent text-xl font-bold font-mono text-white outline-none w-1/2"
                   />
                   <TokenSelector
                     selectedToken={token1}
@@ -1016,9 +1013,9 @@ export default function PositionDetailsPage() {
                       key={p}
                       type="button"
                       onClick={() => handlePercent1Click(p)}
-                      className={`px-2.5 py-1 rounded text-[11px] font-mono tracking-wider transition-all cursor-pointer border ${
+                      className={`px-3 py-1 rounded-lg text-xs font-mono tracking-wider transition-all cursor-pointer border ${
                         increasePercent1 === p
-                          ? 'bg-primary text-black border-primary'
+                          ? 'bg-primary text-black border-primary font-bold'
                           : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10 hover:text-white'
                       }`}
                     >
@@ -1028,21 +1025,21 @@ export default function PositionDetailsPage() {
                 </div>
               </div>
 
-              <div className="pt-2 px-2">
-                <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-[11px]   text-white/20">Selected Range</span>
-                  <span className="text-[11px]   text-emerald-400">In Range</span>
+              <div className="pt-2 px-1">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs uppercase tracking-wider text-white/40">Selected Range</span>
+                  <span className="text-xs font-semibold text-emerald-400">In Range</span>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-white/[0.01] border border-white/5 p-2.5 text-center">
-                    <p className="text-[11px]   text-white/20">Min Price</p>
-                    <p className="text-base text-white">
+                  <div className="bg-white/[0.02] border border-white/10 rounded-xl p-3 text-center">
+                    <p className="text-xs uppercase tracking-wider text-white/30 mb-1">Min Price</p>
+                    <p className="text-sm font-bold font-mono text-white">
                       {details.priceLower.toLocaleString(undefined, { maximumFractionDigits: 6 })}
                     </p>
                   </div>
-                  <div className="bg-white/[0.01] border border-white/5 p-2.5 text-center">
-                    <p className="text-[11px]   text-white/20">Max Price</p>
-                    <p className="text-base text-white">
+                  <div className="bg-white/[0.02] border border-white/10 rounded-xl p-3 text-center">
+                    <p className="text-xs uppercase tracking-wider text-white/30 mb-1">Max Price</p>
+                    <p className="text-sm font-bold font-mono text-white">
                       {details.priceUpper > 1e12 ? '∞' : details.priceUpper.toLocaleString(undefined, { maximumFractionDigits: 6 })}
                     </p>
                   </div>
@@ -1050,19 +1047,19 @@ export default function PositionDetailsPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 w-full mt-6">
+            <div className="grid grid-cols-2 gap-3 w-full mt-6">
               <button
                 onClick={() => setActiveModal(null)}
-                className="py-4 px-6 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold  tracking-wider text-white/60 hover:bg-white/10 transition-all cursor-pointer active:scale-[0.98]"
+                className="py-3 px-5 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold uppercase tracking-wider text-white/60 hover:bg-white/10 transition-all cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleIncreaseLiquiditySubmit}
                 disabled={isPending}
-                className="py-4 px-6 rounded-full bg-primary text-black text-[10px] font-bold  tracking-[0.2em] shadow-[0_0_20px_rgba(244,114,182,0.3)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="py-3 px-5 rounded-xl bg-primary hover:bg-primary/90 text-black text-xs font-bold uppercase tracking-wider gold-glow active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2"
               >
-                {isPending && <RefreshCw size={12} className="animate-spin" />}
+                {isPending && <RefreshCw size={14} className="animate-spin" />}
                 Add Liquidity
               </button>
             </div>
@@ -1072,36 +1069,36 @@ export default function PositionDetailsPage() {
 
       {/* Decrease Position Modal */}
       {activeModal === 'decrease' && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center px-6">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={() => setActiveModal(null)}
-          ></div>
+          />
 
-          <div className="relative w-full max-w-xl glass-morphism bg-[#0A0A0A] border border-primary/30 p-10 shadow-[0_0_50px_rgba(244,114,182,0.1)] animate-in zoom-in-95 duration-300 flex flex-col items-center">
+          <div className="relative w-full max-w-lg bg-[#0d0d10] border border-white/15 p-6 sm:p-8 shadow-2xl rounded-3xl flex flex-col animate-in zoom-in-95 duration-200">
             <button
               onClick={() => setActiveModal(null)}
-              className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors"
+              className="absolute top-6 right-6 text-white/40 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
 
-            <div className="flex flex-col items-center text-center mt-6">
-              <h2 className="text-xl text-white  tracking-tighter mb-1">Remove Liquidity</h2>
-              <p className="text-[11px] text-white/40 font-medium max-w-[360px]  tracking-[0.2em] mb-2">
-                Withdraw a portion of your assets.
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-white tracking-tight">Remove Liquidity</h2>
+              <p className="text-xs text-white/40 mt-1">
+                Withdraw a portion of your pool assets.
               </p>
             </div>
 
-            <div className="w-full flex-col justify-center space-y-6">
+            <div className="w-full space-y-5">
               <div className="text-center">
-                <span className="text-3xl text-white tracking-tighter">{Number(decreasePercent).toFixed(2)}%</span>
-                <div className="flex justify-center gap-2 mt-6">
+                <span className="text-3xl font-bold font-mono text-white tracking-tight">{Number(decreasePercent).toFixed(2)}%</span>
+                <div className="flex justify-center gap-2 mt-4">
                   {[25, 50, 75, 100].map((p) => (
                     <button
                       key={p}
                       onClick={() => setDecreasePercent(p)}
-                      className={`px-4 py-2 border rounded-full text-[11px] font-bold  tracking-wider transition-all cursor-pointer active:scale-95 ${decreasePercent === p
+                      className={`px-4 py-2 border rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer active:scale-95 ${decreasePercent === p
                         ? 'bg-primary text-black border-primary'
                         : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
                         }`}
@@ -1110,26 +1107,26 @@ export default function PositionDetailsPage() {
                     </button>
                   ))}
                 </div>
-                <div className="px-10 mt-6 md:mt-10">
+                <div className="px-6 mt-6">
                   <input
                     type="range"
                     min="0"
                     max="100"
                     value={decreasePercent}
                     onChange={(e) => setDecreasePercent(parseInt(e.target.value))}
-                    className="w-full h-1 bg-white/10 appearance-none outline-none accent-primary cursor-pointer"
+                    className="w-full h-1.5 bg-white/10 rounded-full appearance-none outline-none accent-primary cursor-pointer"
                   />
                 </div>
               </div>
 
-              <div className="bg-white/[0.02] border border-white/5 p-5 space-y-3">
-                <p className="text-[11px]   text-white/30 mb-1">Assets to Receive (Enter amount or use slider)</p>
+              <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-4 space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-1">Assets to Receive</p>
                 
                 {/* Token 0 Input */}
-                <div className="flex justify-between items-center bg-black/40 border border-white/5 px-3 py-2 rounded-xl">
+                <div className="flex justify-between items-center bg-[#16161a] border border-white/10 px-3.5 py-2.5 rounded-xl">
                   <div className="flex items-center gap-2">
-                    <img src={getTokenLogo(details.token0)} className="w-4 h-4" />
-                    <span className="text-[12px] text-white  ">{details.token0.symbol}</span>
+                    <img src={getTokenLogo(details.token0)} className="w-5 h-5 rounded-full" />
+                    <span className="text-xs font-semibold text-white">{details.token0.symbol}</span>
                   </div>
                   <input
                     type="text"
@@ -1164,15 +1161,15 @@ export default function PositionDetailsPage() {
                         setDecreasePercent(pct);
                       }
                     }}
-                    className="bg-transparent text-right font-mono text-xs text-white outline-none w-1/2"
+                    className="bg-transparent text-right font-mono text-xs font-bold text-white outline-none w-1/2"
                   />
                 </div>
 
                 {/* Token 1 Input */}
-                <div className="flex justify-between items-center bg-black/40 border border-white/5 px-3 py-2 rounded-xl">
+                <div className="flex justify-between items-center bg-[#16161a] border border-white/10 px-3.5 py-2.5 rounded-xl">
                   <div className="flex items-center gap-2">
-                    <img src={getTokenLogo(details.token1)} className="w-4 h-4" />
-                    <span className="text-[12px] text-white  ">{details.token1.symbol}</span>
+                    <img src={getTokenLogo(details.token1)} className="w-5 h-5 rounded-full" />
+                    <span className="text-xs font-semibold text-white">{details.token1.symbol}</span>
                   </div>
                   <input
                     type="text"
@@ -1207,25 +1204,25 @@ export default function PositionDetailsPage() {
                         setDecreasePercent(pct);
                       }
                     }}
-                    className="bg-transparent text-right font-mono text-xs text-white outline-none w-1/2"
+                    className="bg-transparent text-right font-mono text-xs font-bold text-white outline-none w-1/2"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 w-full mt-6">
+            <div className="grid grid-cols-2 gap-3 w-full mt-6">
               <button
                 onClick={() => setActiveModal(null)}
-                className="py-4 px-6 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold  tracking-wider text-white/60 hover:bg-white/10 transition-all cursor-pointer active:scale-[0.98]"
+                className="py-3 px-5 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold uppercase tracking-wider text-white/60 hover:bg-white/10 transition-all cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDecreaseLiquidity}
                 disabled={isPending}
-                className="py-4 px-6 rounded-full bg-primary text-black text-[10px] font-bold  tracking-[0.2em] shadow-[0_0_20px_rgba(244,114,182,0.3)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="py-3 px-5 rounded-xl bg-primary hover:bg-primary/90 text-black text-xs font-bold uppercase tracking-wider gold-glow active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2"
               >
-                {isPending && <RefreshCw size={12} className="animate-spin" />}
+                {isPending && <RefreshCw size={14} className="animate-spin" />}
                 Remove Liquidity
               </button>
             </div>
@@ -1235,85 +1232,85 @@ export default function PositionDetailsPage() {
 
       {/* Burn Modal */}
       {activeModal === 'burn' && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center px-6">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={() => setActiveModal(null)}
-          ></div>
+          />
 
-          <div className="relative w-full max-w-xl glass-morphism bg-[#0A0A0A] border border-red-500/30 p-10 shadow-[0_0_50px_rgba(239,68,68,0.15)] animate-in zoom-in-95 duration-300 flex flex-col items-center">
+          <div className="relative w-full max-w-lg bg-[#0d0d10] border border-rose-500/30 p-6 sm:p-8 shadow-[0_0_50px_rgba(239,68,68,0.15)] rounded-3xl flex flex-col animate-in zoom-in-95 duration-200">
             <button
               onClick={() => setActiveModal(null)}
-              className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors"
+              className="absolute top-6 right-6 text-white/40 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
 
-            <div className="flex flex-col items-center text-center mt-8">
-              <h2 className="text-xl text-white  tracking-tighter mb-2">Burn Position</h2>
-              <p className="text-[11px] text-white/40 font-medium max-w-[360px]  tracking-[0.2em]">
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-white tracking-tight">Burn Position</h2>
+              <p className="text-xs text-rose-400/80 mt-1">
                 This action is final and irreversible.
               </p>
             </div>
 
-            <div className="w-full flex-col justify-center space-y-4">
-              <div className="bg-white/[0.02] border border-white/5 p-6 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[100px] h-[100px] bg-red-500/5 blur-[50px] pointer-events-none"></div>
-                <div className="flex justify-between items-center mb-4 relative z-10">
-                  <span className="text-[11px]   text-white/30">Tokens to Claim</span>
-                  <Wallet size={10} className="text-white/20" />
+            <div className="w-full space-y-4">
+              <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-5 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[100px] h-[100px] bg-rose-500/5 blur-[50px] pointer-events-none"></div>
+                <div className="flex justify-between items-center mb-3 relative z-10">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-white/40">Tokens to Claim</span>
+                  <Wallet size={12} className="text-white/30" />
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
-                      <img src={getTokenLogo(details.token0)} className="w-4 h-4" />
-                      <span className="text-[13px] text-white">{(details.amount0Human + details.fees0Human).toFixed(6)} {details.token0.symbol}</span>
+                      <img src={getTokenLogo(details.token0)} className="w-5 h-5 rounded-full" />
+                      <span className="text-xs font-semibold text-white">{(details.amount0Human + details.fees0Human).toFixed(6)} {details.token0.symbol}</span>
                     </div>
-                    <span className="text-[11px] font-mono text-white/30">
+                    <span className="text-xs font-mono text-white/40">
                       ${(usd.amount0USD + usd.fees0USD).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
-                      <img src={getTokenLogo(details.token1)} className="w-4 h-4" />
-                      <span className="text-[13px] text-white">{(details.amount1Human + details.fees1Human).toFixed(6)} {details.token1.symbol}</span>
+                      <img src={getTokenLogo(details.token1)} className="w-5 h-5 rounded-full" />
+                      <span className="text-xs font-semibold text-white">{(details.amount1Human + details.fees1Human).toFixed(6)} {details.token1.symbol}</span>
                     </div>
-                    <span className="text-[11px] font-mono text-white/30">
+                    <span className="text-xs font-mono text-white/40">
                       ${(usd.amount1USD + usd.fees1USD).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-white/5 flex justify-between items-end">
-                  <span className="text-[11px]   text-white/30">Total Value</span>
-                  <span className="text-xl text-white tracking-tight">
+                <div className="mt-4 pt-3 border-t border-white/[0.06] flex justify-between items-end">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-white/40">Total Value</span>
+                  <span className="text-xl font-bold font-mono text-white tracking-tight">
                     ${(usd.totalUSD + usd.totalFeesUSD).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-4 bg-red-500/5 border border-red-500/10">
-                <AlertTriangle size={16} className="text-red-500 shrink-0 mt-0.5" />
-                <p className="text-[12px] text-red-400/80 leading-relaxed  ">
-                  withdraw liquidity and terminate fee generation permanently.
+              <div className="flex items-start gap-2.5 p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-xl">
+                <AlertTriangle size={16} className="text-rose-400 shrink-0 mt-0.5" />
+                <p className="text-xs text-rose-300 leading-relaxed">
+                  Withdraws all liquidity and terminates fee generation permanently.
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 w-full mt-6">
+            <div className="grid grid-cols-2 gap-3 w-full mt-6">
               <button
                 onClick={() => setActiveModal(null)}
-                className="py-4 px-6 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold  tracking-wider text-white/60 hover:bg-white/10 transition-all cursor-pointer active:scale-[0.98]"
+                className="py-3 px-5 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold uppercase tracking-wider text-white/60 hover:bg-white/10 transition-all cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleBurnPosition}
                 disabled={isPending}
-                className="py-4 px-6 rounded-full bg-red-500 text-white text-[10px] font-bold  tracking-[0.2em] shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="py-3 px-5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold uppercase tracking-wider shadow-[0_0_20px_rgba(239,68,68,0.3)] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2"
               >
-                {isPending && <RefreshCw size={12} className="animate-spin" />}
+                {isPending && <RefreshCw size={14} className="animate-spin" />}
                 Confirm Burn
               </button>
             </div>

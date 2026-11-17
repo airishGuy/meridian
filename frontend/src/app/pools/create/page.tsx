@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Copy, Check, Info, Plug, Lock, Unlock } from 'lucide-react';
 import TokenSelector, { Token } from '@/components/TokenSelector';
+import TokenImage from '@/components/TokenImage';
 import { TOKENS } from '@/config/tokens';
 import { usePool } from '@/hooks/pool/usePool';
 import Toast from '@/components/Toast';
@@ -94,34 +95,39 @@ export default function CreatePoolPage() {
       <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
       <div className="absolute bottom-40 left-0 w-[250px] h-[250px] bg-primary/5 blur-[100px] rounded-full pointer-events-none"></div>
 
-      <Link to="/pools" className="flex items-center gap-2 text-white/40 hover:text-white transition-colors mb-8 group w-fit">
-        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-        <span className="text-[12px]  uppercase tracking-widest">Back to Pools</span>
-      </Link>
-
-
-      {/* Header */}
-      <div className="flex flex-col gap-2 mb-12">
-        <h1 className="text-2xl md:text-3xl  text-white tracking-tighter leading-none">Create Pool</h1>
-        {/* <p className="text-[12px]  uppercase tracking-[0.2em] text-white/30">Initialize a new liquidity pair and set protocol parameters.</p> */}
+      {/* Navigation Header */}
+      <div className="mb-8">
+        <Link to="/pools" className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-4 group text-sm font-medium">
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          <span>Back to Pools</span>
+        </Link>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Create Liquidity Pool</h1>
+            <p className="text-base text-white/50 mt-1">Initialize a new Uniswap v4 pool on LitVM LiteForge with customized fees and hook logic</p>
+          </div>
+        </div>
       </div>
 
-      <div className="glass-morphism bg-white/[0.01] border border-white/5 p-10 relative overflow-hidden space-y-10">
+      {/* Modern 2-Column DeFi Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-        {/* Select Pair Section */}
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <label className="text-[12px] uppercase tracking-[0.2em]  text-white/20">Step 1: Select Pair</label>
-            <Info size={12} className="text-white/10" />
-          </div>
+        {/* Left Column: Configuration Steps (7 cols) */}
+        <div className="lg:col-span-7 space-y-6">
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Token A */}
-            <div className="bg-white/[0.02] border border-white/5 p-6 flex flex-col gap-4">
-              <div className="flex justify-between items-center">
-                <span className="text-[11px]  uppercase tracking-widest text-white/20">First Asset</span>
+          {/* Step 1: Pair Selection Card */}
+          <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-6 sm:p-7 rounded-3xl shadow-xl backdrop-blur-md space-y-5">
+            <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
+              <div className="flex items-center gap-2.5">
+                <span className="w-6 h-6 rounded-full bg-primary/10 text-primary border border-primary/25 flex items-center justify-center text-xs font-bold font-mono">1</span>
+                <h3 className="text-base font-bold text-white tracking-tight">Select Token Pair</h3>
               </div>
-              <div className="flex justify-between items-center">
+              <Info size={16} className="text-white/30" />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-black/40 border border-white/[0.08] p-4 rounded-2xl flex flex-col gap-3">
+                <span className="text-xs uppercase tracking-wider font-semibold text-white/40">First Asset</span>
                 <TokenSelector
                   selectedToken={tokenA}
                   onSelect={setTokenA}
@@ -130,14 +136,8 @@ export default function CreatePoolPage() {
                   className="w-full"
                 />
               </div>
-            </div>
-
-            {/* Token B */}
-            <div className="bg-white/[0.02] border border-white/5 p-6 flex flex-col gap-4">
-              <div className="flex justify-between items-center">
-                <span className="text-[11px]  uppercase tracking-widest text-white/20">Second Asset</span>
-              </div>
-              <div className="flex justify-between items-center">
+              <div className="bg-black/40 border border-white/[0.08] p-4 rounded-2xl flex flex-col gap-3">
+                <span className="text-xs uppercase tracking-wider font-semibold text-white/40">Second Asset</span>
                 <TokenSelector
                   selectedToken={tokenB}
                   onSelect={setTokenB}
@@ -147,253 +147,298 @@ export default function CreatePoolPage() {
                 />
               </div>
             </div>
-          </div>
 
-          {/* Token Order Summary - Protocol Readout */}
-          <div className="bg-black/40 border border-white/5 p-6 font-mono relative group">
-            <div className="space-y-3">
-              <div className="flex items-start gap-4 group/t0">
-                <span className="text-primary text-[12px]  w-6">[0]</span>
-                <div className="flex flex-col gap-1 flex-1">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-white text-[12px]  uppercase">{t0.symbol}</span>
-                      <span className="text-white/20 text-[11px] uppercase tracking-widest ">Token0</span>
+            {/* Token Order Readout */}
+            <div className="bg-black/50 border border-white/[0.08] rounded-2xl p-4 font-mono text-xs">
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <span className="text-primary font-bold w-6 shrink-0">[0]</span>
+                  <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white font-bold">{t0.symbol}</span>
+                        <span className="text-white/40 uppercase">Token0</span>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard(t0.address || '', true)}
+                        className={`p-1 cursor-pointer transition-colors ${copied0 ? 'text-primary' : 'text-white/30 hover:text-primary'}`}
+                      >
+                        {copied0 ? <Check size={12} /> : <Copy size={12} />}
+                      </button>
                     </div>
-                    <button
-                      onClick={() => copyToClipboard(t0.address || '', true)}
-                      className={`transition-colors p-1 cursor-pointer ${copied0 ? 'text-primary' : 'text-white/10 hover:text-primary'}`}
-                      title="Copy Address"
-                    >
-                      {copied0 ? <Check size={10} /> : <Copy size={10} />}
-                    </button>
+                    <span className="text-white/40 text-xs tracking-wider break-all select-all font-mono">
+                      {t0.address}
+                    </span>
                   </div>
-                  <span className="text-white/40 text-[11px] tracking-widest break-all select-all leading-relaxed uppercase">
-                    {t0.address}
-                  </span>
                 </div>
-              </div>
 
-              <div className="flex items-start gap-4 pt-4 border-t border-white/[0.03] group/t1">
-                <span className="text-white/20 text-[12px]  w-6">[1]</span>
-                <div className="flex flex-col gap-1 flex-1">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-white text-[12px]  uppercase">{t1.symbol}</span>
-                      <span className="text-white/20 text-[11px] uppercase tracking-widest ">Token1</span>
+                <div className="flex items-start gap-3 pt-3 border-t border-white/[0.06]">
+                  <span className="text-white/40 font-bold w-6 shrink-0">[1]</span>
+                  <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white font-bold">{t1.symbol}</span>
+                        <span className="text-white/40 uppercase">Token1</span>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard(t1.address || '', false)}
+                        className={`p-1 cursor-pointer transition-colors ${copied1 ? 'text-primary' : 'text-white/30 hover:text-primary'}`}
+                      >
+                        {copied1 ? <Check size={12} /> : <Copy size={12} />}
+                      </button>
                     </div>
-                    <button
-                      onClick={() => copyToClipboard(t1.address || '', false)}
-                      className={`transition-colors p-1 ${copied1 ? 'text-primary' : 'text-white/10 hover:text-primary'}`}
-                      title="Copy Address"
-                    >
-                      {copied1 ? <Check size={10} /> : <Copy size={10} />}
-                    </button>
+                    <span className="text-white/40 text-xs tracking-wider break-all select-all font-mono">
+                      {t1.address}
+                    </span>
                   </div>
-                  <span className="text-white/40 text-[11px] tracking-widest break-all select-all leading-relaxed uppercase">
-                    {t1.address}
-                  </span>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Fee Tier Section */}
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <label className="text-[12px] uppercase tracking-[0.2em]  text-white/20">Step 2: Select Fee Tier</label>
-            <Info size={12} className="text-white/10" />
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {feeTiers.map((tier) => (
-              <button
-                key={tier.label}
-                onClick={() => {setFeeTier(tier.label);setTickSpacing(tier.spacing)}}
-                className={`flex flex-col text-left transition-all relative overflow-hidden group border-t-2 cursor-pointer ${feeTier === tier.label
-                  ? 'bg-white/[0.04] border-primary shadow-[inset_0_0_20px_rgba(244,114,182,0.05)]'
-                  : 'bg-white/[0.01] border-white/5 hover:bg-white/[0.02] hover:border-white/10'
-                  }`}
-              >
-                <div className="p-6 pb-2">
-                  <span className={`text-3xl  tracking-tighter block leading-none ${feeTier === tier.label ? 'text-primary' : 'text-white'}`}>
-                    {tier.label}%
-                  </span>
-                </div>
+          {/* Step 2: Fee Tier Card */}
+          <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-6 sm:p-7 rounded-3xl shadow-xl backdrop-blur-md space-y-5">
+            <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
+              <div className="flex items-center gap-2.5">
+                <span className="w-6 h-6 rounded-full bg-primary/10 text-primary border border-primary/25 flex items-center justify-center text-xs font-bold font-mono">2</span>
+                <h3 className="text-base font-bold text-white tracking-tight">Select Fee Tier</h3>
+              </div>
+              <Info size={16} className="text-white/30" />
+            </div>
 
-                <div className="mt-auto border-t border-white/[0.03] p-4 bg-white/[0.01] flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className={`text-[11px]  tracking-widest uppercase ${feeTier === tier.label ? 'text-white' : 'text-white/20'}`}>
-                      {/* {tier.sub} */}
-                    </span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {feeTiers.map((tier) => (
+                <button
+                  key={tier.label}
+                  onClick={() => { setFeeTier(tier.label); setTickSpacing(tier.spacing); }}
+                  className={`flex flex-col text-left transition-all relative overflow-hidden rounded-2xl cursor-pointer border p-4 sm:p-5 ${feeTier === tier.label
+                    ? 'bg-primary/10 border-primary shadow-[0_0_24px_rgba(244,63,94,0.18)]'
+                    : 'bg-black/40 border-white/[0.08] hover:bg-white/[0.03] hover:border-white/20'
+                    }`}
+                >
+                  <div className="flex items-center justify-between w-full mb-2">
+                    <span className="text-xs uppercase tracking-wider font-mono text-white/50">{tier.sub}</span>
                     {feeTier === tier.label && (
-                      <Check size={8} className="text-primary" />
+                      <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                        <Check size={12} strokeWidth={3} />
+                      </div>
                     )}
                   </div>
-                  <span className={`text-[11px] font-mono tracking-widest uppercase ${feeTier === tier.label ? 'text-primary' : 'text-white/10'}`}>
+
+                  <span className={`text-2xl font-bold tracking-tight block mb-2 font-mono ${feeTier === tier.label ? 'text-primary' : 'text-white'}`}>
+                    {tier.label}%
+                  </span>
+
+                  <span className="text-xs font-mono text-white/40 mt-auto">
                     Tick Spacing: {tier.spacing}
                   </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Step 3: Starting Price Ratio */}
+          <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-6 sm:p-7 rounded-3xl shadow-xl backdrop-blur-md space-y-5">
+            <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
+              <div className="flex items-center gap-2.5">
+                <span className="w-6 h-6 rounded-full bg-primary/10 text-primary border border-primary/25 flex items-center justify-center text-xs font-bold font-mono">3</span>
+                <h3 className="text-base font-bold text-white tracking-tight">Initial Price Ratio</h3>
+              </div>
+              <Info size={16} className="text-white/30" />
+            </div>
+
+            <div className="flex flex-wrap gap-2.5">
+              {['1:1', '2:1', '1:2', 'CUSTOM'].map((opt) => {
+                const isCustomOpt = opt === 'CUSTOM';
+                const [a, b] = isCustomOpt ? [customPriceA, customPriceB] : opt.split(':');
+                const isActive = isCustomOpt
+                  ? isCustomRatio
+                  : !isCustomRatio && priceRatioA === a && priceRatioB === b;
+                return (
+                  <button
+                    key={opt}
+                    onClick={() => {
+                      if (isCustomOpt) {
+                        setIsCustomRatio(true);
+                        setPriceRatioA(customPriceA);
+                        setPriceRatioB(customPriceB);
+                      } else {
+                        setIsCustomRatio(false);
+                        setPriceRatioA(a);
+                        setPriceRatioB(b);
+                      }
+                    }}
+                    className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all border cursor-pointer ${
+                      isActive
+                        ? 'bg-primary text-black font-bold shadow-md'
+                        : 'bg-black/40 border-white/[0.08] text-white/60 hover:text-white hover:bg-white/[0.05]'
+                    }`}
+                  >
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+
+            {isCustomRatio && (
+              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 bg-black/40 border border-white/[0.08] rounded-2xl p-5 animate-in fade-in duration-200">
+                <div className="space-y-1.5 text-center">
+                  <p className="text-xs uppercase tracking-wider text-white/50 font-mono font-semibold">{t0.symbol}</p>
+                  <input
+                    className="w-full bg-transparent border-b border-white/20 py-1 text-center focus:outline-none focus:border-primary transition-all text-2xl font-bold font-mono text-white"
+                    type="text"
+                    value={customPriceA}
+                    onChange={(e) => {
+                      setCustomPriceA(e.target.value);
+                      setPriceRatioA(e.target.value);
+                    }}
+                  />
                 </div>
-
-                {feeTier === tier.label && (
-                  <div className="absolute top-0 right-0 w-2 h-2 bg-primary"></div>
-                )}
-              </button>
-            ))}
+                <span className="text-primary text-2xl font-bold">:</span>
+                <div className="space-y-1.5 text-center">
+                  <p className="text-xs uppercase tracking-wider text-white/50 font-mono font-semibold">{t1.symbol}</p>
+                  <input
+                    className="w-full bg-transparent border-b border-white/20 py-1 text-center focus:outline-none focus:border-primary transition-all text-2xl font-bold font-mono text-white"
+                    type="text"
+                    value={customPriceB}
+                    onChange={(e) => {
+                      setCustomPriceB(e.target.value);
+                      setPriceRatioB(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
-        </div>
 
-        {/* Starting Price Ratio Section */}
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <label className="text-[12px] uppercase tracking-[0.2em]  text-white/20">Step 3: Initial Price</label>
-            <Info size={12} className="text-white/10" />
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {['1:1', '2:1', '1:2', 'CUSTOM'].map((opt) => {
-              const isCustomOpt = opt === 'CUSTOM';
-              const [a, b] = isCustomOpt ? [customPriceA, customPriceB] : opt.split(':');
-              const isActive = isCustomOpt
-                ? isCustomRatio
-                : !isCustomRatio && priceRatioA === a && priceRatioB === b;
-              return (
-                <button
-                  key={opt}
-                  onClick={() => {
-                    if (isCustomOpt) {
-                      setIsCustomRatio(true);
-                      setPriceRatioA(customPriceA);
-                      setPriceRatioB(customPriceB);
+          {/* Step 4: Extension Hooks */}
+          <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-6 sm:p-7 rounded-3xl shadow-xl backdrop-blur-md space-y-4">
+            <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
+              <div className="flex items-center gap-2.5">
+                <span className="w-6 h-6 rounded-full bg-primary/10 text-primary border border-primary/25 flex items-center justify-center text-xs font-bold font-mono">4</span>
+                <h3 className="text-base font-bold text-white tracking-tight">Hook Details (Optional)</h3>
+              </div>
+              <Info size={16} className="text-white/30" />
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-sm text-white/50">Attach a smart contract hook to execute custom liquidity, fee, or swap callbacks.</p>
+              <div className="relative">
+                <input
+                  className="w-full bg-black/40 border border-white/[0.08] px-4 py-3.5 rounded-xl font-mono text-sm tracking-wider text-white uppercase placeholder:text-white/20 focus:outline-none focus:border-primary transition-all"
+                  type="text"
+                  placeholder={zeroAddress}
+                  value={hooks === zeroAddress ? '' : hooks}
+                  onChange={(e) => {
+                    const val = e.target.value.trim();
+                    if (val === '') {
+                      setHooks(zeroAddress);
                     } else {
-                      setIsCustomRatio(false);
-                      setPriceRatioA(a);
-                      setPriceRatioB(b);
+                      setHooks(val as `0x${string}`);
                     }
                   }}
-                  className={`px-6 py-3 text-[11px] uppercase tracking-widest transition-all border cursor-pointer ${
-                    isActive
-                      ? 'bg-primary/20 border-primary text-white'
-                      : 'bg-white/[0.02] border-white/5 text-white/40 hover:text-white/60 hover:bg-white/[0.04]'
-                  }`}
-                >
-                  {opt}
-                </button>
-              );
-            })}
+                />
+                {hooks !== zeroAddress && (
+                  <button
+                    type="button"
+                    onClick={() => setHooks(zeroAddress)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs uppercase tracking-wider text-white/40 hover:text-primary transition-colors cursor-pointer px-2 py-1 rounded bg-white/5"
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+              
+              {hooks !== zeroAddress && !/^0x[a-fA-F0-9]{40}$/.test(hooks) && (
+                <p className="text-rose-400 text-xs font-mono">
+                  Invalid Ethereum contract address format
+                </p>
+              )}
+            </div>
           </div>
 
-          {isCustomRatio && (
-            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 bg-white/[0.02] border border-white/5 p-6 animate-in fade-in slide-in-from-top-2 duration-300">
-              <div className="space-y-2">
-                <p className="text-[11px] tracking-widest text-white/20 text-center">{t0.symbol}</p>
-                <input
-                  className="w-full bg-transparent border-b border-white/10 py-2 text-center focus:outline-none focus:border-primary transition-all text-2xl text-white uppercase"
-                  type="text"
-                  value={customPriceA}
-                  onChange={(e) => {
-                    setCustomPriceA(e.target.value);
-                    setPriceRatioA(e.target.value);
-                  }}
-                />
-              </div>
-              <span className="text-primary text-2xl mt-4">:</span>
-              <div className="space-y-2">
-                <p className="text-[11px] tracking-widest text-white/20 text-center">{t1.symbol}</p>
-                <input
-                  className="w-full bg-transparent border-b border-white/10 py-2 text-center focus:outline-none focus:border-primary transition-all text-2xl text-white uppercase"
-                  type="text"
-                  value={customPriceB}
-                  onChange={(e) => {
-                    setCustomPriceB(e.target.value);
-                    setPriceRatioB(e.target.value);
-                  }}
-                />
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* Hook Details Section */}
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <label className="text-[12px] uppercase tracking-[0.2em]  text-white/20">Step 4: Extension Hooks</label>
-            <Info size={12} className="text-white/10" />
-          </div>
+        {/* Right Column: Sticky Pool Preview & Action Summary (5 cols) */}
+        <div className="lg:col-span-5 sticky top-28 space-y-5">
+          <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-6 sm:p-7 rounded-3xl shadow-2xl backdrop-blur-md space-y-6">
+            <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
+              <h3 className="text-lg font-bold text-white tracking-tight">Pool Overview</h3>
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold uppercase tracking-wider">
+                Preview
+              </span>
+            </div>
 
-          <div className="bg-white/[0.02] border border-white/5 p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-white/[0.04] border border-white/5 flex items-center justify-center text-primary">
-                <Plug size={14} />
+            {/* Pair Identity Preview */}
+            <div className="flex items-center gap-4 bg-black/40 border border-white/[0.08] p-4 rounded-2xl">
+              <div className="flex -space-x-3 shrink-0">
+                <div className="w-10 h-10 rounded-full border-2 border-black bg-black overflow-hidden shadow-md">
+                  <TokenImage tokenAddress={t0.address} symbol={t0.symbol} className="w-full h-full object-contain" alt={t0.symbol} />
+                </div>
+                <div className="w-10 h-10 rounded-full border-2 border-black bg-black overflow-hidden shadow-md">
+                  <TokenImage tokenAddress={t1.address} symbol={t1.symbol} className="w-full h-full object-contain" alt={t1.symbol} />
+                </div>
               </div>
               <div>
-                <h4 className="text-[12px] uppercase tracking-widest text-white">Pool Hook Contract</h4>
-                <p className="text-[10px] text-white/40">Specify a hook contract address to run custom logic on pool actions.</p>
+                <h4 className="text-lg font-bold text-white tracking-tight">{t0.symbol} / {t1.symbol}</h4>
+                <p className="text-xs text-white/40 font-mono">Uniswap v4 on LitVM LiteForge</p>
               </div>
             </div>
 
-            <div className="relative">
-              <input
-                className="w-full bg-black/40 border border-white/5 px-4 py-3 rounded-none font-mono text-[12px] tracking-widest text-white uppercase placeholder:text-white/20 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all"
-                type="text"
-                placeholder={zeroAddress}
-                value={hooks === zeroAddress ? '' : hooks}
-                onChange={(e) => {
-                  const val = e.target.value.trim();
-                  if (val === '') {
-                    setHooks(zeroAddress);
-                  } else {
-                    setHooks(val as `0x${string}`);
-                  }
-                }}
-              />
-              {hooks !== zeroAddress && (
+            {/* Parameters Breakdown */}
+            <div className="space-y-3 divide-y divide-white/[0.06] text-sm">
+              <div className="flex justify-between items-center pt-2">
+                <span className="text-white/50">Fee Tier</span>
+                <span className="font-bold text-primary font-mono">{feeTier}%</span>
+              </div>
+              <div className="flex justify-between items-center pt-3">
+                <span className="text-white/50">Tick Spacing</span>
+                <span className="font-bold text-white font-mono">{tickSpacing}</span>
+              </div>
+              <div className="flex justify-between items-center pt-3">
+                <span className="text-white/50">Initial Rate</span>
+                <span className="font-bold text-white font-mono">
+                  1 {t0.symbol} = {(Number(priceRatioB) / Number(priceRatioA)).toFixed(4)} {t1.symbol}
+                </span>
+              </div>
+              <div className="flex justify-between items-center pt-3">
+                <span className="text-white/50">Hook Status</span>
+                <span className="font-mono text-xs text-white/70">
+                  {hooks === zeroAddress ? 'None (address(0))' : `${hooks.slice(0, 6)}…${hooks.slice(-4)}`}
+                </span>
+              </div>
+            </div>
+
+            {/* Action Button */}
+            <div className="pt-2">
+              {!isConnected ? (
                 <button
-                  type="button"
-                  onClick={() => setHooks(zeroAddress)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-widest text-white/40 hover:text-primary transition-colors cursor-pointer"
+                  onClick={() => open()}
+                  className="w-full bg-primary hover:brightness-110 text-black py-4 px-6 text-sm font-bold uppercase tracking-wider rounded-2xl transition-all gold-glow active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer shadow-lg"
                 >
-                  Reset
+                  Connect Wallet
+                </button>
+              ) : (
+                <button 
+                  disabled={isConfirming}
+                  className={`w-full bg-primary hover:brightness-110 text-black py-4 px-6 text-sm font-bold uppercase tracking-wider rounded-2xl transition-all gold-glow active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer shadow-lg ${isConfirming ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  onClick={() => initializePool({
+                    tokenA: t0,
+                    tokenB: t1,
+                    fee: feeTier * 10000,
+                    tickSpacing,
+                    hooks,
+                    priceRatioA,
+                    priceRatioB
+                  })}
+                >
+                  {isConfirming ? 'Initializing Pool...' : 'Initialize Pool'}
                 </button>
               )}
             </div>
-            
-            {hooks !== zeroAddress && !/^0x[a-fA-F0-9]{40}$/.test(hooks) && (
-              <p className="text-red-500/80 text-[10px] uppercase tracking-widest font-mono">
-                Invalid Ethereum address format
-              </p>
-            )}
           </div>
         </div>
 
-
-        {/* Primary Action Button */}
-        <div className="pt-4">
-          {!isConnected ? (
-            <button
-              onClick={() => open()}
-              className="w-full bg-primary text-black py-4 px-6 text-[14px] tracking-[0.2em] font-bold transition-all gold-glow hover:brightness-110 active:scale-[0.98] flex items-center justify-center gap-3 cursor-pointer"
-            >
-              connect wallet
-            </button>
-          ) : (
-            <button 
-              disabled={isConfirming}
-              className={`w-full bg-primary text-black py-4 px-6 text-[10px] tracking-[0.2em] font-bold transition-all gold-glow hover:brightness-110 active:scale-[0.98] flex items-center justify-center gap-3 cursor-pointer ${isConfirming ? 'opacity-50 cursor-not-allowed' : ''}`}
-              onClick={() => initializePool({
-                tokenA: t0,
-                tokenB: t1,
-                fee: feeTier * 10000,
-                tickSpacing,
-                hooks,
-                priceRatioA,
-                priceRatioB
-              })}
-            >
-              {isConfirming ? 'Confirming...' : 'Initialize Pool'}
-            </button>
-          )}
-
-        </div>
       </div>
     </div>
   );

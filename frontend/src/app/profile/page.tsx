@@ -450,13 +450,13 @@ export default function ProfilePage() {
       )}
 
       {/* Portfolio header */}
-      <section className="w-full mb-10">
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 lg:gap-12">
+      <section className="w-full mb-8">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
           <div className="shrink-0">
-            <span className="text-primary tracking-[0.2em]  text-[12px] mb-3 block">
+            <span className="text-primary font-bold tracking-wider text-xs uppercase mb-2 block">
               My Portfolio
             </span>
-            <h1 className="text-4xl md:text-5xl tracking-tighter text-white mb-3">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-3">
               {!isConnected
                 ? <span className="text-white/20">Not connected</span>
                 : totalUsdValue > 0
@@ -466,15 +466,15 @@ export default function ProfilePage() {
             </h1>
             {isConnected && (
               <div className="flex flex-wrap items-center gap-3 mt-4">
-                <div className="flex items-center gap-2 text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full w-fit border border-emerald-400/20">
-                  <Wallet size={12} />
-                  <span className="text-xs tracking-tight">Wallet connected</span>
+                <div className="flex items-center gap-2 text-emerald-400 bg-emerald-400/10 px-3 py-1.5 rounded-full w-fit border border-emerald-400/20 text-xs font-medium">
+                  <Wallet size={14} />
+                  <span>Wallet Connected</span>
                 </div>
                 <button
                   onClick={() => setIsSendModalOpen(true)}
-                  className="flex items-center gap-2 text-primary hover:text-black hover:bg-primary bg-transparent border border-primary/30 hover:border-primary px-4 py-1 rounded-full text-xs transition-all cursor-pointer font-medium"
+                  className="flex items-center gap-2 text-black bg-primary hover:bg-primary/90 px-4 py-1.5 rounded-xl text-xs transition-all cursor-pointer font-bold tracking-wide gold-glow active:scale-[0.98]"
                 >
-                  <Send size={10} />
+                  <Send size={12} />
                   Send Assets
                 </button>
               </div>
@@ -483,21 +483,21 @@ export default function ProfilePage() {
 
           {/* Token balance bar — weighted by USD value */}
           {isConnected && (
-            <div className="flex-1 w-full lg:max-w-md glass-morphism rounded-2xl border border-white/5 p-4 md:p-5 flex flex-col justify-center gap-3">
+            <div className="flex-1 w-full lg:max-w-md bg-[#0a0a0c]/80 rounded-2xl border border-white/[0.08] p-5 flex flex-col justify-center gap-3 backdrop-blur-sm shadow-xl">
               <div className="flex items-center justify-between">
-                <p className="text-[11px]  tracking-[0.2em] text-white/30 shrink-0">Token Allocation</p>
+                <p className="text-xs font-medium uppercase tracking-wider text-white/40 shrink-0">Token Allocation</p>
                 {totalUsdValue > 0 && (
-                  <p className="text-[11px] text-white/40 font-mono">{formatUsd(totalUsdValue)} total</p>
+                  <p className="text-xs text-white/60 font-mono font-medium">{formatUsd(totalUsdValue)} total</p>
                 )}
               </div>
-              <div className="flex h-1.5 w-full bg-white/5 rounded-full overflow-hidden shrink-0">
+              <div className="flex h-2 w-full bg-white/5 rounded-full overflow-hidden shrink-0">
                 {balancesLoading ? (
                   <div className="h-full w-full bg-white/10 animate-pulse rounded-full" />
                 ) : totalUsdValue === 0 ? (
                   <div className="h-full w-full bg-white/5 rounded-full" />
                 ) : (
                   (() => {
-                    const colors = ['#3B82F6', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981', '#06B6D4', '#F97316'];
+                    const colors = ['#F472B6', '#3B82F6', '#8B5CF6', '#F59E0B', '#10B981', '#06B6D4', '#EC4899'];
                     return balances
                       .filter(b => (b.usdValue ?? 0) > 0)
                       .map((b, i) => {
@@ -515,16 +515,16 @@ export default function ProfilePage() {
                 )}
               </div>
               {/* Legend */}
-              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-1">
                 {(() => {
-                  const colors = ['#3B82F6', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981', '#06B6D4', '#F97316'];
+                  const colors = ['#F472B6', '#3B82F6', '#8B5CF6', '#F59E0B', '#10B981', '#06B6D4', '#EC4899'];
                   return balances
                     .filter(b => (b.usdValue ?? 0) > 0)
                     .map((b, i) => (
-                      <span key={b.token.symbol} className="flex items-center gap-1 text-[11px] text-white/40  ">
-                        <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: colors[i % colors.length] }} />
-                        {b.token.symbol}
-                        <span className="text-white/20">{((b.usdValue ?? 0) / totalUsdValue * 100).toFixed(0)}%</span>
+                      <span key={b.token.symbol} className="flex items-center gap-1.5 text-xs text-white/50">
+                        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: colors[i % colors.length] }} />
+                        <span className="font-medium text-white/70">{b.token.symbol}</span>
+                        <span className="text-white/30 font-mono">{((b.usdValue ?? 0) / totalUsdValue * 100).toFixed(0)}%</span>
                       </span>
                     ));
                 })()}
@@ -535,12 +535,12 @@ export default function ProfilePage() {
       </section>
 
       {/* Navigation Tabs */}
-      <div className="w-full flex gap-1 p-1 bg-white/[0.03] rounded-full mb-8 shadow-inner border border-white/5 backdrop-blur-md">
+      <div className="inline-flex w-full sm:w-auto p-1.5 bg-[#0a0a0c] rounded-2xl mb-8 border border-white/[0.08] shadow-lg gap-1">
         <button 
           onClick={() => setActiveTab('tokens')}
-          className={`flex-1 py-3 rounded-full text-[12px] font-bold  tracking-[0.2em] transition-all cursor-pointer ${
+          className={`flex-1 sm:flex-initial px-6 py-2.5 rounded-xl text-sm sm:text-base font-bold transition-all cursor-pointer ${
             activeTab === 'tokens' 
-              ? 'bg-white/10 text-white shadow-lg ring-1 ring-white/10' 
+              ? 'bg-white/10 text-white shadow-md' 
               : 'text-white/40 hover:text-white'
           }`}
         >
@@ -548,9 +548,9 @@ export default function ProfilePage() {
         </button>
         <button 
           onClick={() => setActiveTab('positions')}
-          className={`flex-1 py-3 rounded-full text-[12px] font-bold  tracking-[0.2em] transition-all cursor-pointer ${
+          className={`flex-1 sm:flex-initial px-6 py-2.5 rounded-xl text-sm sm:text-base font-bold transition-all cursor-pointer ${
             activeTab === 'positions' 
-              ? 'bg-white/10 text-white shadow-lg ring-1 ring-white/10' 
+              ? 'bg-white/10 text-white shadow-md' 
               : 'text-white/40 hover:text-white'
           }`}
         >
@@ -558,9 +558,9 @@ export default function ProfilePage() {
         </button>
         <button 
           onClick={() => setActiveTab('activity')}
-          className={`flex-1 py-3 rounded-full text-[12px] font-bold  tracking-[0.2em] transition-all cursor-pointer ${
+          className={`flex-1 sm:flex-initial px-6 py-2.5 rounded-xl text-sm sm:text-base font-bold transition-all cursor-pointer ${
             activeTab === 'activity' 
-              ? 'bg-white/10 text-white shadow-lg ring-1 ring-white/10' 
+              ? 'bg-white/10 text-white shadow-md' 
               : 'text-white/40 hover:text-white'
           }`}
         >
@@ -571,30 +571,30 @@ export default function ProfilePage() {
       {/* Content */}
       <div className="w-full">
         {activeTab === 'tokens' ? (
-          <div className="space-y-3">
+          <div className="bg-black/50 rounded-2xl border border-white/[0.08] overflow-hidden shadow-2xl backdrop-blur-sm">
             {/* Header row */}
-            <div className="hidden md:grid grid-cols-[2fr_1fr_1fr] gap-4 px-6 py-3 text-[11px]  tracking-[0.2em] text-white/20">
+            <div className="hidden md:grid grid-cols-[2fr_1fr_1fr] gap-4 px-6 py-3.5 text-sm font-semibold uppercase tracking-wider text-white/40 border-b border-white/[0.06] bg-[#0a0a0a]">
               <div>Token</div>
               <div className="text-right">Balance</div>
-              <div className="text-right">Address</div>
+              <div className="text-right">USD Value</div>
             </div>
 
             {!isConnected ? (
-              <div className="flex flex-col items-center justify-center py-24 gap-4 text-white/20">
+              <div className="flex flex-col items-center justify-center py-20 gap-3 text-white/30">
                 <Wallet size={32} strokeWidth={1.5} />
-                <p className="text-[12px]  ">Connect your wallet to see balances</p>
+                <p className="text-sm font-medium">Connect your wallet to see balances</p>
               </div>
             ) : balancesLoading ? (
-              Array.from({ length: 7 }).map((_, i) => (
-                <div key={i} className="flex items-center justify-between p-5 bg-white/[0.02] border border-white/5 rounded-lg animate-pulse">
+              Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="flex items-center justify-between p-5 border-b border-white/[0.04] last:border-0 animate-pulse">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-white/10" />
                     <div className="space-y-2">
-                      <div className="h-3 w-20 bg-white/10 rounded" />
-                      <div className="h-2 w-12 bg-white/5 rounded" />
+                      <div className="h-4 w-28 bg-white/10 rounded" />
+                      <div className="h-3 w-16 bg-white/5 rounded" />
                     </div>
                   </div>
-                  <div className="h-4 w-24 bg-white/10 rounded" />
+                  <div className="h-5 w-24 bg-white/10 rounded" />
                 </div>
               ))
             ) : (
@@ -603,66 +603,64 @@ export default function ProfilePage() {
                 return (
                   <div
                     key={item.token.address}
-                    className={`group relative bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] p-5 rounded-lg transition-all duration-300 overflow-hidden ${
-                      hasBalance ? 'hover:border-primary/20' : 'opacity-50'
+                    className={`group relative grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-4 px-6 py-4.5 items-center border-b border-white/[0.04] last:border-0 hover:bg-white/[0.035] transition-colors ${
+                      hasBalance ? '' : 'opacity-60'
                     }`}
                   >
                     {/* Left accent on tokens with balance */}
                     {hasBalance && (
-                      <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary/60 rounded-r" />
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r" />
                     )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-4 items-center">
-                      {/* Token info */}
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden shrink-0">
-                          <img
-                            src={item.token.logo}
-                            alt={item.token.symbol}
-                            className="w-full h-full object-contain"
-                            onError={(e) => {
-                              (e.currentTarget as HTMLImageElement).style.display = 'none';
-                            }}
-                          />
+                    {/* Token info */}
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <div className="w-10 h-10 rounded-full bg-black border border-white/10 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+                        <img
+                          src={item.token.logo}
+                          alt={item.token.symbol}
+                          className="w-full h-full object-contain"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).style.display = 'none';
+                          }}
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-base font-bold text-white tracking-tight truncate">{item.token.name}</h3>
+                          {item.usdPrice !== null && (
+                            <span className="text-xs font-mono text-white/50 bg-white/5 px-2 py-0.5 rounded-full border border-white/[0.06]">
+                              ${item.usdPrice < 0.01
+                                ? item.usdPrice.toFixed(6)
+                                : item.usdPrice.toLocaleString('en-US', { maximumFractionDigits: 4 })}
+                            </span>
+                          )}
                         </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h3 className="text-sm text-white tracking-tight">{item.token.name}</h3>
-                            {item.usdPrice !== null && (
-                              <span className="text-[11px] font-mono text-white/30 bg-white/5 px-1.5 py-0.5 rounded">
-                                ${item.usdPrice < 0.01
-                                  ? item.usdPrice.toFixed(6)
-                                  : item.usdPrice.toLocaleString('en-US', { maximumFractionDigits: 4 })}
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-white/40 text-[12px]  tracking-[0.15em] mt-0.5">{item.token.symbol}</p>
-                        </div>
+                        <p className="text-white/40 text-xs font-mono mt-0.5">{item.token.symbol}</p>
                       </div>
+                    </div>
 
-                      {/* Balance */}
-                      <div className="text-left md:text-right">
-                        {hasBalance ? (
-                          <>
-                            <p className="text-lg text-white tracking-tight font-mono">{item.formatted}</p>
-                            <p className="text-white/30 text-[12px]   mt-0.5">{item.token.symbol}</p>
-                          </>
-                        ) : (
-                          <p className="text-white/20 text-sm font-mono">—</p>
-                        )}
-                      </div>
+                    {/* Balance */}
+                    <div className="text-left md:text-right">
+                      {hasBalance ? (
+                        <>
+                          <p className="text-base font-bold text-white tracking-tight font-mono">{item.formatted}</p>
+                          <p className="text-white/40 text-xs font-mono mt-0.5">{item.token.symbol}</p>
+                        </>
+                      ) : (
+                        <p className="text-white/20 text-base font-mono">—</p>
+                      )}
+                    </div>
 
-                      {/* USD Value */}
-                      <div className="text-left md:text-right">
-                        {item.usdValue !== null ? (
-                          <>
-                            <p className="text-sm text-primary/80 font-mono tracking-tight">{formatUsd(item.usdValue)}</p>
-                            <p className="text-white/20 text-[11px]   mt-0.5">value</p>
-                          </>
-                        ) : (
-                          <p className="text-white/20 text-[11px]  ">no price</p>
-                        )}
-                      </div>
+                    {/* USD Value */}
+                    <div className="text-left md:text-right">
+                      {item.usdValue !== null ? (
+                        <>
+                          <p className="text-base font-bold text-white font-mono tracking-tight">{formatUsd(item.usdValue)}</p>
+                          <p className="text-white/30 text-xs font-mono mt-0.5">Value</p>
+                        </>
+                      ) : (
+                        <p className="text-white/20 text-xs font-mono">—</p>
+                      )}
                     </div>
                   </div>
                 );
@@ -671,39 +669,37 @@ export default function ProfilePage() {
           </div>
         ) : activeTab === 'positions' ? (
           <div className="space-y-6">
-            {/* Summary bar */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-white/[0.02] border border-white/5 p-6 rounded-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-[100px] h-[100px] bg-primary/5 blur-[50px] rounded-full pointer-events-none group-hover:bg-primary/10 transition-colors" />
-                <p className="text-[11px]   text-white/30 mb-2 relative z-10">Active Positions</p>
-                <p className="text-2xl text-white relative z-10 tracking-tight">
+            {/* Compact summary bar */}
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="bg-[#0a0a0c]/80 border border-white/[0.08] px-5 py-3 rounded-xl flex items-center gap-3 shadow-md backdrop-blur-sm">
+                <span className="text-xs font-medium uppercase tracking-wider text-white/50">Active Positions:</span>
+                <span className="text-lg font-bold font-mono text-white tracking-tight">
                   {positionsLoading ? <span className="animate-pulse">…</span> : userPositions.length}
-                </p>
+                </span>
               </div>
-              <div className="bg-white/[0.02] border border-white/5 p-6 rounded-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-[100px] h-[100px] bg-white/5 blur-[50px] rounded-full pointer-events-none group-hover:bg-white/10 transition-colors" />
-                <p className="text-[11px]   text-white/30 mb-2 relative z-10">Unique Pools</p>
-                <p className="text-2xl text-white relative z-10 tracking-tight">
+              <div className="bg-[#0a0a0c]/80 border border-white/[0.08] px-5 py-3 rounded-xl flex items-center gap-3 shadow-md backdrop-blur-sm">
+                <span className="text-xs font-medium uppercase tracking-wider text-white/50">Unique Pools:</span>
+                <span className="text-lg font-bold font-mono text-white tracking-tight">
                   {positionsLoading ? <span className="animate-pulse">…</span>
                     : new Set(userPositions.map(p => `${p.currency0}-${p.currency1}-${p.fee}`)).size}
-                </p>
+                </span>
               </div>
             </div>
 
             {/* Position list */}
             {!isConnected ? (
-              <div className="flex flex-col items-center justify-center py-24 gap-4 text-white/20">
+              <div className="flex flex-col items-center justify-center py-20 gap-3 text-white/30">
                 <Wallet size={32} strokeWidth={1.5} />
-                <p className="text-[12px]  ">Connect your wallet to see positions</p>
+                <p className="text-xs uppercase tracking-wider">Connect your wallet to see positions</p>
               </div>
             ) : positionsLoading ? (
               <div className="space-y-4">
                 {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="p-8 bg-white/[0.02] border border-white/5 rounded-2xl animate-pulse">
+                  <div key={i} className="p-6 bg-[#0a0a0c]/80 border border-white/[0.08] rounded-2xl animate-pulse">
                     <div className="flex items-center gap-4">
                       <div className="flex -space-x-3">
-                        <div className="w-12 h-12 rounded-full bg-white/10 border-2 border-black" />
-                        <div className="w-12 h-12 rounded-full bg-white/5 border-2 border-black" />
+                        <div className="w-10 h-10 rounded-full bg-white/10 border-2 border-black" />
+                        <div className="w-10 h-10 rounded-full bg-white/5 border-2 border-black" />
                       </div>
                       <div className="space-y-2 flex-1">
                         <div className="h-4 w-40 bg-white/10 rounded" />
@@ -714,9 +710,9 @@ export default function ProfilePage() {
                 ))}
               </div>
             ) : userPositions.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-24 gap-4 text-white/20">
+              <div className="flex flex-col items-center justify-center py-20 gap-3 text-white/30">
                 <LayoutList size={32} strokeWidth={1.5} />
-                <p className="text-[12px]  ">No positions found</p>
+                <p className="text-xs uppercase tracking-wider">No positions found</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -724,23 +720,23 @@ export default function ProfilePage() {
                   <div
                     key={pos.tokenId}
                     onClick={() => navigate(`/positions/${pos.tokenId}`)}
-                    className="group bg-white/[0.01] border border-white/[0.05] hover:bg-white/[0.03] hover:border-primary/20 p-8 rounded-2xl transition-all duration-300 cursor-pointer relative overflow-hidden"
+                    className="group bg-[#0a0a0c]/80 border border-white/[0.08] hover:border-primary/30 hover:bg-white/[0.035] p-6 rounded-2xl transition-all duration-200 cursor-pointer relative overflow-hidden shadow-lg backdrop-blur-sm"
                   >
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                       {/* Left: token logos + pair info */}
-                      <div className="flex items-center gap-6">
-                        <div className="flex -space-x-3 shrink-0">
+                      <div className="flex items-center gap-4">
+                        <div className="flex -space-x-2.5 shrink-0">
                           {[pos.token0, pos.token1].map((tok, i) => (
-                            <div key={i} className="w-11 h-11 rounded-full border-2 border-black bg-white/5 overflow-hidden">
+                            <div key={i} className="w-10 h-10 rounded-full border-2 border-black bg-black overflow-hidden">
                               {tok.logo ? (
                                 <img
                                   src={tok.logo}
                                   alt={tok.symbol}
-                                  className="w-full h-full object-contain  group-hover:grayscale-0 transition-all duration-500"
+                                  className="w-full h-full object-contain"
                                   onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                                 />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center text-[11px] text-white/40">{tok.symbol[0]}</div>
+                                <div className="w-full h-full flex items-center justify-center text-xs text-white/40">{tok.symbol[0]}</div>
                               )}
                             </div>
                           ))}
@@ -748,30 +744,30 @@ export default function ProfilePage() {
 
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
-                            <h3 className="text-lg text-white tracking-tight">
+                            <h3 className="text-base font-semibold text-white tracking-tight group-hover:text-primary transition-colors">
                               {pos.token0.symbol} / {pos.token1.symbol}
                             </h3>
-                            <span className="text-[11px] bg-primary/10 text-primary/80 border border-primary/20 px-2 py-0.5 rounded  ">
+                            <span className="text-xs bg-primary/10 text-primary border border-primary/25 px-2 py-0.5 rounded-full font-mono">
                               {pos.feePct}
                             </span>
-                            <span className="text-[11px] text-white/30 font-mono bg-white/5 px-2 py-0.5 rounded">
+                            <span className="text-xs text-white/40 font-mono bg-white/5 border border-white/10 px-2 py-0.5 rounded-full">
                               #{pos.tokenId}
                             </span>
                           </div>
-                          <p className="text-[12px] font-mono text-white/30  tracking-[0.1em] mt-2">
+                          <p className="text-xs font-mono text-white/40 mt-1.5">
                             Range:&nbsp;
-                            <span className="text-white/60">
+                            <span className="text-white/70">
                               {formatPrice(pos.priceLower)}&nbsp;—&nbsp;{formatPrice(pos.priceUpper)}
                             </span>
-                            &nbsp;<span className="text-white/20">{pos.token1.symbol}/{pos.token0.symbol}</span>
+                            &nbsp;<span className="text-white/30">{pos.token1.symbol}/{pos.token0.symbol}</span>
                           </p>
                         </div>
                       </div>
 
                       {/* Right: ticks */}
                       <div className="text-left md:text-right shrink-0">
-                        <p className="text-[11px] text-white/20   mb-1">Tick Range</p>
-                        <p className="text-sm font-mono text-white/60">
+                        <p className="text-xs text-white/40 uppercase tracking-wider mb-1">Tick Range</p>
+                        <p className="text-sm font-mono text-white/80 font-medium">
                           {pos.tickLower} — {pos.tickUpper}
                         </p>
                       </div>
@@ -783,7 +779,7 @@ export default function ProfilePage() {
           </div>
         ) : (
           <div className="w-full bg-black/50 rounded-2xl border border-white/[0.08] overflow-hidden shadow-2xl">
-            <div className="hidden md:grid grid-cols-[100px_1.4fr_120px_140px_140px_110px] gap-4 px-6 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/40 border-b border-white/[0.06] bg-[#0a0a0a]">
+            <div className="hidden md:grid grid-cols-[100px_1.4fr_120px_140px_140px_110px] gap-4 px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-white/40 border-b border-white/[0.06] bg-[#0a0a0a]">
               <div>Time</div>
               <div>Type & Action</div>
               <div className="text-right">Total USD</div>
@@ -822,7 +818,7 @@ export default function ProfilePage() {
                     >
                       {/* Time */}
                       <div className="flex md:block justify-between items-center text-xs text-white/50 font-mono">
-                        <span className="md:hidden text-[11px] uppercase tracking-wider text-white/30 font-sans">Time</span>
+                        <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Time</span>
                         <span className="flex items-center gap-1.5">
                           <Clock size={12} className="text-white/30 hidden md:inline" />
                           {formattedTime}
@@ -831,30 +827,30 @@ export default function ProfilePage() {
 
                       {/* Type & Action */}
                       <div className="flex md:block justify-between items-center">
-                        <span className="md:hidden text-[11px] uppercase tracking-wider text-white/30 font-sans">Type</span>
+                        <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Type</span>
                         <div className="flex items-center gap-2">
                           {isSwap ? (
                             isBuy ? (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-bold rounded-sm bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 uppercase">
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded-sm bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 uppercase">
                                 <ArrowUpRight size={13} className="stroke-[2.5]" />
                                 buy
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-bold rounded-sm bg-rose-500/10 text-rose-400 border border-rose-500/25 uppercase">
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded-sm bg-rose-500/10 text-rose-400 border border-rose-500/25 uppercase">
                                 <ArrowDownRight size={13} className="stroke-[2.5]" />
                                 sell
                               </span>
                             )
                           ) : isAddLiq ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-bold rounded-sm bg-purple-500/10 text-purple-300 border border-purple-500/25 uppercase">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded-sm bg-purple-500/10 text-purple-300 border border-purple-500/25 uppercase">
                               + add lp
                             </span>
                           ) : isRemoveLiq ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-bold rounded-sm bg-amber-500/10 text-amber-300 border border-amber-500/25 uppercase">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded-sm bg-amber-500/10 text-amber-300 border border-amber-500/25 uppercase">
                               - remove lp
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-bold rounded-sm bg-cyan-500/10 text-cyan-300 border border-cyan-500/25 uppercase">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold rounded-sm bg-cyan-500/10 text-cyan-300 border border-cyan-500/25 uppercase">
                               fees
                             </span>
                           )}
@@ -866,7 +862,7 @@ export default function ProfilePage() {
 
                       {/* Total USD */}
                       <div className="flex md:block justify-between items-center md:text-right">
-                        <span className="md:hidden text-[11px] uppercase tracking-wider text-white/30 font-sans">Total USD</span>
+                        <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Total USD</span>
                         <span className={`text-sm font-bold font-mono ${isSwap && isBuy ? 'text-emerald-400' : 'text-white/90'}`}>
                           {tx.usd === '-' ? '-' : formatCurrency(tx.usd)}
                         </span>
@@ -874,7 +870,7 @@ export default function ProfilePage() {
 
                       {/* Token0 Amount */}
                       <div className="flex md:block justify-between items-center md:text-right">
-                        <span className="md:hidden text-[11px] uppercase tracking-wider text-white/30 font-sans">Token0</span>
+                        <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Token0</span>
                         <span className={`text-xs font-mono font-medium ${tx.isToken0Negative ? 'text-rose-400/80' : 'text-emerald-400'}`}>
                           {tx.token0Amount}
                         </span>
@@ -882,7 +878,7 @@ export default function ProfilePage() {
 
                       {/* Token1 Amount */}
                       <div className="flex md:block justify-between items-center md:text-right">
-                        <span className="md:hidden text-[11px] uppercase tracking-wider text-white/30 font-sans">Token1</span>
+                        <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Token1</span>
                         <span className={`text-xs font-mono font-medium ${tx.isToken1Negative ? 'text-rose-400/80' : 'text-emerald-400'}`}>
                           {tx.token1Amount || '-'}
                         </span>
@@ -890,7 +886,7 @@ export default function ProfilePage() {
 
                       {/* Txn Hash */}
                       <div className="flex md:block justify-between items-center md:text-right">
-                        <span className="md:hidden text-[11px] uppercase tracking-wider text-white/30 font-sans">Txn</span>
+                        <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Txn</span>
                         <a 
                           href={`${BLOCK_EXPLORER_URL}/tx/${tx.hash}`}
                           target="_blank"
@@ -923,14 +919,14 @@ export default function ProfilePage() {
                 <button 
                   disabled={!hasPrevProfilePage || profileSwapsLoading}
                   onClick={() => setProfileSwapsPage(prev => Math.max(0, prev - 1))}
-                  className="px-5 py-2 bg-white/5 border border-white/10 text-sm font-semibold text-white hover:bg-white/10 transition-all disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                  className="px-5 py-2 bg-white/5 border border-white/10 rounded-xl text-xs font-semibold text-white hover:bg-white/10 transition-all disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                 >
                   Prev
                 </button>
                 <button 
                   disabled={!hasNextProfilePage || profileSwapsLoading}
                   onClick={() => setProfileSwapsPage(prev => prev + 1)}
-                  className="px-5 py-2 bg-primary text-black text-sm font-semibold transition-all active:scale-[0.98] gold-glow hover:brightness-110 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                  className="px-5 py-2 bg-primary text-black rounded-xl text-xs font-bold uppercase tracking-wider transition-all active:scale-[0.98] gold-glow hover:brightness-110 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                 >
                   Next
                 </button>
@@ -942,31 +938,31 @@ export default function ProfilePage() {
 
       {/* Send Assets Modal */}
       {isSendModalOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center px-6">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div
-            className="absolute inset-0 bg-black/85 backdrop-blur-md"
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={() => setIsSendModalOpen(false)}
-          ></div>
+          />
 
-          <div className="relative w-full max-w-xl glass-morphism bg-[#0A0A0A] border border-primary/30 p-10 shadow-[0_0_50px_rgba(244,114,182,0.1)] animate-in zoom-in-95 duration-300 flex flex-col items-center rounded-3xl">
+          <div className="relative w-full max-w-lg bg-[#0d0d10] border border-white/15 p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col rounded-3xl">
             <button
               onClick={() => setIsSendModalOpen(false)}
-              className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors cursor-pointer"
+              className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors cursor-pointer p-1 rounded-full hover:bg-white/10"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
 
-            <div className="flex flex-col items-center text-center mt-4 mb-6">
-              <h2 className="text-xl text-white  tracking-tighter mb-1">Send Assets</h2>
-              <p className="text-[11px] text-white/40 font-medium max-w-[280px]  tracking-[0.2em]">
-                Transfer native ETH or any custom ERC20 token to another wallet instantly.
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-white tracking-tight">Send Assets</h2>
+              <p className="text-xs text-white/40 mt-1">
+                Transfer native zkLTC or custom tokens to another address.
               </p>
             </div>
 
             <div className="w-full space-y-4">
               {/* Token Selector Dropdown */}
-              <div className="bg-white/[0.02] border border-white/5 p-5 rounded-2xl">
-                <label className="text-[11px]   text-white/30 block mb-2">Select Token</label>
+              <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl">
+                <label className="text-xs font-medium uppercase tracking-wider text-white/40 block mb-2">Select Token</label>
                 <div className="relative">
                   <select
                     value={selectedTokenAddress}
@@ -974,7 +970,7 @@ export default function ProfilePage() {
                       setSelectedTokenAddress(e.target.value);
                       setAmount(''); // clear amount to avoid wrong inputs
                     }}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-xs  tracking-wider outline-none cursor-pointer appearance-none pr-10"
+                    className="w-full bg-[#16161a] border border-white/10 rounded-xl px-4 py-3 text-white text-xs tracking-wider outline-none cursor-pointer appearance-none pr-10 focus:border-primary/50"
                   >
                     {selectableTokens.map((tok) => (
                       <option key={tok.address} value={tok.address} className="bg-[#121212] text-white">
@@ -991,23 +987,23 @@ export default function ProfilePage() {
 
               {/* Custom Token Address Input (if selected) */}
               {selectedTokenAddress === 'custom' && (
-                <div className="bg-white/[0.02] border border-white/5 p-5 rounded-2xl animate-in slide-in-from-top-2 duration-200">
-                  <label className="text-[11px]   text-white/30 block mb-2">Token Contract Address</label>
+                <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl animate-in slide-in-from-top-2 duration-200">
+                  <label className="text-xs font-medium uppercase tracking-wider text-white/40 block mb-2">Token Contract Address</label>
                   <input
                     type="text"
                     placeholder="0x..."
                     value={customTokenAddress}
                     onChange={(e) => setCustomTokenAddress(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-xs font-mono outline-none"
+                    className="w-full bg-[#16161a] border border-white/10 rounded-xl px-4 py-3 text-white text-xs font-mono outline-none focus:border-primary/50"
                   />
                   {customTokenLoading && (
-                    <div className="flex items-center gap-2 mt-2 text-[12px] text-white/40">
+                    <div className="flex items-center gap-2 mt-2 text-xs text-white/40">
                       <Loader2 size={12} className="animate-spin" />
                       Loading token contract details...
                     </div>
                   )}
                   {customTokenError && (
-                    <div className="text-[12px] text-red-400 mt-2">
+                    <div className="text-xs text-rose-400 mt-2">
                       {customTokenError}
                     </div>
                   )}
@@ -1016,11 +1012,11 @@ export default function ProfilePage() {
                       <div className="flex items-center gap-2">
                         <img src={customTokenDetails.logo} className="w-5 h-5 rounded-full" />
                         <div>
-                          <p className="text-xs text-white ">{customTokenDetails.symbol}</p>
-                          <p className="text-[11px] text-white/40 font-sans">{customTokenDetails.name}</p>
+                          <p className="text-xs font-semibold text-white">{customTokenDetails.symbol}</p>
+                          <p className="text-xs text-white/40">{customTokenDetails.name}</p>
                         </div>
                       </div>
-                      <div className="text-right text-[12px] font-mono text-white/60">
+                      <div className="text-right text-xs font-mono text-white/60">
                         DECIMALS: {customTokenDetails.decimals}
                       </div>
                     </div>
@@ -1029,22 +1025,22 @@ export default function ProfilePage() {
               )}
 
               {/* Recipient Address */}
-              <div className="bg-white/[0.02] border border-white/5 p-5 rounded-2xl">
-                <label className="text-[11px]   text-white/30 block mb-2">Recipient Address</label>
+              <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl">
+                <label className="text-xs font-medium uppercase tracking-wider text-white/40 block mb-2">Recipient Address</label>
                 <input
                   type="text"
                   placeholder="0x..."
                   value={recipient}
                   onChange={(e) => setRecipient(e.target.value)}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-xs font-mono outline-none"
+                  className="w-full bg-[#16161a] border border-white/10 rounded-xl px-4 py-3 text-white text-xs font-mono outline-none focus:border-primary/50"
                 />
               </div>
 
               {/* Amount Input */}
-              <div className="bg-white/[0.02] border border-white/5 p-5 rounded-2xl">
+              <div className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl">
                 <div className="flex justify-between items-center mb-2">
-                  <label className="text-[11px]   text-white/30">Amount</label>
-                  <span className="text-[11px]   text-white/40 font-mono">
+                  <label className="text-xs font-medium uppercase tracking-wider text-white/40">Amount</label>
+                  <span className="text-xs text-white/40 font-mono">
                     Balance: {parseFloat(getSelectedTokenDetails().formattedBalance).toLocaleString(undefined, { maximumFractionDigits: 6 })} {getSelectedTokenDetails().symbol}
                   </span>
                 </div>
@@ -1054,11 +1050,11 @@ export default function ProfilePage() {
                     placeholder="0.0"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="bg-transparent text-2xl text-white outline-none w-2/3  font-mono"
+                    className="bg-transparent text-2xl font-bold text-white outline-none w-2/3 font-mono"
                   />
                   <button
                     onClick={() => setAmount(getSelectedTokenDetails().formattedBalance)}
-                    className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white text-xs font-semibold rounded transition-all cursor-pointer font-mono shrink-0"
+                    className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white text-xs font-semibold rounded-lg transition-all cursor-pointer font-mono shrink-0"
                   >
                     MAX
                   </button>
@@ -1066,17 +1062,17 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 w-full mt-8">
+            <div className="grid grid-cols-2 gap-4 w-full mt-6">
               <button
                 onClick={() => setIsSendModalOpen(false)}
-                className="py-3.5 bg-white/5 border border-white/10 text-sm font-semibold text-white/60 hover:bg-white/10 transition-all cursor-pointer"
+                className="py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-semibold text-white/70 hover:text-white transition-all cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSend}
                 disabled={sendLoading || (selectedTokenAddress === 'custom' && !customTokenDetails)}
-                className="py-3.5 bg-primary text-black text-sm font-bold shadow-[0_0_20px_rgba(244,114,182,0.3)] hover:brightness-110 active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="py-3 bg-primary hover:bg-primary/90 text-black text-xs font-bold rounded-xl gold-glow active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {sendLoading ? (
                   <>

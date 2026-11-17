@@ -66,7 +66,7 @@ export default function TokenImage({ tokenAddress, symbol, className = '', alt =
 
   const fallbackContent = (
     <div className={`w-full h-full bg-white/10 flex items-center justify-center ${className}`}>
-      <span className="text-[8px] text-white/40 font-bold token-symbol">
+      <span className="text-xs text-white/40 font-bold token-symbol">
         {symbol ? symbol.slice(0, 3) : '?'}
       </span>
     </div>

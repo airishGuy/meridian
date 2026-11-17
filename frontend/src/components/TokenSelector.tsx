@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronDown, Search, X } from 'lucide-react';
+import { ChevronDown, Search, X, Check } from 'lucide-react';
 import { useAccount } from 'wagmi';
 
 import { TokenConfig } from '@/config/tokens';
@@ -10,7 +10,6 @@ import TokenImage from './TokenImage';
 export interface Token extends TokenConfig {
   balance?: string;
 }
-
 
 interface TokenSelectorProps {
   selectedToken: Token | null;
@@ -22,36 +21,49 @@ interface TokenSelectorProps {
   disabled?: boolean;
 }
 
-const TokenListItem = ({ token, isSelected, onClick }: { token: Token, isSelected: boolean, onClick: () => void }) => {
+const TokenListItem = ({ 
+  token, 
+  isSelected, 
+  onClick 
+}: { 
+  token: Token; 
+  isSelected: boolean; 
+  onClick: () => void; 
+}) => {
   const { address } = useAccount();
   const { formattedBalance } = useTokenBalance({ token, address });
 
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center justify-between px-6 py-4 hover:bg-white/[0.03] transition-colors group cursor-pointer ${
-        isSelected ? 'bg-primary/5' : ''
+      className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl transition-all duration-150 group cursor-pointer text-left ${
+        isSelected 
+          ? 'bg-primary/10 border border-primary/30' 
+          : 'hover:bg-white/[0.05] border border-transparent'
       }`}
     >
-      <div className="flex items-center gap-4">
-        <div className="w-8 h-8 border border-white/10 rounded-full overflow-hidden shrink-0">
-          <TokenImage tokenAddress={token.address} symbol={token.symbol} className="w-full h-full" alt={token.symbol} />
+      <div className="flex items-center gap-3.5 min-w-0">
+        <div className="w-9 h-9 rounded-full bg-white/[0.06] border border-white/10 overflow-hidden shrink-0 flex items-center justify-center">
+          <TokenImage tokenAddress={token.address} symbol={token.symbol} className="w-full h-full object-contain" alt={token.symbol} />
         </div>
-        <div className="text-left">
-          <p className={`text-[15px] tracking-tight token-symbol ${
-            isSelected ? 'text-primary' : 'text-white'
-          }`}>
-            {token.symbol}
-          </p>
-          <p className="text-[11px] font-medium text-white/30 uppercase tracking-widest">{token.name}</p>
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <span className={`text-sm font-semibold tracking-tight token-symbol ${isSelected ? 'text-primary' : 'text-white'}`}>
+              {token.symbol}
+            </span>
+            {isSelected && (
+              <span className="text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-primary/20 text-primary">
+                Selected
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-white/40 truncate">{token.name}</p>
         </div>
       </div>
       
-      <div className="flex flex-col items-end gap-1">
-        <span className="text-[12px] font-mono text-white/60">{formattedBalance}</span>
-        {isSelected && (
-          <span className="text-[10px] uppercase tracking-widest text-primary ">Selected</span>
-        )}
+      <div className="flex flex-col items-end gap-0.5 pl-3 shrink-0">
+        <span className="text-sm font-mono text-white/90 font-medium">{formattedBalance}</span>
+        <span className="text-xs font-mono text-white/40">{token.symbol}</span>
       </div>
     </button>
   );
@@ -98,88 +110,91 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({
 
   return (
     <div className={`relative ${className}`}>
-      {/* Selector Button */}
+      {/* Selector Trigger Button */}
       <button
+        type="button"
         onClick={() => !disabled && setIsOpen(true)}
         disabled={disabled}
-        className={`flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2.5 transition-all cursor-pointer ${
-          disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/10 group active:scale-95'
-        }`}
+        className={`flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border transition-all duration-200 cursor-pointer ${
+          selectedToken 
+            ? 'bg-white/[0.06] hover:bg-white/[0.1] border-white/10 hover:border-white/20 text-white' 
+            : 'bg-primary text-black border-transparent font-bold hover:brightness-110 shadow-md'
+        } ${disabled ? 'opacity-50 cursor-not-allowed' : 'active:scale-95'}`}
       >
         {selectedToken ? (
           <>
-            <div className="w-5 h-5 shrink-0 rounded-full overflow-hidden">
-              <TokenImage tokenAddress={selectedToken.address} symbol={selectedToken.symbol} className="w-full h-full" alt={selectedToken.symbol} />
+            <div className="w-6 h-6 rounded-full overflow-hidden bg-white/10 shrink-0 border border-white/10">
+              <TokenImage tokenAddress={selectedToken.address} symbol={selectedToken.symbol} className="w-full h-full object-contain" alt={selectedToken.symbol} />
             </div>
-            <span className="text-sm text-white tracking-tight token-symbol">{selectedToken.symbol}</span>
+            <span className="text-sm font-semibold tracking-tight token-symbol text-white">{selectedToken.symbol}</span>
+            {!disabled && (
+              <ChevronDown 
+                size={15} 
+                className={`text-white/50 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+              />
+            )}
           </>
         ) : (
-          <span className="text-sm  text-white/40 tracking-tight">{label}</span>
-        )}
-        {!disabled && (
-          <ChevronDown 
-            size={14} 
-            className={`text-white/20 group-hover:text-primary transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
-          />
+          <>
+            <span className="text-sm font-bold tracking-tight">{label}</span>
+            <ChevronDown size={15} />
+          </>
         )}
       </button>
 
-      {/* Dropdown / Modal Portal */}
+      {/* Modal Overlay & Card */}
       {isOpen && createPortal(
         <div
-          className="fixed inset-0 z-[10000] flex items-center justify-center px-6"
-          /* Backdrop — clicking here closes */
+          className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-xl animate-in fade-in duration-200"
           onClick={() => { setIsOpen(false); setSearchQuery(""); }}
         >
           <div
-            className="relative w-full max-w-xl h-[90vh] glass-morphism bg-[#0A0A0A] border border-primary/30 p-10 shadow-[0_0_50px_rgba(244,114,182,0.1)] animate-in zoom-in-95 duration-300 flex flex-col items-center overflow-hidden text-center"
-            /* Stop click from bubbling up to backdrop */
+            className="relative w-full max-w-md bg-[#0d0d10] border border-white/[0.1] rounded-3xl p-6 shadow-2xl flex flex-col max-h-[85vh] overflow-hidden animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
-            <button 
-              onClick={() => { setIsOpen(false); setSearchQuery(""); }}
-              className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors cursor-pointer"
-            >
-              <X size={20} />
-            </button>
-            
-            <div className="flex flex-col items-center text-center mt-6 w-full">
-              <h2 className="text-xl  text-white tracking-tighter mb-4 ">Select a token</h2>
+            {/* Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-white/[0.06]">
+              <h3 className="text-base font-bold text-white tracking-tight">Select a token</h3>
+              <button 
+                onClick={() => { setIsOpen(false); setSearchQuery(""); }}
+                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
 
-              <div className="w-full relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
-                <input
-                  autoFocus
-                  type="text"
-                  placeholder="SEARCH NAME OR ADDRESS"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white/[0.03] border border-white/10 pl-12 pr-6 py-4 text-[12px] rounded-full uppercase tracking-widest text-white outline-none focus:border-primary/40 transition-colors"
-                />
-              </div>
+            {/* Search Input */}
+            <div className="mt-4 relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" size={16} />
+              <input
+                autoFocus
+                type="text"
+                placeholder="Search token name, symbol, or address"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white/[0.04] border border-white/[0.08] focus:border-primary/50 focus:bg-white/[0.06] pl-11 pr-4 py-3 rounded-2xl text-sm text-white placeholder:text-white/30 outline-none transition-all"
+              />
             </div>
 
             {/* Token List */}
-            <div className="w-full flex-1 overflow-y-auto custom-scrollbar mt-6 px-1">
+            <div className="w-full flex-1 overflow-y-auto custom-scrollbar mt-4 -mr-2 pr-2 space-y-1">
               {filteredTokens.length > 0 ? (
-                <div className="space-y-1">
-                  {filteredTokens.map((token, index) => (
-                    <TokenListItem
-                      key={`${token.chainId ?? ''}-${token.symbol}-${index}`}
-                      token={token}
-                      isSelected={selectedToken ? isSameToken(token, selectedToken) : false}
-                      onClick={() => {
-                        onSelect(token);
-                        setIsOpen(false);
-                        setSearchQuery("");
-                      }}
-                    />
-                  ))}
-                </div>
+                filteredTokens.map((token, index) => (
+                  <TokenListItem
+                    key={`${token.chainId ?? ''}-${token.symbol}-${index}`}
+                    token={token}
+                    isSelected={selectedToken ? isSameToken(token, selectedToken) : false}
+                    onClick={() => {
+                      onSelect(token);
+                      setIsOpen(false);
+                      setSearchQuery("");
+                    }}
+                  />
+                ))
               ) : (
-                <div className="h-full flex flex-col items-center justify-center p-8 opacity-20">
-                  <Search size={32} className="mb-4" />
-                  <p className="text-[11px]  uppercase tracking-widest">No assets found</p>
+                <div className="py-16 flex flex-col items-center justify-center text-center opacity-40">
+                  <Search size={28} className="mb-2 text-white/40" />
+                  <p className="text-xs uppercase tracking-wider font-semibold text-white/60">No tokens found</p>
                 </div>
               )}
             </div>
