@@ -330,11 +330,11 @@ export default function SwapPage() {
 
 
   return (
-    <div className="flex-grow flex items-center justify-center py-6 sm:py-12 relative w-full">
+    <div className="flex-grow flex items-center justify-center py-2 relative w-full">
       {/* Background Ambient Glows */}
       <div className="fixed top-1/4 left-1/2 -translate-x-1/2 w-[550px] h-[350px] bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="w-full max-w-[480px] mx-auto relative z-10">
+      <div className="w-full max-w-[520px] mx-auto relative z-10">
         {/* Warning if no pool found */}
         {!poolsLoading && matchingPools.length === 0 && (
           <div className="mb-4 px-4 py-3 rounded-2xl border border-amber-500/20 bg-amber-500/[0.06] flex items-center gap-3">
@@ -346,35 +346,35 @@ export default function SwapPage() {
         )}
 
         {/* Main Swap Card */}
-        <div className="rounded-3xl border border-white/[0.08] bg-[#0c0c0e]/95 backdrop-blur-2xl shadow-2xl overflow-hidden p-3 sm:p-4">
+        <div className="rounded-3xl border border-white/[0.08] bg-[#0c0c0e]/95 backdrop-blur-2xl shadow-2xl overflow-hidden p-5 sm:p-6">
           {/* Card Header */}
-          <div className="flex items-center justify-between px-3 pt-2 pb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-base font-bold text-white tracking-tight">Swap</span>
-              <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.06] text-white/50">
+          <div className="flex items-center justify-between px-1 pt-1 pb-4">
+            <div className="flex items-center gap-2.5">
+              <span className="text-xl sm:text-2xl font-bold text-white tracking-tight">Swap</span>
+              <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-white/50">
                 Uniswap v4
               </span>
             </div>
             {poolsLoading && (
               <div className="flex items-center gap-2">
-                <Loader2 size={13} className="animate-spin text-primary" />
-                <span className="text-xs text-white/40 font-medium">Finding best route...</span>
+                <Loader2 size={14} className="animate-spin text-primary" />
+                <span className="text-xs sm:text-sm text-white/40 font-medium">Finding best route...</span>
               </div>
             )}
             {rateText && !poolsLoading && (
-              <span className="text-xs text-white/50 font-mono">{rateText}</span>
+              <span className="text-xs sm:text-sm text-white/50 font-mono">{rateText}</span>
             )}
           </div>
 
-          <div className="space-y-1 relative">
+          <div className="space-y-1.5 relative">
             {/* From Token Box */}
-            <div className="bg-[#121216] hover:bg-[#15151a] focus-within:bg-[#15151a] focus-within:border-white/15 transition-all duration-200 rounded-2xl p-4 border border-white/[0.06]">
-              <div className="flex justify-between items-center mb-2.5">
+            <div className="bg-[#121216] hover:bg-[#15151a] focus-within:bg-[#15151a] focus-within:border-white/15 transition-all duration-200 rounded-2xl p-4.5 sm:p-5 border border-white/[0.06]">
+              <div className="flex justify-between items-center mb-3">
                 <span className="text-xs uppercase tracking-wider font-semibold text-white/40">You Pay</span>
                 <button
                   type="button"
                   onClick={() => { if (fromBalance) onInputChange(fromBalance.replace(/,/g, '')); setIsExactInput(true); }}
-                  className="text-xs text-white/50 hover:text-primary transition-colors cursor-pointer flex items-center gap-1.5"
+                  className="text-xs sm:text-sm text-white/50 hover:text-primary transition-colors cursor-pointer flex items-center gap-1.5"
                 >
                   <span>Balance:</span>
                   <span className="font-mono text-white/90 font-medium">{fromBalance}</span>
@@ -388,13 +388,13 @@ export default function SwapPage() {
                       type="text"
                       value={inputAmount}
                       onChange={(e) => { setIsExactInput(true); onInputChange(e.target.value); }}
-                      className={`bg-transparent border-none p-0 text-3xl sm:text-4xl leading-tight focus:ring-0 focus:outline-none w-full placeholder:text-white/15 font-bold tracking-tight ${
+                      className={`bg-transparent border-none p-0 text-3xl sm:text-4xl leading-tight focus:ring-0 focus:outline-none w-full placeholder:text-white/15 font-bold font-mono tracking-tight ${
                         isExactInput ? 'text-white' : 'text-white/40'
                       }`}
                       placeholder="0"
                     />
                     {quoteLoading && !isExactInput && (
-                      <Loader2 size={18} className="animate-spin text-primary shrink-0" />
+                      <Loader2 size={20} className="animate-spin text-primary shrink-0" />
                     )}
                   </div>
                 </div>
@@ -409,22 +409,22 @@ export default function SwapPage() {
             </div>
 
             {/* Flip Button */}
-            <div className="flex justify-center -my-2.5 relative z-20">
+            <div className="flex justify-center -my-3 relative z-20">
               <button
                 type="button"
                 onClick={handleFlipTokens}
-                className="w-10 h-10 rounded-full bg-[#18181f] border border-white/10 flex items-center justify-center text-white/60 hover:text-primary hover:border-primary/40 hover:bg-primary/10 shadow-xl transition-all duration-200 active:scale-90 cursor-pointer"
+                className="w-11 h-11 rounded-full bg-[#18181f] border border-white/10 flex items-center justify-center text-white/70 hover:text-primary hover:border-primary/40 hover:bg-primary/10 shadow-xl transition-all duration-200 active:scale-90 cursor-pointer"
                 title="Swap Direction"
               >
-                <ArrowDown size={16} strokeWidth={2.5} />
+                <ArrowDown size={18} strokeWidth={2.5} />
               </button>
             </div>
 
             {/* To Token Box */}
-            <div className="bg-[#121216] hover:bg-[#15151a] focus-within:bg-[#15151a] focus-within:border-white/15 transition-all duration-200 rounded-2xl p-4 border border-white/[0.06]">
-              <div className="flex justify-between items-center mb-2.5">
+            <div className="bg-[#121216] hover:bg-[#15151a] focus-within:bg-[#15151a] focus-within:border-white/15 transition-all duration-200 rounded-2xl p-4.5 sm:p-5 border border-white/[0.06]">
+              <div className="flex justify-between items-center mb-3">
                 <span className="text-xs uppercase tracking-wider font-semibold text-white/40">You Receive</span>
-                <span className="text-xs text-white/50 flex items-center gap-1.5">
+                <span className="text-xs sm:text-sm text-white/50 flex items-center gap-1.5">
                   <span>Balance:</span>
                   <span className="font-mono text-white/90 font-medium">{toBalance}</span>
                   <span className="token-symbol text-white/60">{effectiveToToken.symbol}</span>
@@ -437,13 +437,13 @@ export default function SwapPage() {
                       type="text"
                       value={outputAmount}
                       onChange={(e) => { setIsExactInput(false); onOutputChange(e.target.value); }}
-                      className={`bg-transparent border-none p-0 text-3xl sm:text-4xl leading-tight focus:ring-0 focus:outline-none w-full placeholder:text-white/15 font-bold tracking-tight ${
+                      className={`bg-transparent border-none p-0 text-3xl sm:text-4xl leading-tight focus:ring-0 focus:outline-none w-full placeholder:text-white/15 font-bold font-mono tracking-tight ${
                         !isExactInput ? 'text-white' : 'text-white/40'
                       }`}
                       placeholder="0"
                     />
                     {quoteLoading && isExactInput && (
-                      <Loader2 size={18} className="animate-spin text-primary shrink-0" />
+                      <Loader2 size={20} className="animate-spin text-primary shrink-0" />
                     )}
                   </div>
                 </div>
@@ -460,18 +460,18 @@ export default function SwapPage() {
 
           {/* Quote Error Message */}
           {quoteError && (
-            <div className="mt-3 px-4 py-2.5 bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-medium text-center rounded-2xl">
+            <div className="mt-4 px-4 py-3 bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs sm:text-sm font-medium text-center rounded-2xl">
               {quoteError}
             </div>
           )}
 
           {/* Swap CTA Button */}
-          <div className="mt-3">
+          <div className="mt-4">
             {!isConnected ? (
               <button
                 type="button"
                 onClick={() => open()}
-                className="w-full py-4 rounded-2xl bg-primary text-black text-base tracking-wide font-bold transition-all hover:brightness-110 active:scale-[0.98] cursor-pointer shadow-lg"
+                className="w-full py-4.5 sm:py-5 rounded-2xl bg-primary text-black text-base sm:text-lg tracking-wide font-bold transition-all hover:brightness-110 active:scale-[0.98] cursor-pointer shadow-lg"
               >
                 Connect Wallet
               </button>
@@ -480,7 +480,7 @@ export default function SwapPage() {
                 type="button"
                 onClick={handleSwapClick}
                 disabled={quoteLoading || !!quoteError || !inputAmount || Number(inputAmount) <= 0 || !outputAmount || Number(outputAmount) <= 0}
-                className="w-full py-4 rounded-2xl bg-primary text-black text-base tracking-wide font-bold transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shadow-lg"
+                className="w-full py-4.5 sm:py-5 rounded-2xl bg-primary text-black text-base sm:text-lg tracking-wide font-bold transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shadow-lg"
               >
                 {quoteLoading ? 'Fetching Best Quote…' : 'Swap'}
               </button>
@@ -489,9 +489,9 @@ export default function SwapPage() {
 
           {/* Order Details & Slippage Settings */}
           {(rateText || isConnected) && (
-            <div className="mt-3 pt-3 border-t border-white/[0.06] space-y-2 px-1">
+            <div className="mt-4 pt-4 border-t border-white/[0.06] space-y-2.5 px-1">
               {/* Slippage Row */}
-              <div className="flex items-center justify-between text-xs py-1">
+              <div className="flex items-center justify-between text-xs sm:text-sm py-1">
                 <span className="uppercase tracking-wider font-semibold text-white/40">Max Slippage</span>
                 <div className="flex items-center gap-1.5">
                   <div className="flex items-center p-0.5 bg-white/[0.04] border border-white/[0.06] rounded-xl">
@@ -500,7 +500,7 @@ export default function SwapPage() {
                         key={preset}
                         type="button"
                         onClick={() => { setSlippage(preset); setIsAutoSlippage(preset === '0.5'); }}
-                        className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+                        className={`px-3 py-1 text-xs sm:text-sm font-semibold rounded-lg transition-all cursor-pointer ${
                           slippage === preset && isAutoSlippage === (preset === '0.5')
                             ? 'bg-primary text-black shadow-sm font-bold'
                             : 'text-white/40 hover:text-white'
@@ -517,18 +517,18 @@ export default function SwapPage() {
                       type="text"
                       value={slippage}
                       onChange={(e) => { setSlippage(e.target.value); setIsAutoSlippage(false); }}
-                      className="bg-transparent border-none p-0 text-xs text-white focus:ring-0 focus:outline-none w-7 text-right font-mono"
+                      className="bg-transparent border-none p-0 text-xs sm:text-sm text-white focus:ring-0 focus:outline-none w-8 text-right font-mono"
                     />
-                    <span className="text-xs text-white/30 ml-0.5">%</span>
+                    <span className="text-xs sm:text-sm text-white/30 ml-0.5">%</span>
                   </div>
                 </div>
               </div>
 
               {/* Rate Detail */}
               {reverseRateText && (
-                <div className="flex items-center justify-between text-xs py-1 border-t border-white/[0.04]">
+                <div className="flex items-center justify-between text-xs sm:text-sm py-1 border-t border-white/[0.04]">
                   <span className="uppercase tracking-wider font-semibold text-white/40">Exchange Rate</span>
-                  <span className="text-xs text-white/70 font-mono font-medium">{reverseRateText}</span>
+                  <span className="text-xs sm:text-sm text-white/70 font-mono font-medium">{reverseRateText}</span>
                 </div>
               )}
             </div>

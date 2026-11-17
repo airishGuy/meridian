@@ -115,7 +115,7 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({
         type="button"
         onClick={() => !disabled && setIsOpen(true)}
         disabled={disabled}
-        className={`flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border transition-all duration-200 cursor-pointer ${
+        className={`flex items-center gap-2.5 px-4 py-2.5 rounded-2xl border transition-all duration-200 cursor-pointer ${
           selectedToken 
             ? 'bg-white/[0.06] hover:bg-white/[0.1] border-white/10 hover:border-white/20 text-white' 
             : 'bg-primary text-black border-transparent font-bold hover:brightness-110 shadow-md'
@@ -123,21 +123,21 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({
       >
         {selectedToken ? (
           <>
-            <div className="w-6 h-6 rounded-full overflow-hidden bg-white/10 shrink-0 border border-white/10">
+            <div className="w-7 h-7 rounded-full overflow-hidden bg-white/10 shrink-0 border border-white/10">
               <TokenImage tokenAddress={selectedToken.address} symbol={selectedToken.symbol} className="w-full h-full object-contain" alt={selectedToken.symbol} />
             </div>
-            <span className="text-sm font-semibold tracking-tight token-symbol text-white">{selectedToken.symbol}</span>
+            <span className="text-base font-bold tracking-tight token-symbol text-white">{selectedToken.symbol}</span>
             {!disabled && (
               <ChevronDown 
-                size={15} 
+                size={16} 
                 className={`text-white/50 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
               />
             )}
           </>
         ) : (
           <>
-            <span className="text-sm font-bold tracking-tight">{label}</span>
-            <ChevronDown size={15} />
+            <span className="text-base font-bold tracking-tight">{label}</span>
+            <ChevronDown size={16} />
           </>
         )}
       </button>
