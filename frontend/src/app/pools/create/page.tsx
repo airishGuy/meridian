@@ -109,11 +109,8 @@ export default function CreatePoolPage() {
         </div>
       </div>
 
-      {/* Modern 2-Column DeFi Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
-        {/* Left Column: Configuration Steps (7 cols) */}
-        <div className="lg:col-span-7 space-y-6">
+      {/* Vertical Block Flow */}
+      <div className="space-y-6">
 
           {/* Step 1: Pair Selection Card */}
           <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-6 sm:p-7 rounded-3xl shadow-xl backdrop-blur-md space-y-5">
@@ -357,10 +354,7 @@ export default function CreatePoolPage() {
             </div>
           </div>
 
-        </div>
-
-        {/* Right Column: Sticky Pool Preview & Action Summary (5 cols) */}
-        <div className="lg:col-span-5 sticky top-28 space-y-5">
+          {/* Pool Overview (Block Element Underneath) */}
           <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-6 sm:p-7 rounded-3xl shadow-2xl backdrop-blur-md space-y-6">
             <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
               <h3 className="text-lg font-bold text-white tracking-tight">Pool Overview</h3>
@@ -370,7 +364,7 @@ export default function CreatePoolPage() {
             </div>
 
             {/* Pair Identity Preview */}
-            <div className="flex items-center gap-4 bg-black/40 border border-white/[0.08] p-4 rounded-2xl">
+            <div className="flex items-center gap-4 bg-black/40 border border-white/[0.08] p-4.5 rounded-2xl">
               <div className="flex -space-x-3 shrink-0">
                 <div className="w-10 h-10 rounded-full border-2 border-black bg-black overflow-hidden shadow-md">
                   <TokenImage tokenAddress={t0.address} symbol={t0.symbol} className="w-full h-full object-contain" alt={t0.symbol} />
@@ -386,24 +380,24 @@ export default function CreatePoolPage() {
             </div>
 
             {/* Parameters Breakdown */}
-            <div className="space-y-3 divide-y divide-white/[0.06] text-sm">
-              <div className="flex justify-between items-center pt-2">
-                <span className="text-white/50">Fee Tier</span>
-                <span className="font-bold text-primary font-mono">{feeTier}%</span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-black/40 border border-white/[0.08] p-4.5 rounded-2xl text-sm">
+              <div>
+                <span className="text-xs text-white/40 uppercase tracking-wider block mb-1">Fee Tier</span>
+                <span className="font-bold text-primary font-mono text-base">{feeTier}%</span>
               </div>
-              <div className="flex justify-between items-center pt-3">
-                <span className="text-white/50">Tick Spacing</span>
-                <span className="font-bold text-white font-mono">{tickSpacing}</span>
+              <div>
+                <span className="text-xs text-white/40 uppercase tracking-wider block mb-1">Tick Spacing</span>
+                <span className="font-bold text-white font-mono text-base">{tickSpacing}</span>
               </div>
-              <div className="flex justify-between items-center pt-3">
-                <span className="text-white/50">Initial Rate</span>
-                <span className="font-bold text-white font-mono">
+              <div>
+                <span className="text-xs text-white/40 uppercase tracking-wider block mb-1">Initial Rate</span>
+                <span className="font-bold text-white font-mono text-sm">
                   1 {t0.symbol} = {(Number(priceRatioB) / Number(priceRatioA)).toFixed(4)} {t1.symbol}
                 </span>
               </div>
-              <div className="flex justify-between items-center pt-3">
-                <span className="text-white/50">Hook Status</span>
-                <span className="font-mono text-xs text-white/70">
+              <div>
+                <span className="text-xs text-white/40 uppercase tracking-wider block mb-1">Hook Status</span>
+                <span className="font-mono text-xs text-white/70 block truncate">
                   {hooks === zeroAddress ? 'None (address(0))' : `${hooks.slice(0, 6)}…${hooks.slice(-4)}`}
                 </span>
               </div>
@@ -437,7 +431,6 @@ export default function CreatePoolPage() {
               )}
             </div>
           </div>
-        </div>
 
       </div>
     </div>

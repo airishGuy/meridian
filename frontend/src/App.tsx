@@ -14,6 +14,7 @@ import CreatePositionPage from '@/app/positions/create/[params]/page';
 function AppContent() {
   const location = useLocation();
   const isHome = location.pathname === '/';
+  const isProfile = location.pathname === '/profile';
 
   return (
     <div className="flex flex-col min-h-screen bg-[#060608] text-white relative selection:bg-primary/20 selection:text-primary overflow-x-hidden">
@@ -25,8 +26,20 @@ function AppContent() {
       </div>
 
       <Navbar />
-      <main className={`relative z-10 ${isHome ? 'shrink-0 h-screen min-h-[640px] pt-20 flex flex-col justify-center' : 'flex-1 pt-24'}`}>
-        <div className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full ${isHome ? 'h-full flex flex-col justify-center py-4' : 'pb-16'}`}>
+      <main className={`relative z-10 ${
+        isHome 
+          ? 'shrink-0 h-screen min-h-[640px] pt-20 flex flex-col justify-center' 
+          : isProfile
+            ? 'shrink-0 min-h-screen pt-24 pb-16 flex flex-col'
+            : 'flex-1 pt-24'
+      }`}>
+        <div className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full ${
+          isHome 
+            ? 'h-full flex flex-col justify-center py-4' 
+            : isProfile
+              ? 'flex-1 flex flex-col'
+              : 'pb-16'
+        }`}>
           <Routes>
             <Route path="/" element={<SwapPage />} />
             <Route path="/activity" element={<ActivityPage />} />

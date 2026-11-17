@@ -307,7 +307,7 @@ export default function CreatePositionPage() {
   };
 
   return (
-    <div className="pb-40 max-w-4xl mx-auto relative group/page w-full">
+    <div className="pb-40 max-w-3xl mx-auto relative group/page w-full">
       {/* Toast notifications */}
       {toast.show && (
         <div className="fixed top-15 right-8 z-[100] flex flex-col gap-4 pointer-events-none">
@@ -331,10 +331,8 @@ export default function CreatePositionPage() {
         <p className="text-base text-white/50">Provide liquidity across customized price corridors to earn trading fees on LitVM LiteForge</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
-        {/* Left Column: Pool Info & Price Corridor (7 cols) */}
-        <div className="lg:col-span-7 space-y-6">
+      {/* Vertical Block Flow */}
+      <div className="space-y-6">
 
           {isFromPool ? (
             <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-6 sm:p-7 rounded-3xl shadow-xl backdrop-blur-md space-y-5">
@@ -578,10 +576,7 @@ export default function CreatePositionPage() {
             </div>
           </div>
 
-        </div>
-
-        {/* Right Column: Sticky Deposit & Action Card (5 cols) */}
-        <div className="lg:col-span-5 sticky top-28 space-y-5">
+          {/* Deposit Liquidity (Block Element Underneath) */}
           <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-6 sm:p-7 rounded-3xl shadow-2xl backdrop-blur-md space-y-5">
             <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
               <h3 className="text-lg font-bold text-white tracking-tight">Deposit Liquidity</h3>
@@ -693,7 +688,6 @@ export default function CreatePositionPage() {
             </div>
 
           </div>
-        </div>
 
       </div>
     </div>

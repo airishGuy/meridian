@@ -435,7 +435,7 @@ export default function ProfilePage() {
     p < 0.001 ? p.toExponential(4) : p.toLocaleString('en-US', { maximumFractionDigits: 6 });
 
   return (
-    <div className="pb-40 w-full relative z-10">
+    <div className="w-full relative z-10 flex-1 flex flex-col">
       {/* Toast Alert */}
       {toast.show && (
         <div className="fixed bottom-6 right-6 z-[99999]">
