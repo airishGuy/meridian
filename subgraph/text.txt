@@ -1,0 +1,12 @@
+
+
+git commit --no-verify -m "fix: remove negative multiplier from token amounts in swap mappings"
+
+git checkout -b meridian-testnet-final
+git commit --no-verify -m "meridian-testnet-final"
+git push origin meridian-testnet-final
+
+
+git checkout -b meridian-mainnet-build
+git commit --no-verify -m "meridian-mainnet-build"
+git push origin meridian-mainnet-build

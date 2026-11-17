@@ -1,0 +1,9 @@
+{
+  "name": "meridian",
+  "private": true,
+  "scripts": {
+    "dev": "bun --cwd frontend dev",
+    "build": "bun --cwd frontend build",
+    "preview": "bun --cwd frontend preview"
+  }
+}
