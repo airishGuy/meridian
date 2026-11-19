@@ -30,11 +30,10 @@ const getPriceFromSqrt = (sqrtPriceStr: string, token0: any, token1: any) => {
   const t0Price = Math.pow(sqrtPrice / Math.pow(2, 96), 2) * Math.pow(10, decimals0 - decimals1);
   
   const getPriority = (symbol: string) => {
-    const sym = symbol.toUpperCase();
-    if (sym === 'USDC') return 100;
-    if (sym === 'EURC') return 90;
-    if (sym === 'MUSDC') return 80;
-    if (sym === 'USDT' || sym === 'DAI') return 70;
+    const sym = symbol?.toUpperCase() || '';
+    if (sym === 'USDC' || sym === 'TUSDT' || sym === 'USDT' || sym === 'MUSDC' || sym === 'DAI') return 100;
+    if (sym === 'TLTC' || sym === 'ZKLTC' || sym === 'LTC' || sym === 'WTLTC') return 90;
+    if (sym === 'EURC') return 80;
     if (sym === 'ETH' || sym === 'WETH') return 50;
     return 0;
   };
@@ -253,6 +252,25 @@ export default function PoolDetailsPage() {
   const token0Address = pool?.token0?.id || "0x0000000000000000000000000000000000000000";
   const token1Address = pool?.token1?.id || "0x0000000000000000000000000000000000000000";
 
+  const { baseSymbol, quoteSymbol } = useMemo(() => {
+    const t0Sym = pool?.token0?.symbol || '';
+    const t1Sym = pool?.token1?.symbol || '';
+    const getPriority = (symbol?: string) => {
+      const sym = symbol?.toUpperCase() || '';
+      if (sym === 'USDC' || sym === 'TUSDT' || sym === 'USDT' || sym === 'MUSDC' || sym === 'DAI') return 100;
+      if (sym === 'TLTC' || sym === 'ZKLTC' || sym === 'LTC' || sym === 'WTLTC') return 90;
+      if (sym === 'EURC') return 80;
+      if (sym === 'ETH' || sym === 'WETH') return 50;
+      return 0;
+    };
+    const p0 = getPriority(t0Sym);
+    const p1 = getPriority(t1Sym);
+    if (p0 > p1) {
+      return { baseSymbol: t1Sym, quoteSymbol: t0Sym };
+    }
+    return { baseSymbol: t0Sym, quoteSymbol: t1Sym };
+  }, [pool]);
+
   const getCurrencyParam = (address: string) => {
     return (address === "0" || address === "0x0000000000000000000000000000000000000000") ? "NATIVE" : address;
   };
@@ -282,7 +300,7 @@ export default function PoolDetailsPage() {
 
   const feePercent = pool?.feeTier ? (Number(pool.feeTier) / 10000).toFixed(2) + '%' : '0.00%';
 
-  const addLiquidityPath = `/positions/create/currency0=${getCurrencyParam(token0Address)}&currency1=${getCurrencyParam(token1Address)}&fee=${pool?.feeTier || ''}&tickSpacing=${pool?.tickSpacing || ''}&hooks=${pool?.hooks || '0x0000000000000000000000000000000000000000'}&poolId=${id}`;
+  const addLiquidityPath = `/positions/create/currency0=${getCurrencyParam(token0Address)}&currency1=${getCurrencyParam(token1Address)}&fee=${pool?.feeTier || ''}&tickSpacing=${pool?.tickSpacing || ''}&hooks=${pool?.hooks || '0x0000000000000000000000000000000000000000'}&poolId=${id}&sqrtPrice=${pool?.sqrtPrice || '0'}`;
 
 
 
@@ -408,7 +426,9 @@ export default function PoolDetailsPage() {
             <div>
               <div className="flex items-center justify-between mb-4 border-b border-white/[0.06] pb-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold uppercase tracking-wider text-white/60">Price History</span>
+                  <span className="text-sm font-bold uppercase tracking-wider text-white/60">
+                    Price History {baseSymbol && quoteSymbol ? `(${baseSymbol} / ${quoteSymbol})` : ''}
+                  </span>
                   {chartLoading && <RefreshCw size={14} className="text-primary animate-spin" />}
                 </div>
               </div>
@@ -417,9 +437,9 @@ export default function PoolDetailsPage() {
               <div className="mb-4">
                 <p className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white font-mono">
                   {hoveredPoint ? (
-                    `$${hoveredPoint.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`
+                    `${hoveredPoint.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}${quoteSymbol ? ` ${quoteSymbol}` : ''}`
                   ) : currentPriceVal ? (
-                    `$${currentPriceVal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`
+                    `${currentPriceVal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}${quoteSymbol ? ` ${quoteSymbol}` : ''}`
                   ) : (
                     '—'
                   )}

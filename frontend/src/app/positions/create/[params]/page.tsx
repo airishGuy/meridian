@@ -20,7 +20,7 @@ const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export default function CreatePositionPage() {
   const { params } = useParams();
-  const { MIN_TICK, MAX_TICK, priceToTick, mintPosition, toast, dismissToast, isConfirming } = useModifyLiquidity();
+  const { MIN_TICK, MAX_TICK, getMinTick, getMaxTick, priceToTick, mintPosition, toast, dismissToast, isConfirming } = useModifyLiquidity();
 
   const [tokenA, setTokenA] = useState<Token>(TOKENS[0]);
   const [tokenB, setTokenB] = useState<Token>(TOKENS[1]);
@@ -118,8 +118,19 @@ export default function CreatePositionPage() {
       ///////////////////////////////////////////////
       const parsedAmount0 = parseUnits(amount0Str, t0.decimals);
       const tickSpacingNum = Number(tickSpacing) || 60;
-      const tLower = rangeType === 'full' ? MIN_TICK : priceToTick(minPrice, t0.decimals, t1.decimals, tickSpacingNum);
-      const tUpper = rangeType === 'full' ? MAX_TICK : priceToTick(maxPrice, t0.decimals, t1.decimals, tickSpacingNum);
+      let tLower: number;
+      let tUpper: number;
+
+      if (rangeType === 'full') {
+        tLower = getMinTick(tickSpacingNum);
+        tUpper = getMaxTick(tickSpacingNum);
+      } else {
+        tLower = priceToTick(minPrice, t0.decimals, t1.decimals, tickSpacingNum);
+        tUpper = priceToTick(maxPrice, t0.decimals, t1.decimals, tickSpacingNum);
+        if (tLower >= tUpper) {
+          tUpper = tLower + tickSpacingNum;
+        }
+      }
 
       const sqrtPriceAX96 = getSqrtRatioAtTick(tLower);
       const sqrtPriceBX96 = getSqrtRatioAtTick(tUpper);
@@ -247,10 +258,12 @@ export default function CreatePositionPage() {
 
             // Calculate and set minPrice and maxPrice right here
             if (minPrice === 0 && maxPrice === 0) {
-              const minPercent = 1.9;
-              const maxPercent = 1.6;
-              updateMinPrice(Math.round(price0 * (1 - minPercent / 100)));
-              updateMaxPrice(Math.round(price0 * (1 + maxPercent / 100)));
+              const minPercent = 10;
+              const maxPercent = 10;
+              const calcMin = Number((price0 * (1 - minPercent / 100)).toPrecision(6));
+              const calcMax = Number((price0 * (1 + maxPercent / 100)).toPrecision(6));
+              updateMinPrice(calcMin);
+              updateMaxPrice(calcMax);
             }
           }
         } else {
@@ -277,10 +290,12 @@ export default function CreatePositionPage() {
 
                   // Calculate and set minPrice and maxPrice right here
                   if (minPrice === 0 && maxPrice === 0) {
-                    const minPercent = 1.9;
-                    const maxPercent = 1.6;
-                    updateMinPrice(Math.round(price0 * (1 - minPercent / 100)));
-                    updateMaxPrice(Math.round(price0 * (1 + maxPercent / 100)));
+                    const minPercent = 10;
+                    const maxPercent = 10;
+                    const calcMin = Number((price0 * (1 - minPercent / 100)).toPrecision(6));
+                    const calcMax = Number((price0 * (1 + maxPercent / 100)).toPrecision(6));
+                    updateMinPrice(calcMin);
+                    updateMaxPrice(calcMax);
                   }
                 }
               }
@@ -476,9 +491,9 @@ export default function CreatePositionPage() {
                   onClick={() => {
                     setStrategy('stable');
                     if (currentPrice > 0) {
-                      const strategyPercent = 2; // Stable: -2% / +2%
-                      updateMinPrice(Math.round(currentPrice * (1 - strategyPercent / 100)));
-                      updateMaxPrice(Math.round(currentPrice * (1 + strategyPercent / 100)));
+                      const strategyPercent = 5; // Stable: -5% / +5%
+                      updateMinPrice(Number((currentPrice * (1 - strategyPercent / 100)).toPrecision(6)));
+                      updateMaxPrice(Number((currentPrice * (1 + strategyPercent / 100)).toPrecision(6)));
                     }
                   }}
                   className={`flex-1 py-3 px-4 rounded-xl text-xs uppercase tracking-wider border transition-all flex flex-col items-center gap-1 cursor-pointer ${strategy === 'stable'
@@ -487,7 +502,7 @@ export default function CreatePositionPage() {
                     }`}
                 >
                   <span>STABLE</span>
-                  <span className="text-xs opacity-60">-2% / +2%</span>
+                  <span className="text-xs opacity-60">-5% / +5%</span>
                 </button>
                 <button
                   onClick={() => {
@@ -495,8 +510,8 @@ export default function CreatePositionPage() {
                     if (currentPrice > 0) {
                       const minPercent = 50;  // Wide min: -50%
                       const maxPercent = 100; // Wide max: +100%
-                      updateMinPrice(Math.round(currentPrice * (1 - minPercent / 100)));
-                      updateMaxPrice(Math.round(currentPrice * (1 + maxPercent / 100)));
+                      updateMinPrice(Number((currentPrice * (1 - minPercent / 100)).toPrecision(6)));
+                      updateMaxPrice(Number((currentPrice * (1 + maxPercent / 100)).toPrecision(6)));
                     }
                   }}
                   className={`flex-1 py-3 px-4 rounded-xl text-xs uppercase tracking-wider border transition-all flex flex-col items-center gap-1 cursor-pointer ${strategy === 'wide'
@@ -518,7 +533,16 @@ export default function CreatePositionPage() {
                   MIN PRICE
                 </span>
                 <div className="flex items-center gap-4">
-                  <button onClick={() => updateMinPrice(Math.max(0, minPrice - 100))} disabled={rangeType === 'full'} className="text-white/30 hover:text-primary transition-colors disabled:opacity-0 p-2.5 rounded-xl border border-white/[0.08] hover:border-primary/30 cursor-pointer"><Minus size={14} /></button>
+                  <button
+                    onClick={() => {
+                      const step = Math.max(0.000001, (currentPrice || minPrice || 1) * 0.05);
+                      updateMinPrice(Math.max(0, Number((minPrice - step).toPrecision(6))));
+                    }}
+                    disabled={rangeType === 'full'}
+                    className="text-white/30 hover:text-primary transition-colors disabled:opacity-0 p-2.5 rounded-xl border border-white/[0.08] hover:border-primary/30 cursor-pointer"
+                  >
+                    <Minus size={14} />
+                  </button>
                   <div className="flex flex-col items-center">
                     {rangeType === 'full' ? (
                       <span className="text-3xl font-bold text-white tracking-tight font-mono">0</span>
@@ -533,7 +557,16 @@ export default function CreatePositionPage() {
                     )}
                     <span className="text-xs font-mono text-primary/70 uppercase tracking-wider mt-1">{currentPrice > 0 ? `${(((minPrice - currentPrice) / currentPrice) * 100).toFixed(1)}% OFFSET` : ''}</span>
                   </div>
-                  <button onClick={() => updateMinPrice(minPrice + 100)} disabled={rangeType === 'full'} className="text-white/30 hover:text-primary transition-colors disabled:opacity-0 p-2.5 rounded-xl border border-white/[0.08] hover:border-primary/30 cursor-pointer"><Plus size={14} /></button>
+                  <button
+                    onClick={() => {
+                      const step = Math.max(0.000001, (currentPrice || minPrice || 1) * 0.05);
+                      updateMinPrice(Number((minPrice + step).toPrecision(6)));
+                    }}
+                    disabled={rangeType === 'full'}
+                    className="text-white/30 hover:text-primary transition-colors disabled:opacity-0 p-2.5 rounded-xl border border-white/[0.08] hover:border-primary/30 cursor-pointer"
+                  >
+                    <Plus size={14} />
+                  </button>
                 </div>
               </div>
 
@@ -541,7 +574,7 @@ export default function CreatePositionPage() {
               <div className="bg-white/[0.02] border-y md:border-y-0 md:border-x border-white/[0.08] flex flex-col items-center justify-center px-6 py-4 md:py-0">
                 <div className="flex flex-col items-center relative gap-1.5">
                   <span className="text-xs font-semibold tracking-wider text-primary uppercase">CURRENT PRICE</span>
-                  <p className="text-base font-bold text-white font-mono tracking-tight">{currentPrice > 0 ? currentPrice.toLocaleString(undefined, { maximumFractionDigits: 2 }) : '—'}</p>
+                  <p className="text-base font-bold text-white font-mono tracking-tight">{currentPrice > 0 ? currentPrice.toLocaleString(undefined, { maximumFractionDigits: 6 }) : '—'}</p>
                   <span className="text-xs text-white/40 uppercase tracking-wider">{t1.symbol} per {t0.symbol}</span>
                 </div>
               </div>
@@ -553,7 +586,16 @@ export default function CreatePositionPage() {
                   <div className="w-1.5 h-1.5 rounded-full bg-primary/60"></div>
                 </span>
                 <div className="flex items-center gap-4">
-                  <button onClick={() => updateMaxPrice(Math.max(minPrice + 100, maxPrice - 100))} disabled={rangeType === 'full'} className="text-white/30 hover:text-primary transition-colors disabled:opacity-0 p-2.5 rounded-xl border border-white/[0.08] hover:border-primary/30 cursor-pointer"><Minus size={14} /></button>
+                  <button
+                    onClick={() => {
+                      const step = Math.max(0.000001, (currentPrice || maxPrice || 1) * 0.05);
+                      updateMaxPrice(Math.max(minPrice, Number((maxPrice - step).toPrecision(6))));
+                    }}
+                    disabled={rangeType === 'full'}
+                    className="text-white/30 hover:text-primary transition-colors disabled:opacity-0 p-2.5 rounded-xl border border-white/[0.08] hover:border-primary/30 cursor-pointer"
+                  >
+                    <Minus size={14} />
+                  </button>
                   <div className="flex flex-col items-center">
                     {rangeType === 'full' ? (
                       <Infinity size={32} className="text-white opacity-40 my-1 font-mono" />
@@ -570,7 +612,16 @@ export default function CreatePositionPage() {
                       </div>
                     )}
                   </div>
-                  <button onClick={() => updateMaxPrice(maxPrice + 100)} disabled={rangeType === 'full'} className="text-white/30 hover:text-primary transition-colors disabled:opacity-0 p-2.5 rounded-xl border border-white/[0.08] hover:border-primary/30 cursor-pointer"><Plus size={14} /></button>
+                  <button
+                    onClick={() => {
+                      const step = Math.max(0.000001, (currentPrice || maxPrice || 1) * 0.05);
+                      updateMaxPrice(Number((maxPrice + step).toPrecision(6)));
+                    }}
+                    disabled={rangeType === 'full'}
+                    className="text-white/30 hover:text-primary transition-colors disabled:opacity-0 p-2.5 rounded-xl border border-white/[0.08] hover:border-primary/30 cursor-pointer"
+                  >
+                    <Plus size={14} />
+                  </button>
                 </div>
               </div>
             </div>
@@ -656,7 +707,7 @@ export default function CreatePositionPage() {
                 </button>
               ) : (
                 <button
-                  disabled={isConfirming || isHookInputInvalid}
+                  disabled={isConfirming || isHookInputInvalid || !inputAmount || Number(inputAmount) <= 0}
                   onClick={() => {
                     const feeMap: Record<string, string> = {
                       '0.01%': '100',
@@ -665,22 +716,38 @@ export default function CreatePositionPage() {
                       '1.00%': '10000'
                     };
                     const rawFee = feeMap[feeTier] || feeTier;
+                    const ts = Number(tickSpacing) || 60;
+
+                    let finalMinTick: number;
+                    let finalMaxTick: number;
+
+                    if (rangeType === 'full') {
+                      finalMinTick = getMinTick(ts);
+                      finalMaxTick = getMaxTick(ts);
+                    } else {
+                      finalMinTick = priceToTick(minPrice, t0.decimals, t1.decimals, ts);
+                      finalMaxTick = priceToTick(maxPrice, t0.decimals, t1.decimals, ts);
+
+                      if (finalMinTick >= finalMaxTick) {
+                        finalMaxTick = finalMinTick + ts;
+                      }
+                    }
 
                     mintPosition({
                       token0: t0.address || '',
                       token1: t1.address || '',
                       feeTier: rawFee,
-                      tickSpacing,
+                      tickSpacing: String(ts),
                       hooks,
                       poolId,
                       amount0: parseUnits(inputAmount, t0.decimals).toString(),
-                      amount1: parseUnits(outputAmount, t1.decimals).toString(),
-                      minTick: rangeType === 'full' ? MIN_TICK : priceToTick(minPrice, t0.decimals, t1.decimals, tickSpacing),
-                      maxTick: rangeType === 'full' ? MAX_TICK : priceToTick(maxPrice, t0.decimals, t1.decimals, tickSpacing),
+                      amount1: parseUnits(outputAmount || '0', t1.decimals).toString(),
+                      minTick: finalMinTick,
+                      maxTick: finalMaxTick,
                       sqrtPrice,
                     });
                   }}
-                  className={`w-full bg-primary hover:brightness-110 text-black py-4 px-6 rounded-2xl text-sm font-bold uppercase tracking-wider transition-all gold-glow active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer shadow-lg ${(isConfirming || isHookInputInvalid) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`w-full bg-primary hover:brightness-110 text-black py-4 px-6 rounded-2xl text-sm font-bold uppercase tracking-wider transition-all gold-glow active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer shadow-lg ${(isConfirming || isHookInputInvalid || !inputAmount || Number(inputAmount) <= 0) ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {isConfirming ? 'Minting Position...' : 'Mint Position'}
                 </button>

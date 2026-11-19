@@ -40,11 +40,10 @@ export const getDisplayPrice = (pool: any) => {
     const t1Sym = pool.token1?.symbol || '';
     
     const getPriority = (symbol: string) => {
-      const sym = symbol.toUpperCase();
-      if (sym === 'USDC') return 100;
-      if (sym === 'EURC') return 90;
-      if (sym === 'MUSDC') return 80;
-      if (sym === 'USDT' || sym === 'DAI') return 70;
+      const sym = symbol?.toUpperCase() || '';
+      if (sym === 'USDC' || sym === 'TUSDT' || sym === 'USDT' || sym === 'MUSDC' || sym === 'DAI') return 100;
+      if (sym === 'TLTC' || sym === 'ZKLTC' || sym === 'LTC' || sym === 'WTLTC') return 90;
+      if (sym === 'EURC') return 80;
       if (sym === 'ETH' || sym === 'WETH') return 50;
       return 0;
     };
@@ -62,18 +61,9 @@ export const getDisplayPrice = (pool: any) => {
       rawPrice = pool.token1Price || '0';
     }
     
-    // const formattedPrice = Number(formatPrice(rawPrice)).toFixed(3);
     const formattedPrice = formatPrice(rawPrice);
-
     
-    const qSymUpper = quoteSymbol.toUpperCase();
-    if (qSymUpper === 'USDC' || qSymUpper === 'MUSDC' || qSymUpper === 'USDT') {
-      return `1 ${baseSymbol} = $${formattedPrice}`;
-    } else if (qSymUpper === 'EURC') {
-      return `1 ${baseSymbol} = €${formattedPrice}`;
-    } else {
-      return `1 ${baseSymbol} = ${formattedPrice} ${quoteSymbol}`;
-    }
+    return `1 ${baseSymbol} = ${formattedPrice} ${quoteSymbol}`;
   };
 
   const computePoolId = (poolKey: { currency0: string; currency1: string; fee: number; tickSpacing: number; hooks: string }) => {

@@ -14,6 +14,16 @@ import { redis } from '@/lib/redis';
 export const MIN_TICK = -887272;
 export const MAX_TICK = 887272;
 
+export function getMinTick(tickSpacing: number | string): number {
+  const ts = Number(tickSpacing) || 60;
+  return Math.ceil(MIN_TICK / ts) * ts;
+}
+
+export function getMaxTick(tickSpacing: number | string): number {
+  const ts = Number(tickSpacing) || 60;
+  return Math.floor(MAX_TICK / ts) * ts;
+}
+
 interface ToastState {
   show: boolean;
   type: ToastType;
@@ -22,12 +32,13 @@ interface ToastState {
   txHash?: string;
 }
 
-
-
-function nearestUsableTick(tick: any, tickSpacing: any) {
-  const rounded = Math.round(tick / tickSpacing) * tickSpacing;
-  if (rounded < MIN_TICK) return rounded + tickSpacing;
-  if (rounded > MAX_TICK) return rounded - tickSpacing;
+export function nearestUsableTick(tick: any, tickSpacing: any) {
+  const ts = Number(tickSpacing) || 60;
+  const minTick = getMinTick(ts);
+  const maxTick = getMaxTick(ts);
+  let rounded = Math.round(Number(tick) / ts) * ts;
+  if (rounded < minTick) rounded = minTick;
+  if (rounded > maxTick) rounded = maxTick;
   return rounded;
 }
 
@@ -228,7 +239,7 @@ export function useModifyLiquidity() {
         const now = Math.floor(Date.now() / 1000);
         const isExpired = p2ToSpenderExpiration <= now;
         console.log({tokenToPermit2, p2ToSpenderAmount, p2ToSpenderExpiration, isExpired});
-        const needsApproval = p2ToSpenderAmount < amount1Max || isExpired;
+        const needsApproval = p2ToSpenderAmount < amount0Max || isExpired;
         if (needsApproval) {
           showToast('pending', 'Approving Token 0', 'Approving Permit2 & Position Manager for Token 0...');
           await approveTokenWithPermit2(params.token0 as `0x${string}`, amount0Max, POSITION_MANAGER_ADDRESS as `0x${string}`);
@@ -415,5 +426,5 @@ console.log({ usdc_to_permit2, honey_to_permit2, amount0Max, amount1Max });
     }
   };
 
-  return { MIN_TICK, MAX_TICK, priceToTick, mintPosition, toast, dismissToast, isConfirming };
+  return { MIN_TICK, MAX_TICK, getMinTick, getMaxTick, priceToTick, mintPosition, toast, dismissToast, isConfirming };
 }
