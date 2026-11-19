@@ -1,0 +1,402 @@
+forge script script/DeployTokens.s.sol \
+  --rpc-url LitVM_LiteForge \
+  --account meridian \
+  --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
+  --broadcast
+[⠒] Compiling...
+No files changed, compilation skipped
+Warning: Detected artifacts built from source files that no longer exist. Run `forge clean` to make sure builds are in sync with project files.
+ - /home/airish/Documents/dev/litvm/Meridian/foundry/foundry-pp/DeployHelper74.sol
+Script ran successfully.
+
+== Logs ==
+  tLTC: 0x16559F0919F2E41c7ef51512f8324DE2d24EFa20
+  STPT: 0xF56b200f4007FF00B92dfd2C87183a20bdf7EE75
+  GENOME: 0xf2FD1F1171C902a69B30b0cd75e2d0e7C499eEfe
+  MistCoin: 0x5a6285C084B4b31eFC4562481D03b398d1715C47
+  ZyneCoin: 0x666301A904602452b6172f9F5070832767B12DF1
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 4441
+
+Estimated max fee per gas: 0.020000001 gwei
+Estimated base fee per gas: 0.01 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 3755136
+
+Estimated amount required: 0.000075102723755136 ETH
+
+==========================
+Enter keystore password:
+##### 4441✅  [Success] Hash: 0x4a9767cd70d8accae6eeb4ce42517394a0d8544e2411527e88f36100fd42adbaContract: MockERC20Contract Address: 0xF56b200f4007FF00B92dfd2C87183a20bdf7EE75
+Block: 72448615Paid: 0.00000580992 ETH (580992 gas * 0.01 gwei)                                                                                                     
+##### 4441✅  [Success] Hash: 0x171c540f8380c257e211fe542f97aa74a6588c506cab5bede1fc36c18f117e5fContract: MockERC20Contract Address: 0x16559F0919F2E41c7ef51512f8324DE2d24EFa20Block: 72448615Paid: 0.00000580988 ETH (580988 gas * 0.01 gwei)                                                                                                     
+##### 4441✅  [Success] Hash: 0x6f4ae9e73c6660892e29f47994cfeed5026c0258b3e89e20e2be72e3b693aa3cContract: MockERC20Contract Address: 0x666301A904602452b6172f9F5070832767B12DF1Block: 72448617Paid: 0.00000581043 ETH (581043 gas * 0.01 gwei)                                                                                                     
+##### 4441✅  [Success] Hash: 0xd28dad09a1715a3ded1cf43c1451f846a85e3b6f99a565bd27faa304397a86baContract: MockERC20Contract Address: 0xf2FD1F1171C902a69B30b0cd75e2d0e7C499eEfeBlock: 72448616Paid: 0.00000581047 ETH (581047 gas * 0.01 gwei)                                                                                                     
+##### 4441✅  [Success] Hash: 0xc8d2614dc31b0c40b3ea5a61124a47aa7f4b7fd400bef6202bcad0f7c189262bContract: MockERC20Contract Address: 0x5a6285C084B4b31eFC4562481D03b398d1715C47Block: 72448617Paid: 0.00000581028 ETH (581028 gas * 0.01 gwei)                                                                                                     
+✅ Sequence #1 on 4441 | Total Paid: 0.00002905098 ETH (2905098 gas * avg 0.01 gwei)                                                                                                     
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/broadcast/DeployTokens.s.sol/4441/run-latest.json
+
+Sensitive values saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/cache/DeployTokens.s.sol/4441/run-latest.json
+
+airish@dominic-HP-EliteBook-840-G5:~/Documents/dev/litvm/Meridian/foundry$ 
+
+
+
+Deployment Details
+Contract Address: 0x0188e0ce0804D5f431AB70ee94024b68a46bBA71
+Transaction Hash: 0xc5658f45bf6a72e8eee40d141a71055f454a04ca48f34fdca75c2dd63b3e2247
+Status: 0x1 (Success)
+Bytecode on-chain: Verified via RPC (0x608080...)
+Broadcast record: broadcast/MineTUSDT.s.sol/4441/run-latest.json
+
+
+
+forge script script/DeployPM.s.sol \
+  --rpc-url LitVM_LiteForge \
+  --account meridian \
+  --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
+  --password "papa4mama4" \
+  --broadcast
+[⠒] Compiling...
+No files changed, compilation skipped
+Script ran successfully.
+
+== Return ==
+manager: contract PoolManager 0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 4441
+
+Estimated max fee per gas: 0.020000001 gwei
+Estimated base fee per gas: 0.01 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 4911934
+
+Estimated amount required: 0.000098238684911934 ETH
+
+==========================
+##### 4441✅  [Success] Hash: 0x11b41472fc9c8d5ae0b0b0e5df81f9f4f66ba87bd67d04931f6e980d4e3cd551Contract: PoolManagerContract Address: 0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E
+Block: 72456704Paid: 0.00003795857 ETH (3795857 gas * 0.01 gwei)                                                                                                     
+✅ Sequence #1 on 4441 | Total Paid: 0.00003795857 ETH (3795857 gas * avg 0.01 gwei)                                                                                                     
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/broadcast/DeployPM.s.sol/4441/run-latest.json
+
+Sensitive values saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/cache/DeployPM.s.sol/4441/run-latest.json
+
+airish@dominic-HP-EliteBook-840-G5:~/Documents/dev/litvm/Meridian/foundry$ 
+
+
+
+forge script script/DeployQuoter.s.sol \
+  --rpc-url LitVM_LiteForge \
+  --account meridian \
+  --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
+  --broadcast
+[⠒] Compiling...
+[⠑] Compiling 33 files with Solc 0.8.37
+[⠘] Solc 0.8.37 finished in 1.54s
+Compiler run successful!
+Script ran successfully.
+
+== Return ==
+quoter: contract V4Quoter 0xDCc1cd16B492f55d32B455D3B6b2Dd8B83dCcA4f
+
+== Logs ==
+  Deploying V4Quoter with PoolManager at: 0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E
+  V4Quoter deployed at: 0xDCc1cd16B492f55d32B455D3B6b2Dd8B83dCcA4f
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 4441
+
+Estimated max fee per gas: 0.020000001 gwei
+Estimated base fee per gas: 0.01 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 1283124
+
+Estimated amount required: 0.000025662481283124 ETH
+
+==========================
+Enter keystore password:
+##### 4441✅  [Success] Hash: 0x4ef476c5c0a439f453338c35852d5200d3f707def5b5d6e18bb0b1f4e79d4287Contract: V4QuoterContract Address: 0xDCc1cd16B492f55d32B455D3B6b2Dd8B83dCcA4f
+Block: 72613239Paid: 0.0000099138 ETH (991380 gas * 0.01 gwei)                                                                                                     
+✅ Sequence #1 on 4441 | Total Paid: 0.0000099138 ETH (991380 gas * avg 0.01 gwei)                                                                                                     
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/broadcast/DeployQuoter.s.sol/4441/run-latest.json
+
+Sensitive values saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/cache/DeployQuoter.s.sol/4441/run-latest.json
+
+airish@dominic-HP-EliteBook-840-G5:~/Documents/dev/litvm/Meridian/foundry$ 
+
+
+
+forge script script/DeployPermit2.s.sol \
+  --rpc-url LitVM_LiteForge \
+  --account meridian \
+  --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
+  --broadcast
+[⠒] Compiling...
+[⠑] Compiling 28 files with Solc 0.8.17
+[⠘] Solc 0.8.17 finished in 9.57s
+Compiler run successful!
+Script ran successfully.
+
+== Return ==
+permit2: contract Permit2 0x932f86Fd415107802892B7e1FdB1414b3331c494
+
+== Logs ==
+  Deploying Permit2
+  Permit2 deployed at: 0x932f86Fd415107802892B7e1FdB1414b3331c494
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 4441
+
+Estimated max fee per gas: 0.020000001 gwei
+Estimated base fee per gas: 0.01 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 2042986
+
+Estimated amount required: 0.000040859722042986 ETH
+
+==========================
+Enter keystore password:
+##### 4441✅  [Success] Hash: 0x8437fc229967d4580d559866975146fc3ce4fbcebcde696aea6952c5f72f9df3Contract: Permit2Contract Address: 0x932f86Fd415107802892B7e1FdB1414b3331c494
+Block: 72614004Paid: 0.00001579374 ETH (1579374 gas * 0.01 gwei)                                                                                                     
+✅ Sequence #1 on 4441 | Total Paid: 0.00001579374 ETH (1579374 gas * avg 0.01 gwei)                                                                                                     
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/broadcast/DeployPermit2.s.sol/4441/run-latest.json
+
+Sensitive values saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/cache/DeployPermit2.s.sol/4441/run-latest.json
+
+airish@dominic-HP-EliteBook-840-G5:~/Documents/dev/litvm/Meridian/foundry$ 
+
+
+forge script script/DeployPositionManager.s.sol \
+  --rpc-url LitVM_LiteForge \
+  --account meridian \
+  --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
+  --broadcast
+[⠒] Compiling...
+No files changed, compilation skipped
+Script ran successfully.
+
+== Logs ==
+  PoolManager: 0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E
+  Permit2: 0x932f86Fd415107802892B7e1FdB1414b3331c494
+  WETH deployed at: 0xB4F5FE33a7bf2fF57d6aB9A59061C7Bb27462f2C
+  PositionDescriptor deployed at: 0x888dDa033C98DDF87401B7c3E052c91144d56731
+  PositionManager deployed at: 0x2588E5Df6c621e7FCc05707bFb337643D12d35d2
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 4441
+
+Estimated max fee per gas: 0.020000001 gwei
+Estimated base fee per gas: 0.01 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 13461669
+
+Estimated amount required: 0.000269233393461669 ETH
+
+==========================
+Enter keystore password:
+##### 4441✅  [Success] Hash: 0xd2b980a269f66507ab2c031d069e7f02de518612ecb4f40f7def3438ef4b19b1Contract: WETHContract Address: 0xB4F5FE33a7bf2fF57d6aB9A59061C7Bb27462f2C
+Block: 72615324Paid: 0.00000732093 ETH (732093 gas * 0.01 gwei)                                                                                                     
+##### 4441✅  [Success] Hash: 0xf6a0354ff04f73ac4214c1a3a86779b90212f69acc9398f2830d600596ee1feaContract: PositionDescriptorContract Address: 0x888dDa033C98DDF87401B7c3E052c91144d56731Block: 72615326Paid: 0.00005318633 ETH (5318633 gas * 0.01 gwei)                                                                                                     
+##### 4441✅  [Success] Hash: 0x34e8a3ac37b3f9ecaaba40009f4976c4db053ca1bbcc17a5bbfff22e24cf4bf3Contract: PositionManagerContract Address: 0x2588E5Df6c621e7FCc05707bFb337643D12d35d2
+Block: 72615327Paid: 0.00004348746 ETH (4348746 gas * 0.01 gwei)                                                                                                     
+✅ Sequence #1 on 4441 | Total Paid: 0.00010399472 ETH (10399472 gas * avg 0.01 gwei)                                                                                                     
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/broadcast/DeployPositionManager.s.sol/4441/run-latest.json
+
+Sensitive values saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/cache/DeployPositionManager.s.sol/4441/run-latest.json
+
+airish@dominic-HP-EliteBook-840-G5:~/Documents/dev/litvm/Meridian/foundry$ 
+
+
+forge script script/DeployStateView.s.sol \
+  --rpc-url LitVM_LiteForge \
+  --account meridian \
+  --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
+  --broadcast
+[⠒] Compiling...
+[⠔] Compiling 3 files with Solc 0.8.37
+[⠒] Solc 0.8.37 finished in 1.29s
+Compiler run successful!
+Script ran successfully.
+
+== Return ==
+stateView: contract StateView 0xa3ac6218481cd6852a77FC7d46bf87d1D3e3C5B3
+
+== Logs ==
+  Deploying StateView with PoolManager at: 0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E
+  StateView deployed at: 0xa3ac6218481cd6852a77FC7d46bf87d1D3e3C5B3
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 4441
+
+Estimated max fee per gas: 0.020000001 gwei
+Estimated base fee per gas: 0.01 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 839260
+
+Estimated amount required: 0.00001678520083926 ETH
+
+==========================
+Enter keystore password:
+##### 4441✅  [Success] Hash: 0xbc79adffca2abaa588cff8cdf63cd9fd55c88f9b4f2a92d3f0d74f47841d59c4Contract: StateViewContract Address: 0xa3ac6218481cd6852a77FC7d46bf87d1D3e3C5B3
+Block: 72616113Paid: 0.00000648197 ETH (648197 gas * 0.01 gwei)                                                                                                     
+✅ Sequence #1 on 4441 | Total Paid: 0.00000648197 ETH (648197 gas * avg 0.01 gwei)                                                                                                     
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/broadcast/DeployStateView.s.sol/4441/run-latest.json
+
+Sensitive values saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/cache/DeployStateView.s.sol/4441/run-latest.json
+
+airish@dominic-HP-EliteBook-840-G5:~/Documents/dev/litvm/Meridian/foundry$ 
+
+
+
+ forge script script/DeployUniversalRouter.s.sol \
+  --rpc-url LitVM_LiteForge \
+  --account meridian \
+  --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
+  --broadcast
+[⠒] Compiling...
+[⠔] Compiling 60 files with Solc 0.8.26
+[⠒] Solc 0.8.26 finished in 12.26s
+Compiler run successful!
+Script ran successfully.
+
+== Logs ==
+  Permit2: 0x932f86Fd415107802892B7e1FdB1414b3331c494
+  WETH: 0xB4F5FE33a7bf2fF57d6aB9A59061C7Bb27462f2C
+  PoolManager: 0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E
+  PositionManager: 0x2588E5Df6c621e7FCc05707bFb337643D12d35d2
+  UniversalRouter deployed at: 0x6ba7ad84608C03888b16bF57a8aee7e59035aAE5
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 4441
+
+Estimated max fee per gas: 0.020000001 gwei
+Estimated base fee per gas: 0.01 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 5318076
+
+Estimated amount required: 0.000106361525318076 ETH
+
+==========================
+Enter keystore password:
+##### 4441✅  [Success] Hash: 0xac7f1d3b763cdf876838f70148236e19c93df54b2afc2a8bc9dc6a9460452611
+Contract: UniversalRouterContract Address: 0x6ba7ad84608C03888b16bF57a8aee7e59035aAE5
+Block: 72617032Paid: 0.00004109328 ETH (4109328 gas * 0.01 gwei)                                                                                                     
+✅ Sequence #1 on 4441 | Total Paid: 0.00004109328 ETH (4109328 gas * avg 0.01 gwei)                                                                                                     
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/broadcast/DeployUniversalRouter.s.sol/4441/run-latest.json
+
+Sensitive values saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/cache/DeployUniversalRouter.s.sol/4441/run-latest.json
+
+airish@dominic-HP-EliteBook-840-G5:~/Documents/dev/litvm/Meridian/foundry$ 
+
+
+
+forge script script/DeployMultiTokenFaucet.sol \
+  --rpc-url LitVM_LiteForge \
+  --account meridian \
+  --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
+  --broadcast
+[⠒] Compiling...
+[⠆] Compiling 1 files with Solc 0.8.37
+[⠰] Solc 0.8.37 finished in 1.12s
+Compiler run successful!
+Script ran successfully.
+
+== Logs ==
+  MultiTokenFaucet deployed at: 0xFF4F9485CabF80a4CB77243dB138296a12A2A0ce
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 4441
+
+Estimated max fee per gas: 0.020000001 gwei
+Estimated base fee per gas: 0.01 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 1190983
+
+Estimated amount required: 0.000023819661190983 ETH
+
+==========================
+Enter keystore password:
+##### 4441✅  [Success] Hash: 0x70eb0eff97a5eac58a724084f135205cf901294f59c9a5c097fedd4838e07cd6Contract: MultiTokenFaucetFunction: setCooldown(uint256)Block: 72619911Paid: 0.00000027058 ETH (27058 gas * 0.01 gwei)                                                                                                     
+##### 4441✅  [Success] Hash: 0xaeeee3ced409cfbcfe11337487ac06e71d7e82dee20607e7e443343f93e9b522
+Contract: MultiTokenFaucetContract Address: 0xFF4F9485CabF80a4CB77243dB138296a12A2A0ce
+Block: 72619911Paid: 0.00000891142 ETH (891142 gas * 0.01 gwei)                                                                                                     
+✅ Sequence #1 on 4441 | Total Paid: 0.000009182 ETH (918200 gas * avg 0.01 gwei)                                                                                                     
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/broadcast/DeployMultiTokenFaucet.sol/4441/run-latest.json
+
+Sensitive values saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/cache/DeployMultiTokenFaucet.sol/4441/run-latest.json
+
+airish@dominic-HP-EliteBook-840-G5:~/Documents/dev/litvm/Meridian/foundry$ 

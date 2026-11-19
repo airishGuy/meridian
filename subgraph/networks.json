@@ -1,32 +1,42 @@
 {
-  "elysium": {
+  "liteforge": {
     "PoolManager": {
-      "address": "0x383f1aef5282754Fc48578E1dA834dC01223F75F",
-      "startBlock": 9066021
+      "address": "0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E",
+      "startBlock": 72456704
     },
     "PositionManager": {
-      "address": "0x7d00dB5115Db5e02ef0550E51BB459F7c72e5999",
-      "startBlock": 9066021
+      "address": "0x2588E5Df6c621e7FCc05707bFb337643D12d35d2",
+      "startBlock": 72615327
+    }
+  },
+  "elysium": {
+    "PoolManager": {
+      "address": "0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E",
+      "startBlock": 72456704
+    },
+    "PositionManager": {
+      "address": "0x2588E5Df6c621e7FCc05707bFb337643D12d35d2",
+      "startBlock": 72615327
     }
   },
   "elysium-testnet": {
     "PoolManager": {
-      "address": "0x383f1aef5282754Fc48578E1dA834dC01223F75F",
-      "startBlock": 9066021
+      "address": "0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E",
+      "startBlock": 72456704
     },
     "PositionManager": {
-      "address": "0x7d00dB5115Db5e02ef0550E51BB459F7c72e5999",
-      "startBlock": 9066021
+      "address": "0x2588E5Df6c621e7FCc05707bFb337643D12d35d2",
+      "startBlock": 72615327
     }
   },
   "arc": {
     "PoolManager": {
-      "address": "0x383f1aef5282754Fc48578E1dA834dC01223F75F",
-      "startBlock": 9066021
+      "address": "0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E",
+      "startBlock": 72456704
     },
     "PositionManager": {
-      "address": "0x7d00dB5115Db5e02ef0550E51BB459F7c72e5999",
-      "startBlock": 9066021
+      "address": "0x2588E5Df6c621e7FCc05707bFb337643D12d35d2",
+      "startBlock": 72615327
     }
   },
   "sepolia": {

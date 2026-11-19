@@ -1,7 +1,6 @@
 # Compiler files
 cache/
 out/
-dependencies/
 
 # Commonly ignored directories
 .logs/

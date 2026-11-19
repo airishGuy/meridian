@@ -17,4 +17,5 @@ solmate/=dependencies/universal-router/lib/solmate/
 v4-hooks-public/=lib/v4-hooks-public/
 @uniswap/v2-core/=dependencies/universal-router/node_modules/@uniswap/v2-core/
 @uniswap/v3-core/=dependencies/universal-router/node_modules/@uniswap/v3-core/
+@uniswap/v3-periphery/=dependencies/universal-router/lib/v3-periphery/
 

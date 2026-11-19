@@ -8,29 +8,32 @@ contract DeployFaucet is Script {
     function run() external {
 
         // --- Configure your 5 tokens here ---
-        // Amounts are 500 tokens, scaled to each token's decimals
-        address[] memory tokens = new address[](5);
-        tokens[0] = 0x36bEE8F2DF69Cf3AFAb5c5ccA973fEb6441cAb11; // mUSDC (6 decimals)
-        tokens[1] = 0xF351A424955ba04e3d49dDa6E549a5983dB264B9; // UNCX (18 decimals)
-        tokens[2] = 0x68b6Bdb4AC1d0EBafe5D00309225998997d7137d; // FLUX (18 decimals)
-        tokens[3] = 0x988A89F9469D3B2D7BDbd4Af2b4B39D61701F3eC; // HNY (18 decimals)
-        tokens[4] = 0xd7569Bd95be12b864aAba642721D03063352c896; // ZIL (18 decimals)
+        // Amounts are 1000 tokens, scaled to each token's decimals
+        address[] memory tokens = new address[](6);
+        tokens[0] = 0x0188e0ce0804D5f431AB70ee94024b68a46bBA71;
+        tokens[1] = 0x16559F0919F2E41c7ef51512f8324DE2d24EFa20;
+        tokens[2] = 0xF56b200f4007FF00B92dfd2C87183a20bdf7EE75;
+        tokens[3] = 0xf2FD1F1171C902a69B30b0cd75e2d0e7C499eEfe; 
+        tokens[4] = 0x5a6285C084B4b31eFC4562481D03b398d1715C47;
+        tokens[5] = 0x666301A904602452b6172f9F5070832767B12DF1;
 
 
 
-        uint256[] memory amounts = new uint256[](5);
-        amounts[0] = 500 * 10 ** 6;  // mUSDC: 500 * 10^6
-        amounts[1] = 500 * 10 ** 18; // UNCX
-        amounts[2] = 500 * 10 ** 18; // FLUX
-        amounts[3] = 500 * 10 ** 18; // HNY
-        amounts[4] = 500 * 10 ** 18; // ZIL
+        uint256[] memory amounts = new uint256[](6);
+        amounts[0] = 1000 * 10 ** 6;  
+        amounts[1] = 1000 * 10 ** 18; 
+        amounts[2] = 1000 * 10 ** 18; 
+        amounts[3] = 1000 * 10 ** 18; 
+        amounts[4] = 1000 * 10 ** 18; 
+        amounts[5] = 1000 * 10 ** 18;
+
 
         vm.startBroadcast();
 
         MultiTokenFaucet faucet = new MultiTokenFaucet(tokens, amounts);
 
         // Set cooldown to 24 hours (adjust as needed)
-        faucet.setCooldown(3 minutes);
+        faucet.setCooldown(24 hours);
 
         vm.stopBroadcast();
 

@@ -19,6 +19,7 @@ export interface ChainContracts {
   universalRouter: `0x${string}`;
   weth?: `0x${string}`;
   positionDescriptor?: `0x${string}`;
+  multiTokenFaucet?: `0x${string}`;
 }
 
 export const CONTRACTS_BY_CHAIN: Record<number, ChainContracts> = {
@@ -34,25 +35,27 @@ export const CONTRACTS_BY_CHAIN: Record<number, ChainContracts> = {
   },
   // LitVM LiteForge (4441)
   4441: {
-    poolManager: "0x38F0520f45894020adB79591A1949D3aAFb3921d",
-    quoter: "0xb05b48a914507E17FD955851DFaE02B24ad4E207",
-    permit2: "0x1aB7a432b6FD491597c6D3C6590221993561C103",
-    positionManager: "0xaeC83eb392c67432022362C3dddA59cefFB0898B",
-    stateView: "0x412818d374C12Bb9374723D2065Bde75C445c9e5",
-    universalRouter: "0x8850386bBc1B5A7539eD34b6cEBDAcEf7c226230",
-    positionDescriptor: "0x62C6B01286f1aCD9EE01D6bEee4B3D8002424634",
-    weth: "0xA785dEEfF31941AF1802408943bfB347087602Cd",
+    poolManager: "0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E",
+    quoter: "0xDCc1cd16B492f55d32B455D3B6b2Dd8B83dCcA4f",
+    permit2: "0x932f86Fd415107802892B7e1FdB1414b3331c494",
+    positionManager: "0x2588E5Df6c621e7FCc05707bFb337643D12d35d2",
+    stateView: "0xa3ac6218481cd6852a77FC7d46bf87d1D3e3C5B3",
+    universalRouter: "0x6ba7ad84608C03888b16bF57a8aee7e59035aAE5",
+    positionDescriptor: "0x888dDa033C98DDF87401B7c3E052c91144d56731",
+    weth: "0xB4F5FE33a7bf2fF57d6aB9A59061C7Bb27462f2C",
+    multiTokenFaucet: "0xFF4F9485CabF80a4CB77243dB138296a12A2A0ce",
   },
   // BotChain Mainnet (677)
   677: {
-    poolManager: "0x38F0520f45894020adB79591A1949D3aAFb3921d",
-    quoter: "0xb05b48a914507E17FD955851DFaE02B24ad4E207",
-    permit2: "0x1aB7a432b6FD491597c6D3C6590221993561C103",
-    positionManager: "0xaeC83eb392c67432022362C3dddA59cefFB0898B",
-    stateView: "0x412818d374C12Bb9374723D2065Bde75C445c9e5",
-    universalRouter: "0x8850386bBc1B5A7539eD34b6cEBDAcEf7c226230",
-    positionDescriptor: "0x62C6B01286f1aCD9EE01D6bEee4B3D8002424634",
-    weth: "0xA785dEEfF31941AF1802408943bfB347087602Cd",
+    poolManager: "0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E",
+    quoter: "0xDCc1cd16B492f55d32B455D3B6b2Dd8B83dCcA4f",
+    permit2: "0x932f86Fd415107802892B7e1FdB1414b3331c494",
+    positionManager: "0x2588E5Df6c621e7FCc05707bFb337643D12d35d2",
+    stateView: "0xa3ac6218481cd6852a77FC7d46bf87d1D3e3C5B3",
+    universalRouter: "0x6ba7ad84608C03888b16bF57a8aee7e59035aAE5",
+    positionDescriptor: "0x888dDa033C98DDF87401B7c3E052c91144d56731",
+    weth: "0xB4F5FE33a7bf2fF57d6aB9A59061C7Bb27462f2C",
+    multiTokenFaucet: "0xFF4F9485CabF80a4CB77243dB138296a12A2A0ce",
   },
 };
 
@@ -72,6 +75,7 @@ export const POSITION_MANAGER_ADDRESS = (CONTRACTS_BY_CHAIN[4441] || CONTRACTS_B
 export const STATEVIEW_ADDRESS = (CONTRACTS_BY_CHAIN[4441] || CONTRACTS_BY_CHAIN[677]).stateView;
 export const UNIVERSALROUTER_ADDRESS = (CONTRACTS_BY_CHAIN[4441] || CONTRACTS_BY_CHAIN[677]).universalRouter;
 export const POSITION_DESCRIPTOR_ADDRESS = (CONTRACTS_BY_CHAIN[4441] || CONTRACTS_BY_CHAIN[677]).positionDescriptor;
+export const MULTI_TOKEN_FAUCET_ADDRESS = (CONTRACTS_BY_CHAIN[4441] || CONTRACTS_BY_CHAIN[677]).multiTokenFaucet;
 
 export const ACTIONS = {
   // --- Liquidity Actions (PositionManager) ---

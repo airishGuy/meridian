@@ -1,12 +1,12 @@
 specVersion: 0.0.4
-description: meridian is a decentralized protocol for automated token exchange on Elysium.
+description: meridian is a decentralized protocol for automated token exchange on LitVM LiteForge.
 schema:
   file: ./schema.graphql
 dataSources:
   - source:
-      address: "0x383f1aef5282754Fc48578E1dA834dC01223F75F"
+      address: "0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E"
       abi: PoolManager
-      startBlock: 9066021
+      startBlock: 72456704
     name: PoolManager
     network: elysium-testnet
     kind: ethereum/contract
@@ -40,8 +40,8 @@ dataSources:
 
   - source:
       abi: PositionManager
-      address: "0x7d00dB5115Db5e02ef0550E51BB459F7c72e5999"
-      startBlock: 9066021
+      address: "0x2588E5Df6c621e7FCc05707bFb337643D12d35d2"
+      startBlock: 72615327
     name: PositionManager
     network: elysium-testnet
     kind: ethereum/contract

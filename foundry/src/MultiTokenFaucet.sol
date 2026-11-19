@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MultiTokenFaucet is Ownable {
-    // uint256 public cooldown = 24 hours;
-    uint256 public cooldown = 3 minutes;
+    uint256 public cooldown = 24 hours;
+    // uint256 public cooldown = 3 minutes;
     // amount is complete token (decimals included)
 
 

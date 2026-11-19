@@ -9,6 +9,7 @@ export enum ChainId {
 
 // assemblyscript does not support string enums, hence these constants
 const ELYSIUM_TESTNET_NETWORK_NAME = 'elysium-testnet'
+const LITEFORGE_NETWORK_NAME = 'liteforge'
 const SEPOLIA_NETWORK_NAME = 'sepolia'
 const UNICHAIN_SEPOLIA_NETWORK_NAME = 'unichain-sepolia'
 const ARBITRUM_SEPOLIA_NETWORK_NAME = 'arbitrum-sepolia'
@@ -80,30 +81,32 @@ export function getSubgraphConfig(): SubgraphConfig {
   // Update this value to the corresponding chain you want to deploy
   const selectedNetwork = dataSource.network();
 
-  if (selectedNetwork == ELYSIUM_TESTNET_NETWORK_NAME) {
+  if (selectedNetwork == ELYSIUM_TESTNET_NETWORK_NAME || selectedNetwork == LITEFORGE_NETWORK_NAME) {
     return {
-      poolManagerAddress: '0x383f1aef5282754Fc48578E1dA834dC01223F75F'.toLowerCase(),
+      poolManagerAddress: '0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E'.toLowerCase(),
       stablecoinWrappedNativePoolId: '',
       stablecoinIsToken0: false,
-      wrappedNativeAddress: '0x0000000000000000000000000000000000000000', // HYPE
+      wrappedNativeAddress: '0xB4F5FE33a7bf2fF57d6aB9A59061C7Bb27462f2C'.toLowerCase(), // WETH
       minimumNativeLocked: BigDecimal.fromString('1'),
       stablecoinAddresses: [
-        '0x7D29d8047B905000459c0E80c34a26CeedcB47b2'.toLowerCase(), // USDC
-        '0x7dD76b622AF7eE379326374513E17934246C3c98'.toLowerCase(), // rUSDC
+        '0x0188e0ce0804D5f431AB70ee94024b68a46bBA71'.toLowerCase(), // tUSDT
       ],
       whitelistTokens: [
-        '0x0000000000000000000000000000000000000000', // HYPE
-        '0x7D29d8047B905000459c0E80c34a26CeedcB47b2'.toLowerCase(), // USDC
-        '0x7dD76b622AF7eE379326374513E17934246C3c98'.toLowerCase(), // rUSDC
-        '0x0026de59CF2cD3a581897366DCA1aFa33C6CE312'.toLowerCase(), // rHYPE
-        '0x57C544AAcfBa98b299361C47DDAe391720Ba4aec'.toLowerCase(), // WETH
+        '0x0000000000000000000000000000000000000000', // Native zkLTC
+        '0x0188e0ce0804D5f431AB70ee94024b68a46bBA71'.toLowerCase(), // tUSDT
+        '0x16559F0919F2E41c7ef51512f8324DE2d24EFa20'.toLowerCase(), // tLTC
+        '0xF56b200f4007FF00B92dfd2C87183a20bdf7EE75'.toLowerCase(), // STPT
+        '0xf2FD1F1171C902a69B30b0cd75e2d0e7C499eEfe'.toLowerCase(), // GENOME
+        '0x5a6285C084B4b31eFC4562481D03b398d1715C47'.toLowerCase(), // MistCoin
+        '0x666301A904602452b6172f9F5070832767B12DF1'.toLowerCase(), // ZyneCoin
+        '0xB4F5FE33a7bf2fF57d6aB9A59061C7Bb27462f2C'.toLowerCase(), // WETH
       ], // all addresses should be in lower case
       tokenOverrides: [],
       poolsToSkip: [],
       poolMappings: [],
       nativeTokenDetails: {
-        symbol: 'HYPE',
-        name: 'HYPE',
+        symbol: 'zkLTC',
+        name: 'zkLTC',
         decimals: BigInt.fromI32(18),
       },
     }

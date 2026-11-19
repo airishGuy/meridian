@@ -10,6 +10,7 @@ import CreatePoolPage from '@/app/pools/create/page';
 import PoolDetailsPage from '@/app/pools/[id]/page';
 import PositionDetailsPage from '@/app/positions/[id]/page';
 import CreatePositionPage from '@/app/positions/create/[params]/page';
+import FaucetPage from '@/app/faucet/page';
 
 function AppContent() {
   const location = useLocation();
@@ -49,6 +50,7 @@ function AppContent() {
             <Route path="/pools/:id" element={<PoolDetailsPage />} />
             <Route path="/positions/:id" element={<PositionDetailsPage />} />
             <Route path="/positions/create/:params" element={<CreatePositionPage />} />
+            <Route path="/faucet" element={<FaucetPage />} />
           </Routes>
         </div>
       </main>

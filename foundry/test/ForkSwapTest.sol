@@ -55,7 +55,6 @@ contract ForkSwapTest is Test {
             zeroForOne: true,
             amountIn: amountIn,
             amountOutMinimum: minAmountOut,
-            minHopPriceX36: 0,
             hookData: bytes("")
         }));
         params[1] = abi.encode(poolKey.currency0, amountIn);

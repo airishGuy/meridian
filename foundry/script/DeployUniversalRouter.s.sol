@@ -31,7 +31,6 @@ contract DeployUniversalRouter is Script {
             pairInitCodeHash: bytes32(0),
             poolInitCodeHash: bytes32(0),
             v4PoolManager: poolManager,
-            permissionsAdapterFactory: address(0),
             v3NFTPositionManager: address(0),
             v4PositionManager: positionManager,
             spokePool: address(0)
