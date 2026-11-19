@@ -56,13 +56,13 @@ interface ActivityItem {
 }
 
 const formatLargeCurrency = (val: string | number | undefined) => {
-  if (val === undefined || val === null || isNaN(Number(val))) return '$0.00';
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: "compact" }).format(Number(val));
+  if (val === undefined || val === null || isNaN(Number(val))) return '0.00 tLTC';
+  return `${new Intl.NumberFormat('en-US', { notation: "compact", maximumFractionDigits: 2 }).format(Number(val))} tLTC`;
 };
 
 const formatCurrency = (val: string | number | undefined) => {
-  if (val === undefined || val === null || isNaN(Number(val))) return '$0.00';
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(val));
+  if (val === undefined || val === null || isNaN(Number(val))) return '0.00 tLTC';
+  return `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(Number(val))} tLTC`;
 };
 
 const formatNumber = (val: string | number | undefined) => {
@@ -590,7 +590,7 @@ export default function ActivityPage() {
         <div className="hidden md:grid grid-cols-[100px_1.4fr_120px_140px_140px_110px] gap-4 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white/40 border-b border-white/[0.06] bg-[#0a0a0a]">
           <div>Time</div>
           <div>Type & Action</div>
-          <div className="text-right">Total USD</div>
+          <div className="text-right">Total (tLTC)</div>
           <div className="text-right">Token0</div>
           <div className="text-right">Token1</div>
           <div className="text-right">Txn</div>
@@ -667,7 +667,7 @@ export default function ActivityPage() {
 
                   {/* Total USD */}
                   <div className="flex md:block justify-between items-center md:text-right">
-                    <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Total USD</span>
+                    <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Total (tLTC)</span>
                     <span className={`text-sm font-bold font-mono ${isSwap && isBuy ? 'text-emerald-400' : 'text-white/90'}`}>
                       {row.usd === '-' ? '-' : formatCurrency(row.usd)}
                     </span>

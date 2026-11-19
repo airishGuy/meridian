@@ -10,8 +10,8 @@ import TokenImage from '../../components/TokenImage';
 import { useActiveChain } from '@/context/ActiveChainContext';
 
 const formatLargeCurrency = (val: string | number | undefined) => {
-  if (val === undefined || val === null || isNaN(Number(val))) return '$0.00';
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: "compact" }).format(Number(val));
+  if (val === undefined || val === null || isNaN(Number(val))) return '0.00 tLTC';
+  return `${new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(Number(val))} tLTC`;
 };
 
 const formatNumber = (val: string | number | undefined) => {
@@ -272,13 +272,16 @@ export default function PoolsPage() {
               hooks: pool.hooks
             });
 
-            const formatCurrency = (val: string) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: 'compact' }).format(Number(val));
+            const formatCurrency = (val: string) => {
+              if (!val || isNaN(Number(val))) return '0.00 tLTC';
+              return `${new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(Number(val))} tLTC`;
+            };
 
             const tvlFormatted = formatCurrency(pool.totalValueLockedUSD);
             const currentDayTimestamp = Math.floor(Date.now() / 1000 / 86400) * 86400;
             const hasTodayData = pool.poolDayData && pool.poolDayData.length > 0 && pool.poolDayData[0].date === currentDayTimestamp;
-            const vol1d = hasTodayData ? formatCurrency(pool.poolDayData[0].volumeUSD) : '$0.00';
-            const fee1d = hasTodayData ? formatCurrency(pool.poolDayData[0].feesUSD) : '$0.00';
+            const vol1d = hasTodayData ? formatCurrency(pool.poolDayData[0].volumeUSD) : '0.00 tLTC';
+            const fee1d = hasTodayData ? formatCurrency(pool.poolDayData[0].feesUSD) : '0.00 tLTC';
             const feePercent = (parseInt(pool.feeTier) / 10000).toFixed(2) + '%';
 
             const getCurrencyParam = (address: string) =>

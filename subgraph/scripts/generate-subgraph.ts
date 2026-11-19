@@ -139,7 +139,7 @@ const contractTemplates = {
 // Base subgraph configuration
 const baseConfig = {
   specVersion: '0.0.4',
-  description: 'Uniswap is a decentralized protocol for automated token exchange on Ethereum.',
+  description: 'meridian is a decentralized protocol for automated token exchange on LitVM LiteForge.',
   repository: 'https://github.com/Uniswap/v4-subgraph',
   schema: {
     file: './schema.graphql',

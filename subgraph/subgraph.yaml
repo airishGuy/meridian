@@ -6,9 +6,9 @@ dataSources:
   - source:
       address: "0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E"
       abi: PoolManager
-      startBlock: 72456704
+      startBlock: 72727899
     name: PoolManager
-    network: elysium-testnet
+    network: liteforge
     kind: ethereum/contract
     mapping:
       kind: ethereum/events
@@ -41,9 +41,9 @@ dataSources:
   - source:
       abi: PositionManager
       address: "0x2588E5Df6c621e7FCc05707bFb337643D12d35d2"
-      startBlock: 72615327
+      startBlock: 72727899
     name: PositionManager
-    network: elysium-testnet
+    network: liteforge
     kind: ethereum/contract
     mapping:
       kind: ethereum/events

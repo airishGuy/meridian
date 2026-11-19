@@ -260,8 +260,8 @@ export default function PoolDetailsPage() {
 
 
   const formatCurrency = (val: string | number | undefined) => {
-    if (val === undefined || val === null || isNaN(Number(val))) return '$0.00';
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: "compact" }).format(Number(val));
+    if (val === undefined || val === null || isNaN(Number(val))) return '0.00 tLTC';
+    return `${new Intl.NumberFormat('en-US', { notation: "compact", maximumFractionDigits: 2 }).format(Number(val))} tLTC`;
   };
 
   const currentDayStart = Math.floor(Date.now() / 1000 / 86400) * 86400;
@@ -535,7 +535,7 @@ export default function PoolDetailsPage() {
           <div className="hidden md:grid grid-cols-[100px_1fr_120px_140px_140px_110px] gap-4 px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-white/40 border-b border-white/[0.06] bg-[#0a0a0a]">
             <div>Time</div>
             <div>Type</div>
-            <div className="text-right">Total USD</div>
+            <div className="text-right">Total (tLTC)</div>
             <div className="text-right"><span className="token-symbol">{pool?.token0?.symbol}</span></div>
             <div className="text-right"><span className="token-symbol">{pool?.token1?.symbol}</span></div>
             <div className="text-right">Txn</div>
@@ -602,7 +602,7 @@ export default function PoolDetailsPage() {
 
                     {/* Total USD */}
                     <div className="flex md:block justify-between items-center md:text-right">
-                      <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Total USD</span>
+                      <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Total (tLTC)</span>
                       <span className={`text-sm font-bold font-mono ${isBuy ? 'text-emerald-400' : 'text-white/90'}`}>
                         {formatCurrency(row.amountUSD)}
                       </span>

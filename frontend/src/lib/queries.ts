@@ -1,13 +1,13 @@
 export const SUBGRAPH_ENDPOINTS: Record<number, string> = {
   // LitVM LiteForge (4441)
-  4441: import.meta.env.VITE_LITEFORGE_SUBGRAPH_URL || import.meta.env.VITE_SUBGRAPH_URL_4441 || "https://api.studio.thegraph.com/query/1749160/mlswap-subgraph-mainnet/version/latest",
+  4441: "https://api.goldsky.com/api/public/project_cmr13n1yva85401ts7mu74i0z/subgraphs/meridian-subgraph/1.0.0/gn",
   // Elysium Testnet (99801)
-  99801: import.meta.env.VITE_ELYSIUM_SUBGRAPH_URL || "https://api.studio.thegraph.com/query/1749160/mlswap-subgraph-mainnet/version/latest",
+  99801: "https://api.studio.thegraph.com/query/1749160/mlswap-subgraph-mainnet/version/latest",
   // BotChain Mainnet (677)
-  677: import.meta.env.VITE_BOTCHAIN_SUBGRAPH_URL || import.meta.env.VITE_SUBGRAPH_URL_677 || "https://api.studio.thegraph.com/query/1749160/mlswap-subgraph-mainnet/version/latest",
+  677: "https://api.studio.thegraph.com/query/1749160/mlswap-subgraph-mainnet/version/latest",
 };
 
-export const SUBGRAPH_ENDPOINT = SUBGRAPH_ENDPOINTS[4441] || SUBGRAPH_ENDPOINTS[677] || "https://api.studio.thegraph.com/query/1749160/mlswap-subgraph-mainnet/version/latest";
+export const SUBGRAPH_ENDPOINT = SUBGRAPH_ENDPOINTS[4441];
 
 export function getSubgraphEndpoint(chainId?: number): string {
   if (chainId && SUBGRAPH_ENDPOINTS[chainId]) {

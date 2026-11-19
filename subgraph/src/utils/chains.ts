@@ -82,31 +82,73 @@ export function getSubgraphConfig(): SubgraphConfig {
   const selectedNetwork = dataSource.network();
 
   if (selectedNetwork == ELYSIUM_TESTNET_NETWORK_NAME || selectedNetwork == LITEFORGE_NETWORK_NAME) {
+    const TLTC_ADDRESS = '0x01f9b27f4C3dE3511983C2f90b0A6Af59863cdbD'.toLowerCase()
     return {
       poolManagerAddress: '0xF5ebb911f16F7C6EF0F41459506729035Ca40B2E'.toLowerCase(),
       stablecoinWrappedNativePoolId: '',
       stablecoinIsToken0: false,
-      wrappedNativeAddress: '0xB4F5FE33a7bf2fF57d6aB9A59061C7Bb27462f2C'.toLowerCase(), // WETH
-      minimumNativeLocked: BigDecimal.fromString('1'),
-      stablecoinAddresses: [
-        '0x0188e0ce0804D5f431AB70ee94024b68a46bBA71'.toLowerCase(), // tUSDT
-      ],
+      wrappedNativeAddress: TLTC_ADDRESS, // tLTC is the base token
+      minimumNativeLocked: BigDecimal.fromString('0.0001'),
+      stablecoinAddresses: [], // No tokens pegged to 1 USD; all pricing is in tLTC
       whitelistTokens: [
         '0x0000000000000000000000000000000000000000', // Native zkLTC
+        TLTC_ADDRESS, // tLTC (base token)
         '0x0188e0ce0804D5f431AB70ee94024b68a46bBA71'.toLowerCase(), // tUSDT
-        '0x01f9b27f4C3dE3511983C2f90b0A6Af59863cdbD'.toLowerCase(), // tLTC
         '0xF56b200f4007FF00B92dfd2C87183a20bdf7EE75'.toLowerCase(), // STPT
         '0xf2FD1F1171C902a69B30b0cd75e2d0e7C499eEfe'.toLowerCase(), // GENOME
         '0x5a6285C084B4b31eFC4562481D03b398d1715C47'.toLowerCase(), // MistCoin
         '0x666301A904602452b6172f9F5070832767B12DF1'.toLowerCase(), // ZyneCoin
         '0xB4F5FE33a7bf2fF57d6aB9A59061C7Bb27462f2C'.toLowerCase(), // WETH
       ], // all addresses should be in lower case
-      tokenOverrides: [],
+      tokenOverrides: [
+        {
+          address: Address.fromString(TLTC_ADDRESS),
+          symbol: 'tLTC',
+          name: 'tLTC',
+          decimals: BigInt.fromI32(18),
+        },
+        {
+          address: Address.fromString('0x0188e0ce0804D5f431AB70ee94024b68a46bBA71'),
+          symbol: 'tUSDT',
+          name: 'tUSDT',
+          decimals: BigInt.fromI32(6),
+        },
+        {
+          address: Address.fromString('0xF56b200f4007FF00B92dfd2C87183a20bdf7EE75'),
+          symbol: 'STPT',
+          name: 'STPT',
+          decimals: BigInt.fromI32(18),
+        },
+        {
+          address: Address.fromString('0xf2FD1F1171C902a69B30b0cd75e2d0e7C499eEfe'),
+          symbol: 'GENOME',
+          name: 'GENOME',
+          decimals: BigInt.fromI32(18),
+        },
+        {
+          address: Address.fromString('0x5a6285C084B4b31eFC4562481D03b398d1715C47'),
+          symbol: 'MC',
+          name: 'MistCoin',
+          decimals: BigInt.fromI32(18),
+        },
+        {
+          address: Address.fromString('0x666301A904602452b6172f9F5070832767B12DF1'),
+          symbol: 'ZYN',
+          name: 'ZyneCoin',
+          decimals: BigInt.fromI32(18),
+        },
+        {
+          address: Address.fromString('0xB4F5FE33a7bf2fF57d6aB9A59061C7Bb27462f2C'),
+          symbol: 'WETH',
+          name: 'Wrapped Ether',
+          decimals: BigInt.fromI32(18),
+        },
+      ],
       poolsToSkip: [],
       poolMappings: [],
       nativeTokenDetails: {
-        symbol: 'zkLTC',
-        name: 'zkLTC',
+        symbol: 'tLTC',
+        name: 'tLTC',
         decimals: BigInt.fromI32(18),
       },
     }

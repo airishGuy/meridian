@@ -6,14 +6,13 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "build": "run-s codegen && graph build",
+    "build": "graph codegen --output-dir src/generated/ && graph build",
     "build:docker": "docker build -t matchstick .",
     "buildonly": "graph build",
     "deploy:alchemy": "graph deploy --node https://subgraphs.alchemy.com/api/subgraphs/deploy --ipfs https://ipfs.satsuma.xyz",
     "codegen": "graph codegen --output-dir src/generated/",
     "test": "graph test -d",
     "test:no-tty": "docker run -i --rm --mount type=bind,source=$INIT_CWD,target=/matchstick matchstick",
-    "prepare": "husky install",
     "generate-subgraph": "ts-node scripts/generate-subgraph.ts"
   },
   "devDependencies": {

@@ -33,15 +33,13 @@ export function getNativePriceInUSD(stablecoinWrappedNativePoolId: string, stabl
 }
 
 /**
- * Search through graph to find derived USDC per token.
- * @todo update to be derived USDC (add stablecoin estimates)
+ * Search through graph to find derived base token (tLTC) per token.
  **/
 export function findNativePerToken(
   token: Token,
   wrappedNativeAddress: string,
   stablecoinAddresses: string[],
 ): BigDecimal {
-  
   const whiteList = token.whitelistPools
   const stablecoins = stablecoinAddresses.map<string>(a => a.toLowerCase())
 
@@ -49,52 +47,76 @@ export function findNativePerToken(
     return ONE_BD
   }
 
+  let bestPrice = ZERO_BD
+  let largestTVL = ZERO_BD
 
-  // for now just take USD from pool with greatest TVL
-  // need to update this to actually detect best rate based on liquidity distribution
-  // let largestLiquidityETH = ZERO_BD
-  let priceSoFar = ZERO_BD
-
-  // hardcoded fix for incorrect rates
-  // if whitelist includes token - get the safe price
   if (stablecoins.includes(token.id)) {
-    priceSoFar = ONE_BD
-  } else {
-    for (let i = 0; i < whiteList.length; ++i) {
-      const poolAddress = whiteList[i]
-      const pool = Pool.load(poolAddress)
+    return ONE_BD
+  }
 
-      if (pool) {
-        // if (pool.liquidity.gt(ZERO_BI)) {
-          if (pool.token0 == token.id) {
-            // whitelist token is token1
-            const token1 = Token.load(pool.token1)
-            // get the derived usdc in pool
-            if (token1) {
-              let token1DerivedUSDC = token1.derivedUSDC as BigDecimal;
-              if (stablecoinAddresses.includes(token1.id)) {
-                token1DerivedUSDC = ONE_BD;
-              }
-              priceSoFar = pool.token0Price.times(token1DerivedUSDC);
-              return priceSoFar;
+  for (let i = 0; i < whiteList.length; ++i) {
+    const poolAddress = whiteList[i]
+    const pool = Pool.load(poolAddress)
+
+    if (pool) {
+      if (pool.token0 == token.id) {
+        const isDirectBasePair = pool.token1 == wrappedNativeAddress || pool.token1 == ADDRESS_ZERO
+        if (isDirectBasePair) {
+          if (pool.token0Price.gt(ZERO_BD)) {
+            const poolTVL = pool.totalValueLockedToken1.gt(ZERO_BD)
+              ? pool.totalValueLockedToken1
+              : pool.totalValueLockedToken0
+            if (poolTVL.ge(largestTVL) || bestPrice.equals(ZERO_BD)) {
+              largestTVL = poolTVL
+              bestPrice = pool.token0Price
             }
           }
-          if (pool.token1 == token.id) {
-            const token0 = Token.load(pool.token0)
-            if (token0) {
-              let token0DerivedUSDC = token0.derivedUSDC as BigDecimal;
-              if (stablecoinAddresses.includes(token0.id)) {
-                token0DerivedUSDC = ONE_BD;
+        } else {
+          const token1 = Token.load(pool.token1)
+          if (token1) {
+            let token1Price = token1.derivedUSDC
+            if (token1.id == wrappedNativeAddress || token1.id == ADDRESS_ZERO || stablecoins.includes(token1.id)) {
+              token1Price = ONE_BD
+            }
+            if (token1Price.gt(ZERO_BD) && pool.token0Price.gt(ZERO_BD)) {
+              const candidatePrice = pool.token0Price.times(token1Price)
+              if (bestPrice.equals(ZERO_BD)) {
+                bestPrice = candidatePrice
               }
-              priceSoFar = pool.token1Price.times(token0DerivedUSDC);
-              return priceSoFar;
+            }
+          }
+        }
+      } else if (pool.token1 == token.id) {
+        const isDirectBasePair = pool.token0 == wrappedNativeAddress || pool.token0 == ADDRESS_ZERO
+        if (isDirectBasePair) {
+          if (pool.token1Price.gt(ZERO_BD)) {
+            const poolTVL = pool.totalValueLockedToken0.gt(ZERO_BD)
+              ? pool.totalValueLockedToken0
+              : pool.totalValueLockedToken1
+            if (poolTVL.ge(largestTVL) || bestPrice.equals(ZERO_BD)) {
+              largestTVL = poolTVL
+              bestPrice = pool.token1Price
+            }
+          }
+        } else {
+          const token0 = Token.load(pool.token0)
+          if (token0) {
+            let token0Price = token0.derivedUSDC
+            if (token0.id == wrappedNativeAddress || token0.id == ADDRESS_ZERO || stablecoins.includes(token0.id)) {
+              token0Price = ONE_BD
+            }
+            if (token0Price.gt(ZERO_BD) && pool.token1Price.gt(ZERO_BD)) {
+              const candidatePrice = pool.token1Price.times(token0Price)
+              if (bestPrice.equals(ZERO_BD)) {
+                bestPrice = candidatePrice
+              }
             }
           }
         }
       }
-    // }
+    }
   }
-  return priceSoFar
+  return bestPrice
 }
 
 /**

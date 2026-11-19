@@ -5,11 +5,11 @@ type PoolManager @entity(immutable: false) {
   poolCount: BigInt!
   # amoutn of transactions all time
   txCount: BigInt!
-  # total volume all time in derived USD
+  # total volume all time in derived tLTC (base token)
   totalVolumeUSD: BigDecimal!
-  # total swap fees all time in USD
+  # total swap fees all time in tLTC
   totalFeesUSD: BigDecimal!
-  # TVL derived in USD
+  # TVL derived in tLTC
   totalValueLockedUSD: BigDecimal!
   # current owner of the factory
   owner: ID!
