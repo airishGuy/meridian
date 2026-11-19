@@ -10,6 +10,7 @@ import Toast from '@/components/Toast';
 import { request } from 'graphql-request';
 import { SUBGRAPH_ENDPOINT, GET_USER_ACTIVITY } from '@/lib/queries';
 import { BLOCK_EXPLORER_URL } from '@/lib/chains';
+import { formatRangePrice, isPositionFullRange } from '@/utils';
 
 interface ActivityItem {
   id: string;
@@ -24,8 +25,8 @@ interface ActivityItem {
 }
 
 const formatCurrency = (val: string | number | undefined) => {
-  if (val === undefined || val === null || isNaN(Number(val))) return '$0.00';
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(val));
+  if (val === undefined || val === null || isNaN(Number(val))) return '0.00 tLTC';
+  return `${Number(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })} tLTC`;
 };
 
 const getRelativeTime = (timestamp: number) => {
@@ -428,11 +429,13 @@ export default function ProfilePage() {
     }
   };
 
-  const formatUsd = (value: number) =>
-    value.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
+  const formatTltc = (value: number) =>
+    `${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })} tLTC`;
+
+  const formatUsd = formatTltc;
 
   const formatPrice = (p: number) =>
-    p < 0.001 ? p.toExponential(4) : p.toLocaleString('en-US', { maximumFractionDigits: 6 });
+    formatRangePrice(p);
 
   return (
     <div className="w-full relative z-10 flex-1 flex flex-col">
@@ -753,13 +756,31 @@ export default function ProfilePage() {
                             <span className="text-xs text-white/40 font-mono bg-white/5 border border-white/10 px-2 py-0.5 rounded-full">
                               #{pos.tokenId}
                             </span>
+                            {isPositionFullRange(pos.tickLower, pos.tickUpper) ? (
+                              <span className="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-mono">
+                                Full Range
+                              </span>
+                            ) : (
+                              <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-full font-mono">
+                                Custom Range
+                              </span>
+                            )}
                           </div>
-                          <p className="text-xs font-mono text-white/40 mt-1.5">
-                            Range:&nbsp;
-                            <span className="text-white/70">
-                              {formatPrice(pos.priceLower)}&nbsp;—&nbsp;{formatPrice(pos.priceUpper)}
-                            </span>
-                            &nbsp;<span className="text-white/30">{pos.token1.symbol}/{pos.token0.symbol}</span>
+                          <p className="text-xs font-mono text-white/40 mt-1.5 flex items-center gap-1.5 flex-wrap">
+                            <span>Range:</span>
+                            {isPositionFullRange(pos.tickLower, pos.tickUpper) ? (
+                              <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                                <span>Full Range</span>
+                                <span className="text-white/40 font-normal">(0 ↔ ∞)</span>
+                              </span>
+                            ) : (
+                              <>
+                                <span className="text-white/70 font-medium">
+                                  {formatRangePrice(pos.priceLower, pos.tickLower)}&nbsp;—&nbsp;{formatRangePrice(pos.priceUpper, pos.tickUpper)}
+                                </span>
+                                &nbsp;<span className="text-white/30">{pos.token1.symbol}/{pos.token0.symbol}</span>
+                              </>
+                            )}
                           </p>
                         </div>
                       </div>
@@ -768,8 +789,13 @@ export default function ProfilePage() {
                       <div className="text-left md:text-right shrink-0">
                         <p className="text-xs text-white/40 uppercase tracking-wider mb-1">Tick Range</p>
                         <p className="text-sm font-mono text-white/80 font-medium">
-                          {pos.tickLower} — {pos.tickUpper}
+                          {isPositionFullRange(pos.tickLower, pos.tickUpper) ? 'MIN ↔ MAX' : `${pos.tickLower} — ${pos.tickUpper}`}
                         </p>
+                        {isPositionFullRange(pos.tickLower, pos.tickUpper) && (
+                          <p className="text-[11px] font-mono text-white/30">
+                            ({pos.tickLower} — {pos.tickUpper})
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -782,7 +808,7 @@ export default function ProfilePage() {
             <div className="hidden md:grid grid-cols-[100px_1.4fr_120px_140px_140px_110px] gap-4 px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-white/40 border-b border-white/[0.06] bg-[#0a0a0a]">
               <div>Time</div>
               <div>Type & Action</div>
-              <div className="text-right">Total USD</div>
+              <div className="text-right">Total (tLTC)</div>
               <div className="text-right">Token0</div>
               <div className="text-right">Token1</div>
               <div className="text-right">Txn</div>
@@ -860,9 +886,9 @@ export default function ProfilePage() {
                         </div>
                       </div>
 
-                      {/* Total USD */}
+                      {/* Total (tLTC) */}
                       <div className="flex md:block justify-between items-center md:text-right">
-                        <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Total USD</span>
+                        <span className="md:hidden text-xs uppercase tracking-wider text-white/30 font-sans">Total (tLTC)</span>
                         <span className={`text-sm font-bold font-mono ${isSwap && isBuy ? 'text-emerald-400' : 'text-white/90'}`}>
                           {tx.usd === '-' ? '-' : formatCurrency(tx.usd)}
                         </span>

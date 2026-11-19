@@ -79,3 +79,25 @@ export const getDisplayPrice = (pool: any) => {
     );
     return ethers.keccak256(encoded);
   };
+
+export const isPositionFullRange = (tickLower: number, tickUpper: number): boolean => {
+  return tickLower <= -887000 && tickUpper >= 887000;
+};
+
+export const formatRangePrice = (price: number | string, tick?: number): string => {
+  if (tick !== undefined && tick <= -887000) return '0';
+  if (tick !== undefined && tick >= 887000) return '∞';
+  const num = typeof price === 'number' ? price : parseFloat(price);
+  if (!num || !isFinite(num) || num <= 0 || num < 1e-15) return '0';
+  if (num > 1e12) return '∞';
+  if (num >= 1000) {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  }
+  if (num >= 1) {
+    return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+  }
+  if (num >= 0.0001) {
+    return num.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 6 });
+  }
+  return num.toFixed(8).replace(/0+$/, '').replace(/\.$/, '');
+};

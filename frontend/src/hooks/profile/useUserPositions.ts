@@ -70,6 +70,7 @@ export interface UserPosition {
   tickUpper: number;
   priceLower: number;    // token1 per token0 at tickLower
   priceUpper: number;    // token1 per token0 at tickUpper
+  isFullRange: boolean;
 
   // Token metadata resolved from config
   token0: ReturnType<typeof resolveToken>;
@@ -169,6 +170,7 @@ export function useUserPositions() {
             const priceLower = tickToPrice(tickLower, token0.decimals, token1.decimals);
             const priceUpper = tickToPrice(tickUpper, token0.decimals, token1.decimals);
 
+            const isFullRange = tickLower <= -887000 && tickUpper >= 887000;
             const feePct = `${(poolKey.fee / 10000).toFixed(poolKey.fee % 10000 === 0 ? 0 : 2)}%`;
 
             return {
@@ -185,6 +187,7 @@ export function useUserPositions() {
               tickUpper,
               priceLower,
               priceUpper,
+              isFullRange,
               token0,
               token1,
             };

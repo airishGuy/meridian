@@ -14,6 +14,7 @@ import { POSITION_MANAGER_ADDRESS } from '@/lib/constants';
 import { LiquidityAmounts, getSqrtRatioAtTick } from '@/utils/liquidityMath/liquidityAmounts';
 import { fetchSubgraph, GET_POSITION_OWNER, GET_POSITION_TRANSACTIONS } from '@/lib/queries';
 import { BLOCK_EXPLORER_URL } from '@/lib/chains';
+import { formatRangePrice, isPositionFullRange } from '@/utils';
 
 const getTokenLogo = (token: any) => {
   if (token.logo) return token.logo;
@@ -255,44 +256,63 @@ export default function PositionDetailsPage() {
     return () => { cancelled = true; };
   }, [details, userAddress, publicClient]);
 
-  // Calculate dynamic USD values
+  // Calculate dynamic tLTC values
   const getUSDValues = () => {
-    if (!details) return { amount0USD: 0, amount1USD: 0, totalUSD: 0, fees0USD: 0, fees1USD: 0, totalFeesUSD: 0 };
+    if (!details) return { 
+      amount0Tltc: 0, amount1Tltc: 0, totalTltc: 0, 
+      fees0Tltc: 0, fees1Tltc: 0, totalFeesTltc: 0,
+      amount0USD: 0, amount1USD: 0, totalUSD: 0, 
+      fees0USD: 0, fees1USD: 0, totalFeesUSD: 0 
+    };
     
     let price0 = details.token0.derivedusdc ?? 0;
     let price1 = details.token1.derivedusdc ?? 0;
 
-    // If derived USDC prices are unavailable, fall back to relative pricing
+    const isBase0 = details.token0.symbol === 'tLTC' || details.token0.symbol === 'zkLTC';
+    const isBase1 = details.token1.symbol === 'tLTC' || details.token1.symbol === 'zkLTC';
+
+    if (isBase0) price0 = 1;
+    if (isBase1) price1 = 1;
+
+    // If derived prices are missing or 0, derive from pool's currentPrice (token1 per token0)
     if (price0 === 0 && price1 === 0) {
-      const sym0 = details.token0.symbol;
-      const sym1 = details.token1.symbol;
-      price0 = 1;
-      price1 = 1;
-      if (sym0 === 'ETH' || sym0 === 'WETH') {
+      if (isBase0 && details.currentPrice > 0) {
+        price0 = 1;
+        price1 = 1 / details.currentPrice;
+      } else if (isBase1 && details.currentPrice > 0) {
         price0 = details.currentPrice;
         price1 = 1;
-      } else if (sym1 === 'ETH' || sym1 === 'WETH') {
+      } else {
         price0 = 1;
-        price1 = details.currentPrice;
+        price1 = details.currentPrice > 0 ? 1 / details.currentPrice : 1;
       }
+    } else if (price0 === 0 && price1 > 0 && details.currentPrice > 0) {
+      price0 = details.currentPrice * price1;
+    } else if (price1 === 0 && price0 > 0 && details.currentPrice > 0) {
+      price1 = price0 / details.currentPrice;
     }
 
-    const amount0USD = details.amount0Human * price0;
-    const amount1USD = details.amount1Human * price1;
-    const totalUSD = amount0USD + amount1USD;
-    console.log({currentPrice: details.currentPrice, totalUSD, amount0USD, amount1USD, price0, price1})
+    const amount0Tltc = details.amount0Human * price0;
+    const amount1Tltc = details.amount1Human * price1;
+    const totalTltc = amount0Tltc + amount1Tltc;
 
-    const fees0USD = details.fees0Human * price0;
-    const fees1USD = details.fees1Human * price1;
-    const totalFeesUSD = fees0USD + fees1USD;
+    const fees0Tltc = details.fees0Human * price0;
+    const fees1Tltc = details.fees1Human * price1;
+    const totalFeesTltc = fees0Tltc + fees1Tltc;
 
     return {
-      amount0USD,
-      amount1USD,
-      totalUSD,
-      fees0USD,
-      fees1USD,
-      totalFeesUSD,
+      amount0Tltc,
+      amount1Tltc,
+      totalTltc,
+      fees0Tltc,
+      fees1Tltc,
+      totalFeesTltc,
+      amount0USD: amount0Tltc,
+      amount1USD: amount1Tltc,
+      totalUSD: totalTltc,
+      fees0USD: fees0Tltc,
+      fees1USD: fees1Tltc,
+      totalFeesUSD: totalFeesTltc,
     };
   };
 
@@ -301,6 +321,9 @@ export default function PositionDetailsPage() {
   // Progress Bar styling
   const getProgressStyles = () => {
     if (!details) return { rangeLeft: '25%', rangeRight: '25%', cursorLeft: '50%' };
+    if (isPositionFullRange(details.tickLower, details.tickUpper)) {
+      return { rangeLeft: '0%', rangeRight: '0%', cursorLeft: '50%' };
+    }
     const min = details.priceLower;
     const max = details.priceUpper;
     const curr = details.currentPrice;
@@ -665,7 +688,7 @@ export default function PositionDetailsPage() {
           <div className="absolute top-0 right-0 w-[120px] h-[120px] bg-primary/5 blur-[60px] rounded-full pointer-events-none transition-colors group-hover:bg-primary/10"></div>
           <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-2">Total Liquidity Value</p>
           <p className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-white mb-4">
-            ${usd.totalUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            {usd.totalTltc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })} tLTC
           </p>
 
           <div className="space-y-2 relative z-10 text-sm">
@@ -677,7 +700,7 @@ export default function PositionDetailsPage() {
               <div className="text-right">
                 <p className="font-semibold text-white font-mono">{details.amount0Human.toFixed(4)} {details.token0.symbol}</p>
                 <p className="text-xs text-white/40 font-mono">
-                  ${usd.amount0USD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {usd.amount0Tltc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })} tLTC
                 </p>
               </div>
             </div>
@@ -689,7 +712,7 @@ export default function PositionDetailsPage() {
               <div className="text-right">
                 <p className="font-semibold text-white font-mono">{details.amount1Human.toFixed(4)} {details.token1.symbol}</p>
                 <p className="text-xs text-white/40 font-mono">
-                  ${usd.amount1USD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {usd.amount1Tltc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })} tLTC
                 </p>
               </div>
             </div>
@@ -706,7 +729,7 @@ export default function PositionDetailsPage() {
             </button>
           </div>
           <p className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-emerald-400 mb-4">
-            ${usd.totalFeesUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
+            {usd.totalFeesTltc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })} tLTC
           </p>
 
           <div className="space-y-2 relative z-10 text-sm">
@@ -724,13 +747,20 @@ export default function PositionDetailsPage() {
 
       {/* Range Section */}
       <div className="bg-[#0c0c0e]/95 border border-white/[0.08] p-6 sm:p-8 rounded-3xl shadow-xl backdrop-blur-md mb-8">
-        <p className="text-sm font-bold uppercase tracking-wider text-white/50 mb-6 text-center">Price Range Corridor</p>
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <p className="text-sm font-bold uppercase tracking-wider text-white/50">Price Range Corridor</p>
+          {isPositionFullRange(details.tickLower, details.tickUpper) && (
+            <span className="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded-full font-mono font-medium">
+              Full Range
+            </span>
+          )}
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
           <div className="text-center p-5 bg-black/40 border border-white/[0.08] rounded-2xl">
             <p className="text-xs uppercase tracking-wider text-white/40 mb-2 font-semibold">Min Price</p>
             <p className="text-2xl font-bold font-mono text-white leading-tight">
-              {details.priceLower === 0 ? '0' : details.priceLower.toLocaleString(undefined, { maximumFractionDigits: 6 })}
+              {formatRangePrice(details.priceLower, details.tickLower)}
             </p>
             <p className="text-xs text-white/40 font-mono mt-1.5">{details.token1.symbol} per {details.token0.symbol}</p>
           </div>
@@ -745,7 +775,7 @@ export default function PositionDetailsPage() {
           <div className="text-center p-5 bg-black/40 border border-white/[0.08] rounded-2xl">
             <p className="text-xs uppercase tracking-wider text-white/40 mb-2 font-semibold">Max Price</p>
             <p className="text-2xl font-bold font-mono text-white leading-tight">
-              {details.priceUpper > 1e12 ? '∞' : details.priceUpper.toLocaleString(undefined, { maximumFractionDigits: 6 })}
+              {formatRangePrice(details.priceUpper, details.tickUpper)}
             </p>
             <p className="text-xs text-white/40 font-mono mt-1.5">{details.token1.symbol} per {details.token0.symbol}</p>
           </div>
@@ -757,8 +787,9 @@ export default function PositionDetailsPage() {
           <div className="absolute top-0 h-full w-2 bg-primary gold-glow" style={{ left: progress.cursorLeft }}></div>
         </div>
         <div className="flex justify-between mt-3 text-xs font-mono text-white/40">
-          <span>0</span>
-          <span>&infin;</span>
+          <span>{isPositionFullRange(details.tickLower, details.tickUpper) ? '0' : formatRangePrice(details.priceLower, details.tickLower)}</span>
+          <span className="text-primary font-semibold">Current: {details.currentPrice.toLocaleString(undefined, { maximumFractionDigits: 6 })}</span>
+          <span>{isPositionFullRange(details.tickLower, details.tickUpper) ? '∞' : formatRangePrice(details.priceUpper, details.tickUpper)}</span>
         </div>
       </div>
 
@@ -876,7 +907,7 @@ export default function PositionDetailsPage() {
                       </div>
                     </div>
                     <span className="text-xs font-mono text-white/60">
-                      ${usd.fees0USD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      {usd.fees0Tltc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })} tLTC
                     </span>
                   </div>
 
@@ -889,7 +920,7 @@ export default function PositionDetailsPage() {
                       </div>
                     </div>
                     <span className="text-xs font-mono text-white/60">
-                      ${usd.fees1USD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      {usd.fees1Tltc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })} tLTC
                     </span>
                   </div>
                 </div>
@@ -897,7 +928,7 @@ export default function PositionDetailsPage() {
                 <div className="mt-6 pt-4 border-t border-white/[0.06] flex flex-col items-center">
                   <span className="text-xs font-medium uppercase tracking-wider text-white/40 mb-1">Total Receivable</span>
                   <span className="text-2xl sm:text-3xl font-bold text-primary tracking-tight font-mono">
-                    ${usd.totalFeesUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {usd.totalFeesTltc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })} tLTC
                   </span>
                 </div>
               </div>
@@ -1034,13 +1065,13 @@ export default function PositionDetailsPage() {
                   <div className="bg-white/[0.02] border border-white/10 rounded-xl p-3 text-center">
                     <p className="text-xs uppercase tracking-wider text-white/30 mb-1">Min Price</p>
                     <p className="text-sm font-bold font-mono text-white">
-                      {details.priceLower.toLocaleString(undefined, { maximumFractionDigits: 6 })}
+                      {formatRangePrice(details.priceLower, details.tickLower)}
                     </p>
                   </div>
                   <div className="bg-white/[0.02] border border-white/10 rounded-xl p-3 text-center">
                     <p className="text-xs uppercase tracking-wider text-white/30 mb-1">Max Price</p>
                     <p className="text-sm font-bold font-mono text-white">
-                      {details.priceUpper > 1e12 ? '∞' : details.priceUpper.toLocaleString(undefined, { maximumFractionDigits: 6 })}
+                      {formatRangePrice(details.priceUpper, details.tickUpper)}
                     </p>
                   </div>
                 </div>
@@ -1268,7 +1299,7 @@ export default function PositionDetailsPage() {
                       <span className="text-xs font-semibold text-white">{(details.amount0Human + details.fees0Human).toFixed(6)} {details.token0.symbol}</span>
                     </div>
                     <span className="text-xs font-mono text-white/40">
-                      ${(usd.amount0USD + usd.fees0USD).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      {(usd.amount0Tltc + usd.fees0Tltc).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })} tLTC
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -1277,7 +1308,7 @@ export default function PositionDetailsPage() {
                       <span className="text-xs font-semibold text-white">{(details.amount1Human + details.fees1Human).toFixed(6)} {details.token1.symbol}</span>
                     </div>
                     <span className="text-xs font-mono text-white/40">
-                      ${(usd.amount1USD + usd.fees1USD).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      {(usd.amount1Tltc + usd.fees1Tltc).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })} tLTC
                     </span>
                   </div>
                 </div>
@@ -1285,7 +1316,7 @@ export default function PositionDetailsPage() {
                 <div className="mt-4 pt-3 border-t border-white/[0.06] flex justify-between items-end">
                   <span className="text-xs font-semibold uppercase tracking-wider text-white/40">Total Value</span>
                   <span className="text-xl font-bold font-mono text-white tracking-tight">
-                    ${(usd.totalUSD + usd.totalFeesUSD).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {(usd.totalTltc + usd.totalFeesTltc).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })} tLTC
                   </span>
                 </div>
               </div>
