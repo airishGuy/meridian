@@ -229,13 +229,6 @@ export default function FaucetPage() {
                   {Math.round(cooldown / 3600)} Hours
                 </p>
               </div>
-              <div className="w-[1px] h-8 bg-white/10 hidden sm:block" />
-              <div>
-                <p className="text-xs uppercase tracking-wider text-white/40">Network Fee</p>
-                <p className="text-base sm:text-lg font-bold font-mono text-white mt-0.5">
-                  ~0.0001 zkLTC
-                </p>
-              </div>
             </div>
           </div>
 

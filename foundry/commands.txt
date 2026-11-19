@@ -173,3 +173,11 @@ forge script script/AdminFaucet.sol \
   --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
   --broadcast
 
+
+// FUND FAUCET (10M of each of the 6 tokens)
+forge script script/FundFaucet.s.sol \
+  --rpc-url LitVM_LiteForge \
+  --account meridian \
+  --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
+  --broadcast
+
