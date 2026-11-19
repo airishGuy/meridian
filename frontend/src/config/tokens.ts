@@ -20,7 +20,7 @@ export const TOKENS_BY_CHAIN: Record<number, TokenConfig[]> = {
     },
 
     {
-      "address": "0x16559F0919F2E41c7ef51512f8324DE2d24EFa20",
+      "address": "0x01f9b27f4C3dE3511983C2f90b0A6Af59863cdbD",
       "name": "tLTC",
       "symbol": "tLTC",
       "decimals": 18,

@@ -180,19 +180,8 @@ export function useFaucet() {
           setSecondsRemaining(userTimeRemaining);
         }
 
-        // Read token list from contract
-        let tokenAddresses: `0x${string}`[] = [];
-        try {
-          const fetchedTokens = await publicClient.readContract({
-            address: faucetAddress,
-            abi: MultiTokenFaucetABI.abi,
-            functionName: 'getTokens',
-          }) as `0x${string}`[];
-          tokenAddresses = fetchedTokens;
-        } catch (e) {
-          console.warn('Failed to read getTokens() from faucet, falling back to TOKENS:', e);
-          tokenAddresses = TOKENS.map((t) => t.address as `0x${string}`);
-        }
+        // Use configured tokens as primary list
+        const tokenAddresses: `0x${string}`[] = TOKENS.map((t) => t.address as `0x${string}`);
 
         // For each token, get claim amount, decimals, symbol, user balance, and faucet balance
         const tokenInfos: FaucetTokenInfo[] = await Promise.all(
@@ -245,6 +234,10 @@ export function useFaucet() {
               }) as bigint;
             } catch (e) {
               console.warn(`Failed to read faucet amount for ${address}:`, e);
+            }
+
+            if (claimAmount === 0n) {
+              claimAmount = 1000n * (10n ** BigInt(decimals));
             }
 
             // Read user balance

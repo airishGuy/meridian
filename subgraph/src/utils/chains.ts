@@ -94,7 +94,7 @@ export function getSubgraphConfig(): SubgraphConfig {
       whitelistTokens: [
         '0x0000000000000000000000000000000000000000', // Native zkLTC
         '0x0188e0ce0804D5f431AB70ee94024b68a46bBA71'.toLowerCase(), // tUSDT
-        '0x16559F0919F2E41c7ef51512f8324DE2d24EFa20'.toLowerCase(), // tLTC
+        '0x01f9b27f4C3dE3511983C2f90b0A6Af59863cdbD'.toLowerCase(), // tLTC
         '0xF56b200f4007FF00B92dfd2C87183a20bdf7EE75'.toLowerCase(), // STPT
         '0xf2FD1F1171C902a69B30b0cd75e2d0e7C499eEfe'.toLowerCase(), // GENOME
         '0x5a6285C084B4b31eFC4562481D03b398d1715C47'.toLowerCase(), // MistCoin

@@ -8,7 +8,7 @@ contract FundFaucet is Script {
     address constant FAUCET = 0xFF4F9485CabF80a4CB77243dB138296a12A2A0ce;
 
     address constant TUSDT  = 0x0188e0ce0804D5f431AB70ee94024b68a46bBA71; // 6 decimals
-    address constant TLTC   = 0x16559F0919F2E41c7ef51512f8324DE2d24EFa20; // 18 decimals
+    address constant TLTC   = 0x01f9b27f4C3dE3511983C2f90b0A6Af59863cdbD; // 18 decimals
     address constant STPT   = 0xF56b200f4007FF00B92dfd2C87183a20bdf7EE75; // 18 decimals
     address constant GENOME = 0xf2FD1F1171C902a69B30b0cd75e2d0e7C499eEfe; // 18 decimals
     address constant MC     = 0x5a6285C084B4b31eFC4562481D03b398d1715C47; // 18 decimals

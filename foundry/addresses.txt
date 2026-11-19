@@ -10,7 +10,7 @@ Warning: Detected artifacts built from source files that no longer exist. Run `f
 Script ran successfully.
 
 == Logs ==
-  tLTC: 0x16559F0919F2E41c7ef51512f8324DE2d24EFa20
+  tLTC: 0x01f9b27f4C3dE3511983C2f90b0A6Af59863cdbD
   STPT: 0xF56b200f4007FF00B92dfd2C87183a20bdf7EE75
   GENOME: 0xf2FD1F1171C902a69B30b0cd75e2d0e7C499eEfe
   MistCoin: 0x5a6285C084B4b31eFC4562481D03b398d1715C47
@@ -58,6 +58,50 @@ Transaction Hash: 0xc5658f45bf6a72e8eee40d141a71055f454a04ca48f34fdca75c2dd63b3e
 Status: 0x1 (Success)
 Bytecode on-chain: Verified via RPC (0x608080...)
 Broadcast record: broadcast/MineTUSDT.s.sol/4441/run-latest.json
+
+
+
+forge script script/MineTLTC.s.sol \
+  --rpc-url LitVM_LiteForge \
+  --account meridian \
+  --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
+  --broadcast
+[⠒] Compiling...
+No files changed, compilation skipped
+Script ran successfully.
+
+== Logs ==
+  tLTC deployed at: 0x01f9b27f4C3dE3511983C2f90b0A6Af59863cdbD
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 4441
+
+Estimated max fee per gas: 0.020000001 gwei
+Estimated base fee per gas: 0.01 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 847107
+
+Estimated amount required: 0.000016942140847107 ETH
+
+==========================
+Enter keystore password:
+##### 4441✅  [Success] Hash: 0x1b6c50b56d1ca98f69437fc91c5b24a1024df98fae6df7ae87b9b64c379ec633Contract: MockERC20Block: 72723891Paid: 0.00000582556 ETH (582556 gas * 0.01 gwei)                                                                                      
+✅ Sequence #1 on 4441 | Total Paid: 0.00000582556 ETH (582556 gas * avg 0.01 gwei)                                                                                      
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/broadcast/MineTLTC.s.sol/4441/run-latest.json
+
+Sensitive values saved to: /home/airish/Documents/dev/litvm/Meridian/foundry/cache/MineTLTC.s.sol/4441/run-latest.json
+
+airish@dominic-HP-EliteBook-840-G5:~/Documents/dev/litvm/Meridian/foundry$ 
+
 
 
 

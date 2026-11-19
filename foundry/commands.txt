@@ -37,13 +37,18 @@ forge script script/MineTUSDT.s.sol \
   --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
   --broadcast
 
-forge script script/MineTUSDT.s.sol \
+
+forge script script/MineTLTC.s.sol \
+  --sig "mine()" \
+  --rpc-url LitVM_LiteForge \
+  --account meridian
+
+echo "TLTC_SALT=0x0000000000000000000000000000000000000000000000000000000000000085" >> .env
+forge script script/MineTLTC.s.sol \
   --rpc-url LitVM_LiteForge \
   --account meridian \
   --sender 0x05bb580503eace5bb21b3be5e2cd917653a022b9 \
-  --password "papa4mama4" \
-  --broadcast \
-
+  --broadcast
 
 
 

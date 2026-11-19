@@ -11,7 +11,7 @@ contract DeployFaucet is Script {
         // Amounts are 1000 tokens, scaled to each token's decimals
         address[] memory tokens = new address[](6);
         tokens[0] = 0x0188e0ce0804D5f431AB70ee94024b68a46bBA71;
-        tokens[1] = 0x16559F0919F2E41c7ef51512f8324DE2d24EFa20;
+        tokens[1] = 0x01f9b27f4C3dE3511983C2f90b0A6Af59863cdbD;
         tokens[2] = 0xF56b200f4007FF00B92dfd2C87183a20bdf7EE75;
         tokens[3] = 0xf2FD1F1171C902a69B30b0cd75e2d0e7C499eEfe; 
         tokens[4] = 0x5a6285C084B4b31eFC4562481D03b398d1715C47;
