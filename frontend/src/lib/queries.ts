@@ -1,6 +1,6 @@
 export const SUBGRAPH_ENDPOINTS: Record<number, string> = {
   // LitVM LiteForge (4441)
-  4441: "https://api.goldsky.com/api/public/project_cmr13n1yva85401ts7mu74i0z/subgraphs/meridian-subgraph/1.0.0/gn",
+  4441: "https://api.goldsky.com/api/public/project_cmr13n1yva85401ts7mu74i0z/subgraphs/meridian-subgraph/1.0.1/gn",
   // Elysium Testnet (99801)
   99801: "https://api.studio.thegraph.com/query/1749160/mlswap-subgraph-mainnet/version/latest",
   // BotChain Mainnet (677)

@@ -3,7 +3,7 @@ import { Address, BigInt } from '@graphprotocol/graph-ts'
 import { ERC20 } from '../../generated/PoolManager/ERC20'
 import { ERC20NameBytes } from '../../generated/PoolManager/ERC20NameBytes'
 import { ERC20SymbolBytes } from '../../generated/PoolManager/ERC20SymbolBytes'
-import { ADDRESS_ZERO, ZERO_BI } from './constants'
+import { ADDRESS_ZERO, TEN_BILLION_BI, ZERO_BI } from './constants'
 import { isNullEthValue } from './index'
 import { NativeTokenDetails } from './nativeTokenDetails'
 import { getStaticDefinition, StaticTokenDefinition } from './staticTokenDefinition'
@@ -78,17 +78,35 @@ export function fetchTokenName(
   return nameValue
 }
 
-export function fetchTokenTotalSupply(tokenAddress: Address): BigInt {
+function getTenBillionSupply(decimals: i32): BigInt {
+  // 10 billion = 10^10. With decimals d, total supply is 10^(10 + d).
+  let result = '1'
+  const totalZeros = 10 + decimals
+  for (let i = 0; i < totalZeros; i++) {
+    result += '0'
+  }
+  return BigInt.fromString(result)
+}
+
+export function fetchTokenTotalSupply(
+  tokenAddress: Address,
+  tokenOverrides: StaticTokenDefinition[],
+  decimals: BigInt | null,
+): BigInt {
   if (tokenAddress.equals(Address.fromString(ADDRESS_ZERO))) {
     return ZERO_BI
   }
-  const contract = ERC20.bind(tokenAddress)
-  let totalSupplyValue = BigInt.zero()
-  const totalSupplyResult = contract.try_totalSupply()
-  if (!totalSupplyResult.reverted) {
-    totalSupplyValue = totalSupplyResult.value
+
+  const staticTokenDefinition = getStaticDefinition(tokenAddress, tokenOverrides)
+  if (staticTokenDefinition != null) {
+    return getTenBillionSupply(staticTokenDefinition.decimals.toI32())
   }
-  return totalSupplyValue
+
+  if (decimals !== null) {
+    return getTenBillionSupply(decimals.toI32())
+  }
+
+  return getTenBillionSupply(18)
 }
 
 // export function fetchTokenDecimals(

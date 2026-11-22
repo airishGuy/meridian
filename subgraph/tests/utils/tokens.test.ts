@@ -71,8 +71,18 @@ describe('Token utilities', () => {
   })
 
   test('fetchTokenTotalSupply returns zero for native token', () => {
-    const totalSupply = fetchTokenTotalSupply(Address.fromString(NATIVE_TOKEN_ADDRESS))
+    const totalSupply = fetchTokenTotalSupply(Address.fromString(NATIVE_TOKEN_ADDRESS), TOKEN_OVERRIDES, null)
     assert.assertTrue(totalSupply.equals(BigInt.zero()), 'Should return zero for native token total supply')
+  })
+
+  test('fetchTokenTotalSupply returns 10 billion for overridden token', () => {
+    const totalSupply = fetchTokenTotalSupply(
+      Address.fromString('0x1111111111111111111111111111111111111111'),
+      TOKEN_OVERRIDES,
+      null,
+    )
+    const expected = BigInt.fromString('10000000000000000000000000000')
+    assert.assertTrue(totalSupply.equals(expected), 'Should return 10 billion with 18 decimals')
   })
 
   test('fetchTokenDecimals returns native token decimals', () => {

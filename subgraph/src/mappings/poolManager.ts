@@ -46,9 +46,6 @@ export function handleInitializeHelper(
   let token0 = Token.load(event.params.currency0.toHexString())
   if (token0 === null) {
     token0 = new Token(event.params.currency0.toHexString())
-    token0.symbol = fetchTokenSymbol(event.params.currency0, tokenOverrides, nativeTokenDetails)
-    token0.name = fetchTokenName(event.params.currency0, tokenOverrides, nativeTokenDetails)
-    token0.totalSupply = fetchTokenTotalSupply(event.params.currency0)
 
     const decimals = fetchTokenDecimals(event.params.currency0, tokenOverrides, nativeTokenDetails)
     if (decimals === null) {
@@ -57,6 +54,9 @@ export function handleInitializeHelper(
     }
 
     token0.decimals = decimals
+    token0.symbol = fetchTokenSymbol(event.params.currency0, tokenOverrides, nativeTokenDetails)
+    token0.name = fetchTokenName(event.params.currency0, tokenOverrides, nativeTokenDetails)
+    token0.totalSupply = fetchTokenTotalSupply(event.params.currency0, tokenOverrides, decimals)
     token0.derivedUSDC = ZERO_BD
     token0.volume = ZERO_BD
     token0.volumeUSD = ZERO_BD
@@ -71,9 +71,6 @@ export function handleInitializeHelper(
   let token1 = Token.load(event.params.currency1.toHexString())
   if (token1 === null) {
     token1 = new Token(event.params.currency1.toHexString())
-    token1.symbol = fetchTokenSymbol(event.params.currency1, tokenOverrides, nativeTokenDetails)
-    token1.name = fetchTokenName(event.params.currency1, tokenOverrides, nativeTokenDetails)
-    token1.totalSupply = fetchTokenTotalSupply(event.params.currency1)
 
     const decimals = fetchTokenDecimals(event.params.currency1, tokenOverrides, nativeTokenDetails)
     if (decimals === null) {
@@ -82,6 +79,9 @@ export function handleInitializeHelper(
     }
 
     token1.decimals = decimals
+    token1.symbol = fetchTokenSymbol(event.params.currency1, tokenOverrides, nativeTokenDetails)
+    token1.name = fetchTokenName(event.params.currency1, tokenOverrides, nativeTokenDetails)
+    token1.totalSupply = fetchTokenTotalSupply(event.params.currency1, tokenOverrides, decimals)
     token1.derivedUSDC = ZERO_BD
     token1.volume = ZERO_BD
     token1.volumeUSD = ZERO_BD
