@@ -4,6 +4,7 @@ import { usePublicClient, useWriteContract, useAccount } from 'wagmi';
 import ERC20_ABI from '../../abi/ERC20.json';
 import PERMIT2_ABI from '../../abi/Permit2.json';
 import { PERMIT2_ADDRESS } from '../../lib/constants';
+import { useActiveChain } from '@/context/ActiveChainContext';
 
 const MAX_UINT256 = 2n ** 256n - 1n;
 const MAX_UINT160 = 2n ** 160n - 1n;
@@ -13,6 +14,8 @@ export function useApproval() {
   const publicClient = usePublicClient();
   const { writeContractAsync } = useWriteContract();
   const { address: userAddress } = useAccount();
+  const { contracts } = useActiveChain();
+  const permit2Address = (contracts?.permit2 || PERMIT2_ADDRESS) as `0x${string}`;
 
   const checkAllowance = async (
     tokenAddress: `0x${string}`,
@@ -34,11 +37,11 @@ export function useApproval() {
       address: tokenAddress,
       abi: ERC20_ABI.abi,
       functionName: 'allowance',
-      args: [ownerAddress, PERMIT2_ADDRESS as `0x${string}`],
+      args: [ownerAddress, permit2Address],
     })) as bigint;
 
     const permit2Allowance = (await publicClient.readContract({
-      address: PERMIT2_ADDRESS as `0x${string}`,
+      address: permit2Address,
       abi: PERMIT2_ABI.abi,
       functionName: 'allowance',
       args: [ownerAddress, tokenAddress, spenderAddress],
@@ -73,7 +76,7 @@ export function useApproval() {
         address: tokenAddress,
         abi: ERC20_ABI.abi,
         functionName: 'approve',
-        args: [PERMIT2_ADDRESS as `0x${string}`, MAX_UINT256],
+        args: [permit2Address, MAX_UINT256],
       });
       console.log("Approve Permit2 tx:", tx1);
       await publicClient.waitForTransactionReceipt({ hash: tx1 });
@@ -86,7 +89,7 @@ export function useApproval() {
     const expiration = Number(MAX_UINT48);
     console.log(`Allowing Spender ${spenderAddress} via Permit2 for token ${tokenAddress} amount ${permit2Amount}...`);
     const tx2 = await writeContractAsync({
-      address: PERMIT2_ADDRESS as `0x${string}`,
+      address: permit2Address,
       abi: PERMIT2_ABI.abi,
       functionName: 'approve',
       args: [tokenAddress, spenderAddress, permit2Amount, expiration],

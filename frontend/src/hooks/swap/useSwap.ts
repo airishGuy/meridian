@@ -3,6 +3,7 @@ import { useAccount, usePublicClient, useWriteContract } from 'wagmi';
 import { encodePacked, encodeAbiParameters, parseUnits, encodeFunctionData, maxUint256, formatEther, formatUnits } from 'viem';
 import { useApproval } from '../shared/useApproval';
 import { UNIVERSALROUTER_ADDRESS, ACTIONS } from '../../lib/constants';
+import { useActiveChain } from '@/context/ActiveChainContext';
 import type { ToastType } from '../../components/Toast';
 import type { TokenConfig } from '@/config/tokens';
 
@@ -45,6 +46,8 @@ export function useSwap() {
   const publicClient = usePublicClient();
   const { writeContractAsync } = useWriteContract();
   const { checkAllowance, approveTokenWithPermit2 } = useApproval();
+  const { contracts } = useActiveChain();
+  const universalRouterAddress = (contracts?.universalRouter || UNIVERSALROUTER_ADDRESS) as `0x${string}`;
 
   const [toast, setToast] = useState<ToastState>({
     show: false,
@@ -125,21 +128,21 @@ export function useSwap() {
         const { p2ToSpenderAmount, p2ToSpenderExpiration } = await checkAllowance(
           params.fromToken.address,
           userAddress,
-          UNIVERSALROUTER_ADDRESS as `0x${string}`
+          universalRouterAddress
         );
-        console.log({ p2ToSpenderAmount, p2ToSpenderExpiration })
+        console.log({ p2ToSpenderAmount, p2ToSpenderExpiration });
 
         const now = Math.floor(Date.now() / 1000);
         const isExpired = p2ToSpenderExpiration <= now;
 
-        const needsApproval = isExpired || p2ToSpenderAmount < rawAmountIn;
+        const needsApproval = isExpired || p2ToSpenderAmount < amountIn;
 
         if (needsApproval) {
           showToast('pending', 'Approving Token', `Approving Permit2 & Universal Router for ${params.fromToken.symbol}...`);
           await approveTokenWithPermit2(
             params.fromToken.address,
             maxUint256,
-            UNIVERSALROUTER_ADDRESS as `0x${string}`
+            universalRouterAddress
           );
         }
         setIsApproving(false);
@@ -185,10 +188,9 @@ export function useSwap() {
       // The exact amount always goes in slot 3, the limit goes in slot 4 — but they swap between modes.
       const structSlot3 = params.isExactInput ? amountIn : amountOutMinimum; // exact side
       const structSlot4 = params.isExactInput ? amountOutMinimum : amountIn; // limit side
-      const hookData = encodeAbiParameters(
-        [{ type: 'address' }],
-        [userAddress]
-      ) 
+      const hookData: `0x${string}` = (params.hooksAddress && params.hooksAddress !== '0x0000000000000000000000000000000000000000')
+        ? encodeAbiParameters([{ type: 'address' }], [userAddress])
+        : '0x';
 
       paramsArray[0] = encodeAbiParameters(
         [
@@ -209,7 +211,6 @@ export function useSwap() {
               { name: 'zeroForOne', type: 'bool' },
               { name: 'amount1', type: 'uint128' }, // amountIn (exact input) OR amountOut (exact output)
               { name: 'amount2', type: 'uint128' }, // amountOutMinimum (exact input) OR amountInMaximum (exact output)
-              { name: 'minHopPriceX36', type: 'uint128' },
               { name: 'hookData', type: 'bytes' }
             ]
           }
@@ -220,7 +221,6 @@ export function useSwap() {
             zeroForOne,
             amount1: structSlot3,
             amount2: structSlot4,
-            minHopPriceX36: 0n,
             hookData
           }
         ]
@@ -260,50 +260,33 @@ export function useSwap() {
 
       showToast('pending', 'Confirming Transaction', 'Confirm the swap transaction in your wallet...');
 
-      ////////////////////////////////////////////
-      try {
-        const result = await publicClient.call({
-          account: userAddress,
-          to: UNIVERSALROUTER_ADDRESS as `0x${string}`,
-          data: encodeFunctionData({
-            abi: UNIVERSAL_ROUTER_ABI,
-            functionName: 'execute',
-            args: [commands, inputs, deadline],
-          }),
-          value,
-        });
-        console.log('call result:', result);
-      } catch (callError: any) {
-        console.log('call error data:', callError?.cause?.data);
-        console.log('call error details:', JSON.stringify(callError, null, 2));
-      }
-
-
       // 4. Simulate contract execution to ensure safety
-      
-      const { request, result } = await publicClient.simulateContract({
-        address: UNIVERSALROUTER_ADDRESS as `0x${string}`,
+      const { request } = await publicClient.simulateContract({
+        address: universalRouterAddress,
         abi: UNIVERSAL_ROUTER_ABI,
         functionName: 'execute',
         args: [commands, inputs, deadline],
         value,
         account: userAddress,
       });
-      
-      // Gas estimate
-      const txnGas_ = await publicClient.estimateContractGas({
-        address: UNIVERSALROUTER_ADDRESS as `0x${string}`,
-        abi: UNIVERSAL_ROUTER_ABI,
-        functionName: "execute",
-        args: [commands, inputs, deadline],
-        value,
-        account: userAddress,
-      });
 
-      const gasPrice = await publicClient.getGasPrice();
-      // arc uses 6 decimals
-      console.log("Estimated fee...:", formatEther(txnGas_ * gasPrice));
-      setTxnGas(Number(formatEther(txnGas_ * gasPrice)).toFixed(4));
+      // Gas estimate
+      try {
+        const txnGas_ = await publicClient.estimateContractGas({
+          address: universalRouterAddress,
+          abi: UNIVERSAL_ROUTER_ABI,
+          functionName: 'execute',
+          args: [commands, inputs, deadline],
+          value,
+          account: userAddress,
+        });
+
+        const gasPrice = await publicClient.getGasPrice();
+        console.log('Estimated fee...:', formatEther(txnGas_ * gasPrice));
+        setTxnGas(Number(formatEther(txnGas_ * gasPrice)).toFixed(4));
+      } catch (gasErr) {
+        console.warn('Failed to estimate gas fee:', gasErr);
+      }
 
       // 5. Submit transaction
       const hash = await writeContractAsync(request);

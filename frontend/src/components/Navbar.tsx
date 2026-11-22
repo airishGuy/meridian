@@ -2,9 +2,9 @@ import { useState, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Logo } from './Logo';
 import { useAppKit } from '@reown/appkit/react';
-import { useConnection, useDisconnect } from 'wagmi';
+import { useConnection, useDisconnect, useBalance } from 'wagmi';
+import { formatUnits } from 'viem';
 import { Menu, X, LogOut, ArrowRight, Copy, Check, ChevronDown } from 'lucide-react';
-import { useTokenBalance } from '@/hooks/shared/useTokenBalance';
 import { useActiveChain } from '@/context/ActiveChainContext';
 
 // Deterministic random number generator based on seed string
@@ -77,9 +77,25 @@ function Blockie({ address, size = 20 }: { address: string; size?: number }) {
 export default function Navbar() {
   const { open } = useAppKit();
   const { address, isConnected } = useConnection();
-  const { activeChain, chainId, supportedChains, switchNetwork, tokens } = useActiveChain();
+  const { activeChain, chainId, supportedChains, switchNetwork } = useActiveChain();
   const visibleChains = useMemo(() => supportedChains, [supportedChains]);
-  const { formattedBalance } = useTokenBalance({ token: tokens[0], address });
+  const { data: balanceData } = useBalance({
+    address: address as `0x${string}` | undefined,
+    chainId: activeChain.id,
+    query: {
+      refetchInterval: 10_000,
+    },
+  });
+
+  const formattedBalance = useMemo(() => {
+    if (!balanceData) return '0.000';
+    const num = parseFloat(formatUnits(balanceData.value, balanceData.decimals));
+    if (num === 0) return '0.000';
+    if (num > 0 && num < 0.001) return '<0.001';
+    return num.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+  }, [balanceData]);
+
+  const nativeSymbol = balanceData?.symbol || activeChain.nativeCurrency.symbol;
 
   const { disconnect } = useDisconnect();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -248,7 +264,7 @@ export default function Navbar() {
                         <div className="px-4 py-3.5 border-b border-white/[0.06] bg-white/[0.02]">
                           <span className="text-xs uppercase tracking-wider font-semibold text-white/40">Native Balance</span>
                           <p className="text-base text-white font-mono font-bold mt-1">
-                            {formattedBalance} <span className="text-xs text-white/50 font-normal">{tokens[0]?.symbol || activeChain.nativeCurrency.symbol}</span>
+                            {formattedBalance} <span className="text-xs text-white/50 font-normal">{nativeSymbol}</span>
                           </p>
                         </div>
 
@@ -337,9 +353,9 @@ export default function Navbar() {
                     </button>
                   </div>
                   <div className="pt-2 border-t border-white/[0.06] flex justify-between items-baseline">
-                    <span className="text-xs text-white/40">Balance</span>
+                    <span className="text-xs text-white/40">Native Balance</span>
                     <span className="text-sm font-mono text-white font-semibold">
-                      {formattedBalance} {tokens[0]?.symbol || activeChain.nativeCurrency.symbol}
+                      {formattedBalance} {nativeSymbol}
                     </span>
                   </div>
                 </div>

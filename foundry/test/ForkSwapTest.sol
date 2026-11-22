@@ -18,28 +18,27 @@ contract ForkSwapTest is Test {
 
     UniversalRouter router = UniversalRouter(payable(vm.envAddress("UNIVERSALROUTER_ADDRESS")));
     IPermit2 permit2 = IPermit2(vm.envAddress("PERMIT2_ADDRESS"));
-    address MUSDC = 0x367fB39AB07f4380076201Aa3FAD30e3A778Aa65;
-    address HNY   = 0x58228Bb87820aF037776182e78B41eb4fF82119d;
+    address tLTC = 0x01f9b27f4C3dE3511983C2f90b0A6Af59863cdbD;
+    address GENOME = 0xf2FD1F1171C902a69B30b0cd75e2d0e7C499eEfe;
     address USER  = vm.envAddress("ADDRESS_TO_MINT_TO");
 
     function testForkSwap() public {
-        // fork Arc testnet
-        vm.createSelectFork("arc_testnet");
+        vm.createSelectFork("LitVM_LiteForge");
         vm.startPrank(USER);
 
         // approve
-        IERC20(MUSDC).approve(address(permit2), type(uint256).max);
-        permit2.approve(MUSDC, address(router), type(uint160).max, uint48(block.timestamp + 1 days));
+        IERC20(tLTC).approve(address(permit2), type(uint256).max);
+        permit2.approve(tLTC, address(router), type(uint160).max, uint48(block.timestamp + 1 days));
 
         PoolKey memory poolKey = PoolKey({
-            currency0: Currency.wrap(MUSDC),
-            currency1: Currency.wrap(HNY),
+            currency0: Currency.wrap(tLTC),
+            currency1: Currency.wrap(GENOME),
             fee: 3000,
             tickSpacing: 60,
             hooks: IHooks(address(0))
         });
 
-        uint128 amountIn = 10000_000_000; // 100 USDC
+        uint128 amountIn = 1e18; // 1 tLTC
         uint128 minAmountOut = 0;       // 0 to isolate revert reason
 
         bytes memory commands = abi.encodePacked(uint8(Commands.V4_SWAP));
